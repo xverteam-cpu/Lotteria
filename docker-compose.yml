@@ -1,0 +1,55 @@
+version: '3.8'
+services:
+  app:
+    image: php:8.1-fpm
+    container_name: lotteria_app
+    working_dir: /var/www/html
+    volumes:
+      - ./:/var/www/html
+    depends_on:
+      - db
+    networks:
+      - lotteria
+
+  web:
+    image: nginx:stable-alpine
+    container_name: lotteria_web
+    ports:
+      - "8000:80"
+    volumes:
+      - ./:/var/www/html
+      - ./docker/nginx/conf.d:/etc/nginx/conf.d
+    depends_on:
+      - app
+    networks:
+      - lotteria
+
+  db:
+    image: mysql:8.0
+    container_name: lotteria_db
+    environment:
+      MYSQL_ROOT_PASSWORD: secret
+      MYSQL_DATABASE: lotteria
+      MYSQL_USER: laravel
+      MYSQL_PASSWORD: secret
+    volumes:
+      - dbdata:/var/lib/mysql
+    ports:
+      - "3306:3306"
+    networks:
+      - lotteria
+
+  composer:
+    image: composer:2
+    container_name: lotteria_composer
+    working_dir: /var/www/html
+    volumes:
+      - ./:/var/www/html
+    networks:
+      - lotteria
+
+volumes:
+  dbdata:
+
+networks:
+  lotteria:
