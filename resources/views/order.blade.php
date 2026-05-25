@@ -120,13 +120,19 @@
       <img src="https://www.lotteria.vn/grs-static/icons/logo_512.png" alt="Lotteria">
     </div>
 
-    <form class="login-card" action="#" method="post">
+    <form class="login-card" action="{{ route('login.submit') }}" method="post">
       @csrf
       <h1 class="login-title">Partner Login</h1>
 
+      @if ($errors->any())
+        <div style="margin-bottom:16px;padding:10px 12px;border-radius:6px;background:#fff0f2;color:#b00000;font-size:14px;line-height:20px;">
+          {{ $errors->first() }}
+        </div>
+      @endif
+
       <div class="login-field">
         <label class="login-label" for="email">Email</label>
-        <input class="login-input" id="email" name="email" type="email" placeholder="Enter your email">
+        <input class="login-input" id="email" name="email" type="email" value="{{ old('email') }}" placeholder="Enter your email">
       </div>
 
       <div class="login-field">
@@ -135,7 +141,7 @@
       </div>
 
       <div class="login-row">
-        <a class="forgot-link" href="#">Forgot password?</a>
+        <a class="forgot-link" href="{{ route('unavailable') }}">Forgot password?</a>
       </div>
 
       <button class="login-button" type="submit">Login</button>
