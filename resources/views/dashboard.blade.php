@@ -96,36 +96,6 @@
     line-height:15px;
     font-weight:700;
   }
-  .swipe-runner {
-    position:absolute;
-    top:50%;
-    right:42px;
-    z-index:1;
-    width:76px;
-    height:32px;
-    opacity:.3;
-    animation:runner-slide 1.45s linear infinite;
-    transform:translateY(-50%);
-    pointer-events:none;
-  }
-  .swipe-runner span {
-    position:absolute;
-    top:50%;
-    width:24px;
-    height:24px;
-    border-top:9px solid #f5c400;
-    border-right:9px solid #f5c400;
-    transform:translateY(-50%) rotate(45deg);
-  }
-  .swipe-runner span:nth-child(1) { left:0; }
-  .swipe-runner span:nth-child(2) { left:24px; }
-  .swipe-runner span:nth-child(3) { left:48px; }
-  @keyframes runner-slide {
-    0% { transform:translate(-60px, -50%); opacity:0; }
-    20% { opacity:.9; }
-    78% { opacity:.9; }
-    100% { transform:translate(34px, -50%); opacity:0; }
-  }
   .summary-card { padding:16px; border-radius:16px; background:#fff; box-shadow:0 10px 24px rgba(15,23,42,.08); border:1px solid #ffc5cd; }
   .summary-card.featured { background:linear-gradient(135deg, #c40000, #e31b23 62%, #f5a400); border-color:#e31b23; color:#fff; }
   .summary-label { color:#c40000; font-size:11px; line-height:15px; font-weight:900; letter-spacing:.08em; text-transform:uppercase; }
@@ -134,33 +104,6 @@
   .summary-card.featured .summary-value { color:#fff; }
   .summary-help { margin-top:10px; color:#64748b; font-size:12px; line-height:17px; }
   .summary-card.featured .summary-help { color:#fff8e8; }
-  .joy-marquee {
-    overflow:hidden;
-    margin:14px -12px 14px;
-    border-block:1px solid #f5a400;
-    background:#fff8e8;
-  }
-  .joy-track {
-    display:flex;
-    width:max-content;
-    animation:joy-scroll 14s linear infinite;
-  }
-  .joy-text {
-    flex:0 0 auto;
-    margin:0;
-    padding:14px 18px;
-    color:#cf332b;
-    font-size:34px;
-    line-height:40px;
-    font-weight:900;
-    letter-spacing:.02em;
-    white-space:nowrap;
-    text-transform:uppercase;
-  }
-  @keyframes joy-scroll {
-    from { transform:translateX(0); }
-    to { transform:translateX(-50%); }
-  }
   .activity-card { border-radius:18px; background:#fff; padding:16px; box-shadow:0 10px 24px rgba(15,23,42,.08); border:1px solid #ffc5cd; }
   .activity-head { display:block; gap:12px; }
   .activity-title { color:#c40000; font-size:15px; line-height:20px; font-weight:800; }
@@ -178,8 +121,6 @@
     .swipe-invest { margin-top:18px; }
     .summary-grid { gap:16px; margin:18px 0 22px; }
     .summary-card { padding:20px; }
-    .joy-marquee { margin:18px 0; border-radius:16px; }
-    .joy-text { font-size:38px; line-height:44px; padding:16px 24px; }
     .activity-card { padding:24px; }
     .activity-head, .activity-item { display:flex; align-items:center; justify-content:space-between; }
   }
@@ -214,11 +155,6 @@
       <span class="swipe-title">Swipe to Invest</span>
       <span class="swipe-hint">Start your partner investment</span>
     </span>
-    <span class="swipe-runner" aria-hidden="true">
-      <span></span>
-      <span></span>
-      <span></span>
-    </span>
   </div>
 
   <section class="summary-grid" aria-label="Account summary">
@@ -249,13 +185,6 @@
         <div class="summary-value">$0.00</div>
       </div>
       <div class="summary-help">Estimated daily earnings.</div>
-    </div>
-  </section>
-
-  <section class="joy-marquee" aria-label="Lotteria favorites message">
-    <div class="joy-track">
-      <p class="joy-text">ALL YOUR FAVORITES IN HERE FEEL THE TASTE OF JOY!</p>
-      <p class="joy-text" aria-hidden="true">ALL YOUR FAVORITES IN HERE FEEL THE TASTE OF JOY!</p>
     </div>
   </section>
 
