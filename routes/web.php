@@ -1,6 +1,7 @@
 <?php
 
 use App\Http\Controllers\AuthController;
+use App\Http\Controllers\Admin\UserManagementController;
 use App\Models\User;
 use Illuminate\Support\Facades\Auth;
 use Illuminate\Support\Facades\Route;
@@ -40,7 +41,11 @@ Route::get('/dashboard', function () {
 Route::get('/admin/dashboard', function () {
     abort_unless(Auth::user()?->is_admin, 403);
 
-    return view('admin.dashboard', [
-        'users' => User::query()->latest()->get(),
-    ]);
+    return app(UserManagementController::class)->index(request());
 })->middleware('auth')->name('admin.dashboard');
+
+Route::get('/admin/users/{user}', function (User $user) {
+    abort_unless(Auth::user()?->is_admin, 403);
+
+    return app(UserManagementController::class)->show($user);
+})->middleware('auth')->name('admin.users.show');

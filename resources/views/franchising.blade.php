@@ -38,7 +38,7 @@
     border-radius:4px;
     background:#ffffff;
     color:#001a33;
-    font-family:Arial, Helvetica, sans-serif;
+    font-family:'Helvetica Neue',Helvetica,Arial,-apple-system,BlinkMacSystemFont,'Segoe UI',system-ui,sans-serif;
     font-size:16px;
     line-height:22px;
     outline:none;

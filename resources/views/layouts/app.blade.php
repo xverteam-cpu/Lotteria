@@ -7,7 +7,7 @@
   <link rel="shortcut icon" type="image/png" href="https://www.lotteria.vn/grs-static/icons/logo_512.png">
   <title>Lotteria</title>
   <style>
-    body { background:#eef1f4; font-family: Arial, Helvetica, sans-serif; margin:0; }
+    body { background:#eef1f4; font-family:'Helvetica Neue',Helvetica,Arial,-apple-system,BlinkMacSystemFont,'Segoe UI',system-ui,sans-serif; margin:0; }
     .container { max-width:1100px; margin:0 auto; padding:18px; }
     a { color:#d90000; }
     .page-loader {

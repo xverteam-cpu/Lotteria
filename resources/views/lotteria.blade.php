@@ -46,7 +46,7 @@
     @keyframes page-loader-spin {
       to { transform:rotate(360deg); }
     }
-    body { margin:0; padding:0; background-color:#eef1f4; font-family:Arial, Helvetica, sans-serif; }
+    body { margin:0; padding:0; background-color:#eef1f4; font-family:'Helvetica Neue',Helvetica,Arial,-apple-system,BlinkMacSystemFont,'Segoe UI',system-ui,sans-serif; }
   </style>
 </head>
 <body>

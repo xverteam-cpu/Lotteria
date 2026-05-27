@@ -15,7 +15,7 @@
     }
     body {
       background:#eef1f4;
-      font-family:Arial, Helvetica, sans-serif;
+      font-family:'Helvetica Neue',Helvetica,Arial,-apple-system,BlinkMacSystemFont,'Segoe UI',system-ui,sans-serif;
     }
     .splash {
       position:relative;

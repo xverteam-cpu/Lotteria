@@ -27,6 +27,8 @@ class User extends Authenticatable
         'message',
         'password',
         'is_admin',
+        'last_seen_at',
+        'last_ip_address',
     ];
 
     /**
@@ -50,6 +52,13 @@ class User extends Authenticatable
             'email_verified_at' => 'datetime',
             'password' => 'hashed',
             'is_admin' => 'boolean',
+            'last_seen_at' => 'datetime',
         ];
+    }
+
+    public function isOnline(): bool
+    {
+        return $this->last_seen_at
+            && $this->last_seen_at->greaterThan(now()->subMinutes(5));
     }
 }
