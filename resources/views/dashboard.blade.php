@@ -32,6 +32,9 @@
     color:#fff;
     text-decoration:none;
     box-shadow:0 10px 24px rgba(196,0,0,.22);
+    touch-action:none;
+    user-select:none;
+    cursor:grab;
   }
   .swipe-invest::before {
     content:'';
@@ -56,6 +59,19 @@
     line-height:1;
     font-weight:900;
     box-shadow:0 4px 12px rgba(0,0,0,.16);
+    transition:transform .18s ease;
+    cursor:grab;
+    touch-action:none;
+  }
+  .swipe-invest.is-dragging .swipe-knob {
+    transition:none;
+    cursor:grabbing;
+  }
+  .swipe-invest.is-dragging {
+    cursor:grabbing;
+  }
+  .swipe-invest.is-complete .swipe-knob {
+    transition:transform .18s ease;
   }
   .swipe-copy {
     position:relative;
@@ -87,6 +103,7 @@
     z-index:1;
     width:76px;
     height:32px;
+    opacity:.3;
     animation:runner-slide 1.45s linear infinite;
     transform:translateY(-50%);
     pointer-events:none;
@@ -191,7 +208,7 @@
     </div>
   </section>
 
-  <a class="swipe-invest" href="{{ route('unavailable') }}" aria-label="Swipe to invest">
+  <div class="swipe-invest" role="link" tabindex="0" data-swipe-url="{{ route('unavailable') }}" aria-label="Swipe to invest">
     <span class="swipe-knob">›</span>
     <span class="swipe-copy">
       <span class="swipe-title">Swipe to Invest</span>
@@ -202,7 +219,7 @@
       <span></span>
       <span></span>
     </span>
-  </a>
+  </div>
 
   <section class="summary-grid" aria-label="Account summary">
     <div class="summary-card featured">
@@ -251,4 +268,98 @@
     <div class="activity-item"><div><strong>Application profile saved</strong><span class="activity-time">{{ $user->last_seen_at?->format('h:i A') ?: 'Now' }} - active</span></div><div style="font-weight:800;color:#c40000;">{{ $user->phone ?: 'N/A' }}</div></div>
   </section>
 </main>
+<script>
+  (function () {
+    var swipe = document.querySelector('.swipe-invest');
+    if (!swipe) return;
+
+    var knob = swipe.querySelector('.swipe-knob');
+    var dragStartX = 0;
+    var initialX = 0;
+    var currentX = 0;
+    var maxX = 0;
+    var dragging = false;
+
+    function setKnob(x) {
+      currentX = Math.max(0, Math.min(x, maxX));
+      knob.style.transform = 'translateX(' + currentX + 'px)';
+    }
+
+    function resetKnob() {
+      dragging = false;
+      swipe.classList.remove('is-dragging');
+      setKnob(0);
+    }
+
+    function completeSwipe() {
+      swipe.classList.remove('is-dragging');
+      swipe.classList.add('is-complete');
+      setKnob(maxX);
+      window.setTimeout(function () {
+        window.location.href = swipe.dataset.swipeUrl;
+      }, 160);
+    }
+
+    function start(clientX, event) {
+      dragging = true;
+      dragStartX = clientX;
+      initialX = currentX;
+      maxX = Math.max(0, swipe.clientWidth - knob.offsetWidth - 14);
+      swipe.classList.add('is-dragging');
+      if (event) event.preventDefault();
+    }
+
+    function move(clientX, event) {
+      if (!dragging) return;
+      setKnob(initialX + clientX - dragStartX);
+      if (event) event.preventDefault();
+    }
+
+    function end() {
+      if (!dragging) return;
+      dragging = false;
+      if (currentX >= maxX * 0.72) {
+        completeSwipe();
+        return;
+      }
+      resetKnob();
+    }
+
+    setKnob(0);
+
+    if (window.PointerEvent) {
+      swipe.addEventListener('pointerdown', function (event) {
+        if (event.button !== undefined && event.button !== 0) return;
+        swipe.setPointerCapture(event.pointerId);
+        start(event.clientX, event);
+      });
+      swipe.addEventListener('pointermove', function (event) {
+        move(event.clientX, event);
+      });
+      swipe.addEventListener('pointerup', end);
+      swipe.addEventListener('pointercancel', resetKnob);
+    } else {
+      swipe.addEventListener('mousedown', function (event) {
+        start(event.clientX, event);
+      });
+      swipe.addEventListener('touchstart', function (event) {
+        start(event.touches[0].clientX, event);
+      }, { passive:false });
+      document.addEventListener('mousemove', function (event) {
+        move(event.clientX, event);
+      });
+      document.addEventListener('touchmove', function (event) {
+        move(event.touches[0].clientX, event);
+      }, { passive:false });
+      document.addEventListener('mouseup', end);
+      document.addEventListener('touchend', end);
+    }
+    swipe.addEventListener('keydown', function (event) {
+      if (event.key === 'Enter' || event.key === ' ') {
+        completeSwipe();
+        event.preventDefault();
+      }
+    });
+  })();
+</script>
 @endsection
