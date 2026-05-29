@@ -53,6 +53,11 @@
   .amount-field span { display:block; margin-bottom:7px; color:#252525; font-size:13px; line-height:17px; font-weight:900; }
   .amount-field input { width:100%; min-height:48px; border-radius:14px; border:1px solid #ffc5cd; padding:0 14px; color:#001a33; font-size:16px; font-weight:800; outline:none; }
   .amount-field input:focus { border-color:#d91b0b; box-shadow:0 0 0 3px rgba(217,27,11,.12); }
+  .estimate-grid { display:grid; grid-template-columns:repeat(3, minmax(0, 1fr)); gap:8px; margin-top:14px; }
+  .estimate-card { border-radius:14px; background:#fff8e8; border:1px solid #ffe0a3; padding:11px 10px; }
+  .estimate-label { color:#8a4b00; font-size:10px; line-height:13px; font-weight:900; letter-spacing:.05em; text-transform:uppercase; }
+  .estimate-value { margin-top:5px; color:#d91b0b; font-size:16px; line-height:20px; font-weight:900; }
+  .estimate-note { margin:10px 0 0; color:#64748b; font-size:12px; line-height:17px; font-weight:600; }
   .form-error { margin:0 0 12px; border-radius:12px; background:#fff5f5; border:1px solid #ffc5cd; padding:10px 12px; color:#d91b0b; font-size:13px; line-height:18px; font-weight:800; }
   @media (max-width:430px) {
     .packages-page { padding-inline:13px; }
@@ -178,6 +183,21 @@
       <span>Amount in USD</span>
       <input type="number" name="amount" id="amountInput" min="1" step="0.01" value="{{ old('amount') }}" placeholder="Enter amount">
     </label>
+    <div class="estimate-grid" aria-label="Investment estimate">
+      <div class="estimate-card">
+        <div class="estimate-label">Daily</div>
+        <div class="estimate-value" id="dailyEstimate">$0.00</div>
+      </div>
+      <div class="estimate-card">
+        <div class="estimate-label">Weekly</div>
+        <div class="estimate-value" id="weeklyEstimate">$0.00</div>
+      </div>
+      <div class="estimate-card">
+        <div class="estimate-label">Total</div>
+        <div class="estimate-value" id="totalEstimate">$0.00</div>
+      </div>
+    </div>
+    <p class="estimate-note" id="estimateNote">Sample computation appears after selecting a package.</p>
     <div class="modal-actions">
       <button class="modal-button confirm" type="submit">Confirm</button>
       <button class="modal-button cancel" type="button" id="amountModalCancel">Cancel</button>
@@ -200,6 +220,10 @@
     var amountPackageCopy = document.getElementById('amountPackageCopy');
     var amountInput = document.getElementById('amountInput');
     var amountModalCancel = document.getElementById('amountModalCancel');
+    var dailyEstimate = document.getElementById('dailyEstimate');
+    var weeklyEstimate = document.getElementById('weeklyEstimate');
+    var totalEstimate = document.getElementById('totalEstimate');
+    var estimateNote = document.getElementById('estimateNote');
     var pointerStartX = 0;
     var pointerStartY = 0;
     var selectedPackage = null;
@@ -270,6 +294,7 @@
       amountInput.min = selectedPackage.price;
       amountInput.placeholder = 'Minimum $' + Number(selectedPackage.price).toLocaleString();
       if (!amountInput.value) amountInput.value = selectedPackage.price;
+      updateEstimate();
       amountModal.classList.add('is-open');
       amountModal.setAttribute('aria-hidden', 'false');
       amountInput.focus();
@@ -280,6 +305,30 @@
       moveFocusOut(amountModal, true);
       amountModal.classList.remove('is-open');
       amountModal.setAttribute('aria-hidden', 'true');
+    }
+
+    function money(value) {
+      return '$' + Number(value || 0).toLocaleString(undefined, {
+        minimumFractionDigits: 2,
+        maximumFractionDigits: 2
+      });
+    }
+
+    function updateEstimate() {
+      if (!selectedPackage || !amountInput) return;
+      var amount = Number(amountInput.value || 0);
+      var rate = Number(selectedPackage.rate || 0) / 100;
+      var days = Number(selectedPackage.days || 0);
+      var daily = amount * rate;
+      var weekly = daily * 7;
+      var total = daily * days;
+
+      if (dailyEstimate) dailyEstimate.textContent = money(daily);
+      if (weeklyEstimate) weeklyEstimate.textContent = money(weekly);
+      if (totalEstimate) totalEstimate.textContent = money(total);
+      if (estimateNote) {
+        estimateNote.textContent = money(amount) + ' x ' + selectedPackage.rate + '% = ' + money(daily) + ' daily. Estimated total income for ' + days + ' days is ' + money(total) + '.';
+      }
     }
 
     cards.forEach(function (card) {
@@ -309,6 +358,9 @@
     }
     if (amountModalCancel) {
       amountModalCancel.addEventListener('click', closeAmountModal);
+    }
+    if (amountInput) {
+      amountInput.addEventListener('input', updateEstimate);
     }
     if (modal) {
       modal.addEventListener('click', function (event) {
