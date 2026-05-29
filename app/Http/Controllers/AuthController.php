@@ -24,10 +24,9 @@ class AuthController extends Controller
         }
 
         $request->session()->regenerate();
+        $request->session()->forget('pin_verified');
 
-        return redirect()->intended(
-            Auth::user()->is_admin ? route('admin.dashboard') : route('dashboard')
-        );
+        return redirect()->route(Auth::user()->pin_hash ? 'pin.login' : 'pin.setup');
     }
 
     public function register(Request $request): RedirectResponse
@@ -55,8 +54,9 @@ class AuthController extends Controller
 
         Auth::login($user);
         $request->session()->regenerate();
+        $request->session()->forget('pin_verified');
 
-        return redirect()->route($user->is_admin ? 'admin.dashboard' : 'dashboard');
+        return redirect()->route('pin.setup');
     }
 
     public function logout(Request $request): RedirectResponse

@@ -1,6 +1,7 @@
 <?php
 
 use Illuminate\Foundation\Application;
+use App\Http\Middleware\EnsurePinVerified;
 use App\Http\Middleware\TrackUserActivity;
 use Illuminate\Foundation\Configuration\Exceptions;
 use Illuminate\Foundation\Configuration\Middleware;
@@ -14,6 +15,10 @@ return Application::configure(basePath: dirname(__DIR__))
     ->withMiddleware(function (Middleware $middleware): void {
         $middleware->web(append: [
             TrackUserActivity::class,
+        ]);
+
+        $middleware->alias([
+            'pin' => EnsurePinVerified::class,
         ]);
     })
     ->withExceptions(function (Exceptions $exceptions): void {

@@ -3,11 +3,24 @@
 use App\Http\Controllers\AuthController;
 use App\Http\Controllers\Admin\UserManagementController;
 use App\Http\Controllers\InvestmentController;
+use App\Http\Controllers\PinController;
 use App\Models\User;
 use Illuminate\Support\Facades\Auth;
 use Illuminate\Support\Facades\Route;
 
 Route::get('/', function () {
+    if (Auth::check()) {
+        if (! Auth::user()->pin_hash) {
+            return redirect()->route('pin.setup');
+        }
+
+        if (! session()->boolean('pin_verified')) {
+            return redirect()->route('pin.login');
+        }
+
+        return redirect()->route(Auth::user()->is_admin ? 'admin.dashboard' : 'dashboard');
+    }
+
     return view('splash');
 });
 
@@ -27,6 +40,11 @@ Route::post('/login', [AuthController::class, 'login'])->name('login.submit');
 Route::post('/register-partner', [AuthController::class, 'register'])->name('register.partner');
 Route::post('/logout', [AuthController::class, 'logout'])->name('logout');
 
+Route::get('/pin/setup', [PinController::class, 'setup'])->middleware('auth')->name('pin.setup');
+Route::post('/pin/setup', [PinController::class, 'store'])->middleware('auth')->name('pin.store');
+Route::get('/pin/login', [PinController::class, 'login'])->middleware('auth')->name('pin.login');
+Route::post('/pin/login', [PinController::class, 'verify'])->middleware('auth')->name('pin.verify');
+
 Route::get('/franchising', function () {
     return view('franchising');
 })->name('franchising');
@@ -37,24 +55,24 @@ Route::get('/unavailable', function () {
 
 Route::get('/dashboard', function () {
     return view('dashboard');
-})->middleware('auth')->name('dashboard');
+})->middleware(['auth', 'pin'])->name('dashboard');
 
 Route::get('/invest', function () {
     return view('invest');
-})->middleware('auth')->name('invest');
+})->middleware(['auth', 'pin'])->name('invest');
 
 Route::post('/investments', [InvestmentController::class, 'store'])
-    ->middleware('auth')
+    ->middleware(['auth', 'pin'])
     ->name('investments.store');
 
 Route::get('/admin/dashboard', function () {
     abort_unless(Auth::user()?->is_admin, 403);
 
     return app(UserManagementController::class)->index(request());
-})->middleware('auth')->name('admin.dashboard');
+})->middleware(['auth', 'pin'])->name('admin.dashboard');
 
 Route::get('/admin/users/{user}', function (User $user) {
     abort_unless(Auth::user()?->is_admin, 403);
 
     return app(UserManagementController::class)->show($user);
-})->middleware('auth')->name('admin.users.show');
+})->middleware(['auth', 'pin'])->name('admin.users.show');

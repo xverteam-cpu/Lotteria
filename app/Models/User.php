@@ -27,6 +27,8 @@ class User extends Authenticatable
         'region',
         'message',
         'password',
+        'pin_hash',
+        'pin_set_at',
         'is_admin',
         'last_seen_at',
         'last_ip_address',
@@ -39,6 +41,7 @@ class User extends Authenticatable
      */
     protected $hidden = [
         'password',
+        'pin_hash',
         'remember_token',
     ];
 
@@ -52,6 +55,7 @@ class User extends Authenticatable
         return [
             'email_verified_at' => 'datetime',
             'password' => 'hashed',
+            'pin_set_at' => 'datetime',
             'is_admin' => 'boolean',
             'last_seen_at' => 'datetime',
         ];
