@@ -200,6 +200,7 @@
     var pointerStartX = 0;
     var pointerStartY = 0;
     var selectedPackage = null;
+    var lastPackageCard = null;
     if (!track || !dots.length) return;
 
     function updateDots() {
@@ -224,6 +225,7 @@
 
     function openModal(card) {
       if (!modal || !modalImage) return;
+      lastPackageCard = card;
       modalImage.src = card.dataset.packageImage;
       modalImage.alt = card.dataset.packageTitle + ' package';
       selectedPackage = {
@@ -238,8 +240,18 @@
       if (modalCancel) modalCancel.focus();
     }
 
-    function closeModal() {
+    function moveFocusOut(modalElement, shouldReturnFocus) {
+      if (modalElement && modalElement.contains(document.activeElement)) {
+        document.activeElement.blur();
+      }
+      if (shouldReturnFocus && lastPackageCard) {
+        lastPackageCard.focus();
+      }
+    }
+
+    function closeModal(shouldReturnFocus) {
       if (!modal || !modalImage) return;
+      moveFocusOut(modal, shouldReturnFocus !== false);
       modal.classList.remove('is-open');
       modal.setAttribute('aria-hidden', 'true');
       modalImage.removeAttribute('src');
@@ -248,7 +260,7 @@
 
     function openAmountModal() {
       if (!amountModal || !selectedPackage) return;
-      closeModal();
+      closeModal(false);
       amountPackageKey.value = selectedPackage.key;
       amountPackageTitle.textContent = selectedPackage.title;
       amountPackageCopy.textContent = 'Minimum $' + Number(selectedPackage.price).toLocaleString() + ' with ' + selectedPackage.rate + '% daily interest for ' + selectedPackage.days + ' days.';
@@ -262,6 +274,7 @@
 
     function closeAmountModal() {
       if (!amountModal) return;
+      moveFocusOut(amountModal, true);
       amountModal.classList.remove('is-open');
       amountModal.setAttribute('aria-hidden', 'true');
     }
