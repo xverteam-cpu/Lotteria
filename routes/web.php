@@ -2,6 +2,7 @@
 
 use App\Http\Controllers\AuthController;
 use App\Http\Controllers\Admin\UserManagementController;
+use App\Http\Controllers\InvestmentController;
 use App\Models\User;
 use Illuminate\Support\Facades\Auth;
 use Illuminate\Support\Facades\Route;
@@ -41,6 +42,10 @@ Route::get('/dashboard', function () {
 Route::get('/invest', function () {
     return view('invest');
 })->middleware('auth')->name('invest');
+
+Route::post('/investments', [InvestmentController::class, 'store'])
+    ->middleware('auth')
+    ->name('investments.store');
 
 Route::get('/admin/dashboard', function () {
     abort_unless(Auth::user()?->is_admin, 403);

@@ -104,6 +104,7 @@
   .summary-card.featured .summary-value { color:#fff; }
   .summary-help { margin-top:10px; color:#64748b; font-size:12px; line-height:17px; }
   .summary-card.featured .summary-help { color:#fff8e8; }
+  .status-message { margin:14px 0 0; border-radius:14px; background:#fff8e8; border:1px solid #f5a400; padding:12px 14px; color:#c40000; font-size:13px; line-height:18px; font-weight:800; }
   .activity-card { border-radius:18px; background:#fff; padding:16px; box-shadow:0 10px 24px rgba(15,23,42,.08); border:1px solid #ffc5cd; }
   .activity-head { display:block; gap:12px; }
   .activity-title { color:#c40000; font-size:15px; line-height:20px; font-weight:800; }
@@ -126,9 +127,19 @@
   }
 </style>
 
-@php($user = auth()->user())
+@php
+  $user = auth()->user();
+  $investments = $user->investments()->latest()->get();
+  $activeCapital = $investments->sum(fn ($investment) => (float) $investment->amount);
+  $dailyInterest = $investments->sum(fn ($investment) => $investment->dailyInterestAmount());
+  $earnedIncome = $investments->sum(fn ($investment) => $investment->earnedInterest());
+@endphp
 
 <main class="dashboard-shell">
+  @if (session('status'))
+    <div class="status-message">{{ session('status') }}</div>
+  @endif
+
   <section class="account-hero">
     <img src="/MGames%20Festival.png" alt="">
     <div class="hero-inner">
@@ -161,14 +172,14 @@
     <div class="summary-card featured">
       <div>
         <div class="summary-label">Investment</div>
-        <div class="summary-value">$0.00</div>
+        <div class="summary-value">${{ number_format($activeCapital, 2) }}</div>
       </div>
       <div class="summary-help">Active partner capital.</div>
     </div>
     <div class="summary-card">
       <div>
         <div class="summary-label">Income</div>
-        <div class="summary-value">$0.00</div>
+        <div class="summary-value">${{ number_format($earnedIncome, 2) }}</div>
       </div>
       <div class="summary-help">Total earned income.</div>
     </div>
@@ -182,7 +193,7 @@
     <div class="summary-card">
       <div>
         <div class="summary-label">Daily Interest</div>
-        <div class="summary-value">$0.00</div>
+        <div class="summary-value">${{ number_format($dailyInterest, 2) }}</div>
       </div>
       <div class="summary-help">Estimated daily earnings.</div>
     </div>

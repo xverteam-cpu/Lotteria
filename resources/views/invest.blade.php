@@ -22,7 +22,8 @@
   .swipe-hint { margin:0 0 10px; color:#d91b0b; font-size:12px; line-height:16px; font-weight:900; letter-spacing:.08em; text-transform:uppercase; }
   .package-track { display:flex; gap:18px; overflow-x:auto; overscroll-behavior-x:contain; scroll-snap-type:x mandatory; padding:0 8px 20px 0; margin-right:-16px; -webkit-overflow-scrolling:touch; }
   .package-track::-webkit-scrollbar { display:none; }
-  .package-card { position:relative; flex:0 0 88%; min-height:286px; scroll-snap-align:center; border-radius:28px; background:#fff; border:1px solid rgba(224,30,10,.08); box-shadow:0 14px 28px rgba(45,24,10,.14); overflow:hidden; }
+  .package-card { position:relative; flex:0 0 88%; min-height:286px; scroll-snap-align:center; border-radius:28px; background:#fff; border:1px solid rgba(224,30,10,.08); box-shadow:0 14px 28px rgba(45,24,10,.14); overflow:hidden; cursor:pointer; }
+  .package-card:focus-visible { outline:3px solid #f5a400; outline-offset:4px; }
   .package-card::after { content:''; position:absolute; right:-40px; top:108px; width:62%; height:96px; background:linear-gradient(90deg, #e12a10, #d61505); box-shadow:0 8px 20px rgba(165,24,9,.22); z-index:1; }
   .package-content { position:relative; z-index:2; padding:30px 24px 26px; max-width:58%; }
   .package-name { margin:0; color:#e12610; font-size:32px; line-height:36px; font-weight:900; font-style:italic; letter-spacing:.04em; text-transform:uppercase; }
@@ -32,15 +33,30 @@
   .price { display:inline-flex; align-items:center; min-height:48px; padding:0 16px; border-radius:12px; background:linear-gradient(180deg, #ef3518, #d91705); color:#fff; font-size:31px; line-height:34px; font-weight:900; }
   .save { display:inline-flex; align-items:center; min-height:48px; padding:0 15px; border-radius:12px; background:#f8f2ef; color:#d91b0b; font-size:18px; line-height:22px; font-weight:900; white-space:nowrap; }
   .product-label { position:absolute; z-index:2; right:22px; top:134px; color:#fff; font-size:34px; line-height:36px; font-weight:900; font-style:italic; letter-spacing:.07em; text-transform:uppercase; }
-  .product-img { position:absolute; z-index:3; right:25%; top:76px; max-width:160px; max-height:210px; object-fit:contain; filter:drop-shadow(0 10px 10px rgba(0,0,0,.18)); pointer-events:none; }
-  .package-card.loaded .product-img { top:70px; right:29%; max-width:178px; max-height:222px; }
-  .package-card.supreme .product-img { top:88px; right:24%; max-width:210px; max-height:190px; }
+  .product-mark { position:absolute; z-index:3; right:25%; top:94px; display:flex; align-items:center; justify-content:center; width:118px; height:118px; border-radius:50%; background:#fff8e8; color:#e12610; font-size:56px; line-height:1; font-weight:900; box-shadow:0 10px 22px rgba(0,0,0,.14); pointer-events:none; }
+  .package-card.loaded .product-mark { background:#fff4d6; color:#f5a400; }
+  .package-card.supreme .product-mark { background:#fff0ed; color:#d91b0b; }
   .payment-card { display:flex; align-items:center; justify-content:space-between; gap:12px; margin:8px auto 0; padding:17px 18px; max-width:790px; border-radius:18px; background:#fff; box-shadow:0 8px 24px rgba(30,20,10,.1); }
   .payment-copy { color:#252525; font-size:13px; line-height:17px; font-weight:600; }
   .payment-logos { display:flex; align-items:center; gap:10px; color:#174a9f; font-size:16px; line-height:18px; font-weight:900; white-space:nowrap; }
   .dot-row { display:flex; justify-content:center; gap:8px; margin:2px 0 16px; }
   .dot { width:7px; height:7px; border-radius:50%; background:#ffd2c9; }
   .dot.is-active { width:22px; border-radius:999px; background:#e12610; }
+  .package-modal { position:fixed; inset:0; z-index:50; display:none; align-items:center; justify-content:center; padding:20px; background:rgba(10,10,10,.62); }
+  .package-modal.is-open { display:flex; }
+  .modal-card { width:min(100%, 430px); max-height:92vh; overflow:auto; border-radius:24px; background:#fff; padding:14px; box-shadow:0 24px 60px rgba(0,0,0,.3); }
+  .modal-image { display:block; width:100%; height:auto; border-radius:18px; background:#fff8e8; }
+  .modal-actions { display:grid; grid-template-columns:1fr 1fr; gap:10px; margin-top:14px; }
+  .modal-button { display:inline-flex; align-items:center; justify-content:center; min-height:46px; border-radius:999px; border:0; font-size:14px; line-height:18px; font-weight:900; letter-spacing:.04em; text-transform:uppercase; text-decoration:none; cursor:pointer; }
+  .modal-button.confirm { background:#d91b0b; color:#fff; box-shadow:0 10px 22px rgba(217,27,11,.22); }
+  .modal-button.cancel { background:#fff5f5; color:#d91b0b; border:1px solid #ffc5cd; }
+  .amount-title { margin:4px 0 8px; color:#d91b0b; font-size:23px; line-height:28px; font-weight:900; }
+  .amount-copy { margin:0 0 14px; color:#475569; font-size:14px; line-height:20px; font-weight:600; }
+  .amount-field { display:block; margin-top:12px; }
+  .amount-field span { display:block; margin-bottom:7px; color:#252525; font-size:13px; line-height:17px; font-weight:900; }
+  .amount-field input { width:100%; min-height:48px; border-radius:14px; border:1px solid #ffc5cd; padding:0 14px; color:#001a33; font-size:16px; font-weight:800; outline:none; }
+  .amount-field input:focus { border-color:#d91b0b; box-shadow:0 0 0 3px rgba(217,27,11,.12); }
+  .form-error { margin:0 0 12px; border-radius:12px; background:#fff5f5; border:1px solid #ffc5cd; padding:10px 12px; color:#d91b0b; font-size:13px; line-height:18px; font-weight:800; }
   @media (max-width:430px) {
     .packages-page { padding-inline:13px; }
     .hero-title .black { font-size:40px; line-height:39px; }
@@ -53,9 +69,7 @@
     .package-content { padding:28px 20px 24px; max-width:62%; }
     .package-name { font-size:28px; line-height:32px; }
     .product-label { right:13px; font-size:29px; line-height:32px; }
-    .product-img { right:19%; }
-    .package-card.loaded .product-img { right:23%; }
-    .package-card.supreme .product-img { right:18%; }
+    .product-mark { right:18%; width:104px; height:104px; font-size:48px; }
     .price { font-size:27px; padding-inline:13px; }
     .save { font-size:16px; padding-inline:12px; }
   }
@@ -101,33 +115,33 @@
 
     <p class="swipe-hint">Swipe packages</p>
     <section class="package-track" aria-label="Swipeable package list">
-      <article class="package-card crunch">
+      <article class="package-card crunch" role="button" tabindex="0" data-package-key="crunch" data-package-title="Crunch Package" data-package-price="250" data-package-rate="0.5" data-package-days="150" data-package-image="{{ asset('images/Crunch-Package.png') }}">
         <div class="package-content">
           <h2 class="package-name"><span class="package-number">01</span>Crunch</h2>
           <p class="package-desc">Crispy satisfaction in every bite.</p>
-          <div class="price-row"><span class="price">&#8377;199</span><span class="save">Save &#8377;50</span></div>
+          <div class="price-row"><span class="price">$250</span><span class="save">0.5% daily</span></div>
         </div>
-        <img class="product-img" src="{{ asset('images/package-drink.png') }}" alt="Crunch drink">
+        <div class="product-mark" aria-hidden="true">D</div>
         <div class="product-label">Crunch</div>
       </article>
 
-      <article class="package-card loaded">
+      <article class="package-card loaded" role="button" tabindex="0" data-package-key="loaded" data-package-title="Loaded Package" data-package-price="900" data-package-rate="0.7" data-package-days="120" data-package-image="{{ asset('images/Loaded-Package.png') }}">
         <div class="package-content">
           <h2 class="package-name"><span class="package-number">02</span>Loaded</h2>
           <p class="package-desc">Loaded fries. Max taste. Zero regrets.</p>
-          <div class="price-row"><span class="price">&#8377;249</span><span class="save">Save &#8377;70</span></div>
+          <div class="price-row"><span class="price">$900</span><span class="save">0.7% daily</span></div>
         </div>
-        <img class="product-img" src="{{ asset('images/package-fries.png') }}" alt="Loaded fries">
+        <div class="product-mark" aria-hidden="true">F</div>
         <div class="product-label">Loaded</div>
       </article>
 
-      <article class="package-card supreme">
+      <article class="package-card supreme" role="button" tabindex="0" data-package-key="supreme" data-package-title="Supreme Package" data-package-price="10000" data-package-rate="0.9" data-package-days="90" data-package-image="{{ asset('images/Supreme-Package.png') }}">
         <div class="package-content">
           <h2 class="package-name"><span class="package-number">03</span>Supreme</h2>
           <p class="package-desc">The ultimate combo for true cravings.</p>
-          <div class="price-row"><span class="price">&#8377;299</span><span class="save">Save &#8377;100</span></div>
+          <div class="price-row"><span class="price">$10,000</span><span class="save">0.9% daily</span></div>
         </div>
-        <img class="product-img" src="{{ asset('images/package-burger.png') }}" alt="Supreme burger">
+        <div class="product-mark" aria-hidden="true">B</div>
         <div class="product-label">Supreme</div>
       </article>
     </section>
@@ -145,10 +159,54 @@
   </div>
 </main>
 
+<div class="package-modal" id="packageModal" aria-hidden="true">
+  <div class="modal-card" role="dialog" aria-modal="true" aria-label="Package details">
+    <img class="modal-image" id="packageModalImage" src="" alt="">
+    <div class="modal-actions">
+      <button class="modal-button confirm" type="button" id="packageModalConfirm">Confirm</button>
+      <button class="modal-button cancel" type="button" id="packageModalCancel">Cancel</button>
+    </div>
+  </div>
+</div>
+
+<div class="package-modal" id="amountModal" aria-hidden="true">
+  <form class="modal-card" role="dialog" aria-modal="true" aria-label="Investment amount" method="post" action="{{ route('investments.store') }}">
+    @csrf
+    <input type="hidden" name="package" id="amountPackageKey" value="{{ old('package') }}">
+    @if ($errors->any())
+      <div class="form-error">{{ $errors->first() }}</div>
+    @endif
+    <h2 class="amount-title" id="amountPackageTitle">Investment amount</h2>
+    <p class="amount-copy" id="amountPackageCopy">Enter the amount you want to invest.</p>
+    <label class="amount-field">
+      <span>Amount in USD</span>
+      <input type="number" name="amount" id="amountInput" min="1" step="0.01" value="{{ old('amount') }}" placeholder="Enter amount">
+    </label>
+    <div class="modal-actions">
+      <button class="modal-button confirm" type="submit">Confirm</button>
+      <button class="modal-button cancel" type="button" id="amountModalCancel">Cancel</button>
+    </div>
+  </form>
+</div>
+
 <script>
   (function () {
     var track = document.querySelector('.package-track');
     var dots = Array.prototype.slice.call(document.querySelectorAll('.dot'));
+    var cards = Array.prototype.slice.call(document.querySelectorAll('.package-card'));
+    var modal = document.getElementById('packageModal');
+    var modalImage = document.getElementById('packageModalImage');
+    var modalConfirm = document.getElementById('packageModalConfirm');
+    var modalCancel = document.getElementById('packageModalCancel');
+    var amountModal = document.getElementById('amountModal');
+    var amountPackageKey = document.getElementById('amountPackageKey');
+    var amountPackageTitle = document.getElementById('amountPackageTitle');
+    var amountPackageCopy = document.getElementById('amountPackageCopy');
+    var amountInput = document.getElementById('amountInput');
+    var amountModalCancel = document.getElementById('amountModalCancel');
+    var pointerStartX = 0;
+    var pointerStartY = 0;
+    var selectedPackage = null;
     if (!track || !dots.length) return;
 
     function updateDots() {
@@ -170,6 +228,110 @@
       window.requestAnimationFrame(updateDots);
     }, { passive:true });
     updateDots();
+
+    function openModal(card) {
+      if (!modal || !modalImage) return;
+      modalImage.src = card.dataset.packageImage;
+      modalImage.alt = card.dataset.packageTitle + ' package';
+      selectedPackage = {
+        key: card.dataset.packageKey,
+        title: card.dataset.packageTitle,
+        price: card.dataset.packagePrice,
+        rate: card.dataset.packageRate,
+        days: card.dataset.packageDays
+      };
+      modal.classList.add('is-open');
+      modal.setAttribute('aria-hidden', 'false');
+      if (modalCancel) modalCancel.focus();
+    }
+
+    function closeModal() {
+      if (!modal || !modalImage) return;
+      modal.classList.remove('is-open');
+      modal.setAttribute('aria-hidden', 'true');
+      modalImage.removeAttribute('src');
+      modalImage.alt = '';
+    }
+
+    function openAmountModal() {
+      if (!amountModal || !selectedPackage) return;
+      closeModal();
+      amountPackageKey.value = selectedPackage.key;
+      amountPackageTitle.textContent = selectedPackage.title;
+      amountPackageCopy.textContent = 'Minimum $' + Number(selectedPackage.price).toLocaleString() + ' with ' + selectedPackage.rate + '% daily interest for ' + selectedPackage.days + ' days.';
+      amountInput.min = selectedPackage.price;
+      amountInput.placeholder = 'Minimum $' + Number(selectedPackage.price).toLocaleString();
+      if (!amountInput.value) amountInput.value = selectedPackage.price;
+      amountModal.classList.add('is-open');
+      amountModal.setAttribute('aria-hidden', 'false');
+      amountInput.focus();
+    }
+
+    function closeAmountModal() {
+      if (!amountModal) return;
+      amountModal.classList.remove('is-open');
+      amountModal.setAttribute('aria-hidden', 'true');
+    }
+
+    cards.forEach(function (card) {
+      card.addEventListener('pointerdown', function (event) {
+        pointerStartX = event.clientX;
+        pointerStartY = event.clientY;
+      });
+      card.addEventListener('click', function (event) {
+        var movedX = Math.abs(event.clientX - pointerStartX);
+        var movedY = Math.abs(event.clientY - pointerStartY);
+        if (movedX > 12 || movedY > 12) return;
+        openModal(card);
+      });
+      card.addEventListener('keydown', function (event) {
+        if (event.key === 'Enter' || event.key === ' ') {
+          openModal(card);
+          event.preventDefault();
+        }
+      });
+    });
+
+    if (modalCancel) {
+      modalCancel.addEventListener('click', closeModal);
+    }
+    if (modalConfirm) {
+      modalConfirm.addEventListener('click', openAmountModal);
+    }
+    if (amountModalCancel) {
+      amountModalCancel.addEventListener('click', closeAmountModal);
+    }
+    if (modal) {
+      modal.addEventListener('click', function (event) {
+        if (event.target === modal) closeModal();
+      });
+    }
+    if (amountModal) {
+      amountModal.addEventListener('click', function (event) {
+        if (event.target === amountModal) closeAmountModal();
+      });
+    }
+    document.addEventListener('keydown', function (event) {
+      if (event.key === 'Escape') {
+        closeModal();
+        closeAmountModal();
+      }
+    });
+
+    @if ($errors->any())
+      var oldPackage = '{{ old('package') }}';
+      var oldCard = oldPackage ? document.querySelector('[data-package-key="' + oldPackage + '"]') : null;
+      if (oldCard) {
+        selectedPackage = {
+          key: oldCard.dataset.packageKey,
+          title: oldCard.dataset.packageTitle,
+          price: oldCard.dataset.packagePrice,
+          rate: oldCard.dataset.packageRate,
+          days: oldCard.dataset.packageDays
+        };
+        openAmountModal();
+      }
+    @endif
   })();
 </script>
 @endsection
