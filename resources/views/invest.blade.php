@@ -54,6 +54,9 @@
   .amount-field input { width:100%; min-height:48px; border-radius:14px; border:1px solid #ffc5cd; padding:0 14px; color:#001a33; font-size:16px; font-weight:800; outline:none; }
   .amount-field input:focus { border-color:#d91b0b; box-shadow:0 0 0 3px rgba(217,27,11,.12); }
   .estimate-grid { display:grid; grid-template-columns:repeat(3, minmax(0, 1fr)); gap:8px; margin-top:14px; }
+  .currency-toggle { display:grid; grid-template-columns:1fr 1fr; gap:8px; margin-top:14px; }
+  .currency-button { min-height:38px; border-radius:999px; border:1px solid #ffc5cd; background:#fff5f5; color:#d91b0b; font-size:13px; line-height:17px; font-weight:900; cursor:pointer; }
+  .currency-button.is-active { background:#d91b0b; color:#fff; border-color:#d91b0b; box-shadow:0 8px 18px rgba(217,27,11,.18); }
   .estimate-card { border-radius:14px; background:#fff8e8; border:1px solid #ffe0a3; padding:11px 10px; }
   .estimate-label { color:#8a4b00; font-size:10px; line-height:13px; font-weight:900; letter-spacing:.05em; text-transform:uppercase; }
   .estimate-value { margin-top:5px; color:#d91b0b; font-size:16px; line-height:20px; font-weight:900; }
@@ -183,6 +186,10 @@
       <span>Amount in USD</span>
       <input type="number" name="amount" id="amountInput" min="1" step="0.01" value="{{ old('amount') }}" placeholder="Enter amount">
     </label>
+    <div class="currency-toggle" aria-label="Sample computation currency">
+      <button class="currency-button is-active" type="button" data-currency="USD">USD</button>
+      <button class="currency-button" type="button" data-currency="PHP">PHP</button>
+    </div>
     <div class="estimate-grid" aria-label="Investment estimate">
       <div class="estimate-card">
         <div class="estimate-label">Daily</div>
@@ -220,6 +227,7 @@
     var amountPackageCopy = document.getElementById('amountPackageCopy');
     var amountInput = document.getElementById('amountInput');
     var amountModalCancel = document.getElementById('amountModalCancel');
+    var currencyButtons = Array.prototype.slice.call(document.querySelectorAll('.currency-button'));
     var dailyEstimate = document.getElementById('dailyEstimate');
     var weeklyEstimate = document.getElementById('weeklyEstimate');
     var totalEstimate = document.getElementById('totalEstimate');
@@ -228,6 +236,8 @@
     var pointerStartY = 0;
     var selectedPackage = null;
     var lastPackageCard = null;
+    var selectedCurrency = 'USD';
+    var phpRate = 58;
     if (!track || !dots.length) return;
 
     function updateDots() {
@@ -308,7 +318,10 @@
     }
 
     function money(value) {
-      return '$' + Number(value || 0).toLocaleString(undefined, {
+      var converted = selectedCurrency === 'PHP' ? Number(value || 0) * phpRate : Number(value || 0);
+      var prefix = selectedCurrency === 'PHP' ? '₱' : '$';
+
+      return prefix + converted.toLocaleString(undefined, {
         minimumFractionDigits: 2,
         maximumFractionDigits: 2
       });
@@ -327,7 +340,8 @@
       if (weeklyEstimate) weeklyEstimate.textContent = money(weekly);
       if (totalEstimate) totalEstimate.textContent = money(total);
       if (estimateNote) {
-        estimateNote.textContent = money(amount) + ' x ' + selectedPackage.rate + '% = ' + money(daily) + ' daily. Estimated total income for ' + days + ' days is ' + money(total) + '.';
+        var convertedLabel = selectedCurrency === 'PHP' ? 'PHP estimate at ₱' + phpRate + ' per $1. ' : '';
+        estimateNote.textContent = convertedLabel + money(amount) + ' x ' + selectedPackage.rate + '% = ' + money(daily) + ' daily. Estimated total income for ' + days + ' days is ' + money(total) + '.';
       }
     }
 
@@ -362,6 +376,15 @@
     if (amountInput) {
       amountInput.addEventListener('input', updateEstimate);
     }
+    currencyButtons.forEach(function (button) {
+      button.addEventListener('click', function () {
+        selectedCurrency = button.dataset.currency || 'USD';
+        currencyButtons.forEach(function (item) {
+          item.classList.toggle('is-active', item === button);
+        });
+        updateEstimate();
+      });
+    });
     if (modal) {
       modal.addEventListener('click', function (event) {
         if (event.target === modal) closeModal();

@@ -46,8 +46,8 @@
   .swipe-knob {
     position:relative;
     z-index:1;
-    width:38px;
-    height:38px;
+    width:50px;
+    height:50px;
     flex:0 0 auto;
     border-radius:50%;
     display:flex;
@@ -55,10 +55,10 @@
     justify-content:center;
     background:#fff;
     color:#c40000;
-    font-size:20px;
+    font-size:26px;
     line-height:1;
     font-weight:900;
-    box-shadow:0 4px 12px rgba(0,0,0,.16);
+    box-shadow:0 6px 16px rgba(0,0,0,.18);
     transition:transform .18s ease;
     cursor:grab;
     touch-action:none;
@@ -258,7 +258,7 @@
     function end() {
       if (!dragging) return;
       dragging = false;
-      if (currentX >= maxX * 0.72) {
+      if (currentX >= maxX * 0.5) {
         completeSwipe();
         return;
       }
