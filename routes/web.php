@@ -14,7 +14,7 @@ Route::get('/', function () {
             return redirect()->route('pin.setup');
         }
 
-        if (! session()->boolean('pin_verified')) {
+        if (! (bool) session()->get('pin_verified', false)) {
             return redirect()->route('pin.login');
         }
 

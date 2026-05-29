@@ -44,7 +44,7 @@ class PinController extends Controller
             return redirect()->route('pin.setup');
         }
 
-        if ($request->session()->boolean('pin_verified')) {
+        if ((bool) $request->session()->get('pin_verified', false)) {
             return redirect()->route($request->user()->is_admin ? 'admin.dashboard' : 'dashboard');
         }
 
