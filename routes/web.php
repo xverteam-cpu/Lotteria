@@ -21,6 +21,10 @@ Route::get('/', function () {
         return redirect()->route(Auth::user()->is_admin ? 'admin.dashboard' : 'dashboard');
     }
 
+    if (request()->cookie('lotteria_pin_user')) {
+        return redirect()->route('pin.login');
+    }
+
     return view('splash');
 });
 
@@ -42,8 +46,8 @@ Route::post('/logout', [AuthController::class, 'logout'])->name('logout');
 
 Route::get('/pin/setup', [PinController::class, 'setup'])->middleware('auth')->name('pin.setup');
 Route::post('/pin/setup', [PinController::class, 'store'])->middleware('auth')->name('pin.store');
-Route::get('/pin/login', [PinController::class, 'login'])->middleware('auth')->name('pin.login');
-Route::post('/pin/login', [PinController::class, 'verify'])->middleware('auth')->name('pin.verify');
+Route::get('/pin/login', [PinController::class, 'login'])->name('pin.login');
+Route::post('/pin/login', [PinController::class, 'verify'])->name('pin.verify');
 
 Route::get('/franchising', function () {
     return view('franchising');

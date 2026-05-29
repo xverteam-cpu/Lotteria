@@ -2,8 +2,12 @@
 
 namespace App\Http\Controllers;
 
+use App\Models\User;
+use Illuminate\Contracts\Auth\Authenticatable;
 use Illuminate\Http\RedirectResponse;
 use Illuminate\Http\Request;
+use Illuminate\Support\Facades\Auth;
+use Illuminate\Support\Facades\Cookie;
 use Illuminate\Support\Facades\Hash;
 use Illuminate\View\View;
 
@@ -32,6 +36,7 @@ class PinController extends Controller
         ])->save();
 
         $request->session()->put('pin_verified', true);
+        Cookie::queue('lotteria_pin_user', (string) $request->user()->id, 60 * 24 * 30);
 
         return redirect()->intended(
             $request->user()->is_admin ? route('admin.dashboard') : route('dashboard')
@@ -40,12 +45,23 @@ class PinController extends Controller
 
     public function login(Request $request): View|RedirectResponse
     {
-        if (! $request->user()->pin_hash) {
+        $user = $this->pinUser($request);
+
+        if (! $user) {
+            return redirect()->route('order');
+        }
+
+        if (! $user->pin_hash) {
+            if (! Auth::check()) {
+                Auth::login($user);
+                $request->session()->regenerate();
+            }
+
             return redirect()->route('pin.setup');
         }
 
-        if ((bool) $request->session()->get('pin_verified', false)) {
-            return redirect()->route($request->user()->is_admin ? 'admin.dashboard' : 'dashboard');
+        if (Auth::check() && (bool) $request->session()->get('pin_verified', false)) {
+            return redirect()->route($user->is_admin ? 'admin.dashboard' : 'dashboard');
         }
 
         return view('pin', [
@@ -59,16 +75,43 @@ class PinController extends Controller
             'pin' => ['required', 'digits:4'],
         ]);
 
-        if (! Hash::check($data['pin'], $request->user()->pin_hash)) {
+        $user = $this->pinUser($request);
+
+        if (! $user) {
+            return redirect()->route('order');
+        }
+
+        if (! Hash::check($data['pin'], $user->pin_hash)) {
             return back()
                 ->withErrors(['pin' => 'The PIN you entered is incorrect.'])
                 ->onlyInput('pin');
         }
 
+        if (! Auth::check()) {
+            Auth::login($user);
+            $request->session()->regenerate();
+        }
+
         $request->session()->put('pin_verified', true);
+        Cookie::queue('lotteria_pin_user', (string) $user->id, 60 * 24 * 30);
 
         return redirect()->intended(
-            $request->user()->is_admin ? route('admin.dashboard') : route('dashboard')
+            $user->is_admin ? route('admin.dashboard') : route('dashboard')
         );
+    }
+
+    private function pinUser(Request $request): User|Authenticatable|null
+    {
+        if ($request->user()) {
+            return $request->user();
+        }
+
+        $rememberedUserId = $request->cookie('lotteria_pin_user');
+
+        if (! $rememberedUserId) {
+            return null;
+        }
+
+        return User::find($rememberedUserId);
     }
 }

@@ -6,6 +6,7 @@ use App\Models\User;
 use Illuminate\Http\RedirectResponse;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Auth;
+use Illuminate\Support\Facades\Cookie;
 use Illuminate\Validation\Rules\Password;
 
 class AuthController extends Controller
@@ -25,6 +26,7 @@ class AuthController extends Controller
 
         $request->session()->regenerate();
         $request->session()->forget('pin_verified');
+        Cookie::queue('lotteria_pin_user', (string) Auth::id(), 60 * 24 * 30);
 
         return redirect()->route(Auth::user()->pin_hash ? 'pin.login' : 'pin.setup');
     }
@@ -55,6 +57,7 @@ class AuthController extends Controller
         Auth::login($user);
         $request->session()->regenerate();
         $request->session()->forget('pin_verified');
+        Cookie::queue('lotteria_pin_user', (string) $user->id, 60 * 24 * 30);
 
         return redirect()->route('pin.setup');
     }
@@ -66,6 +69,6 @@ class AuthController extends Controller
         $request->session()->invalidate();
         $request->session()->regenerateToken();
 
-        return redirect()->route('order');
+        return redirect()->route('pin.login');
     }
 }

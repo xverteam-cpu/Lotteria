@@ -20,7 +20,7 @@
       box-shadow:0 12px 34px rgba(15,23,42,.14);
     }
     .pin-content { position:relative; z-index:1; display:flex; min-height:calc(100vh - 92px); flex-direction:column; align-items:center; }
-    .pin-logo { display:block; width:138px; height:auto; margin:0 auto 30px; }
+    .pin-spacer { height:108px; }
     .pin-title { margin:0; color:#071846; font-size:24px; line-height:30px; font-weight:900; text-align:center; }
     .pin-subtitle { margin:8px 0 0; color:#8b91a3; font-size:14px; line-height:20px; font-weight:700; text-align:center; }
     .pin-error { margin:14px 0 0; border-radius:12px; background:#fff5f5; border:1px solid #ffc5cd; padding:10px 12px; color:#d91b0b; font-size:13px; line-height:18px; font-weight:800; text-align:center; }
@@ -83,7 +83,7 @@
     <section class="pin-shell">
       <form class="pin-content" method="post" action="{{ $mode === 'setup' ? route('pin.store') : route('pin.verify') }}">
         @csrf
-        <img class="pin-logo" src="https://www.lotteria.vn/grs-static/icons/logo_512.png" alt="Lotteria">
+        <div class="pin-spacer" aria-hidden="true"></div>
         <h1 class="pin-title">{{ $mode === 'setup' ? 'Create your PIN' : 'Welcome back!' }}</h1>
         <p class="pin-subtitle">{{ $mode === 'setup' ? 'Enter your 4 digit MPIN' : 'Enter your MPIN to login' }}</p>
 
@@ -123,6 +123,8 @@
       var keys = Array.prototype.slice.call(document.querySelectorAll('[data-key]'));
       var deleteKey = document.querySelector('[data-delete]');
       var revealTimer = null;
+      var autoSubmit = {{ $mode === 'login' && ! $errors->any() ? 'true' : 'false' }};
+      var hasSubmitted = false;
 
       function sync() {
         var value = input.value.slice(0, 4);
@@ -136,6 +138,12 @@
           indicator.textContent = isFilled ? (isVisible ? value[index] : '•') : '';
         });
         submit.disabled = value.length !== 4;
+        if (autoSubmit && !hasSubmitted && value.length === 4) {
+          hasSubmitted = true;
+          window.setTimeout(function () {
+            input.form.submit();
+          }, 180);
+        }
       }
 
       function maskAll() {
