@@ -10,7 +10,8 @@
     @media only screen and (max-width: 600px) {
       .container { width: 100% !important; }
       .content-padding { padding: 18px !important; }
-      .nav-button { display: block !important; width: 100% !important; margin: 8px 0 !important; }
+      .nav-button { display: table-cell !important; width: 33.333% !important; margin: 0 !important; padding: 0 4px !important; vertical-align: top !important; }
+      .nav-button a { box-sizing: border-box !important; width: 100% !important; min-height: 70px !important; padding: 13px 5px !important; font-size: 11px !important; line-height: 16px !important; border-radius: 28px !important; }
       .mobile-center { text-align: center !important; }
       .card-title { font-size: 22px !important; }
       .card-text { font-size: 16px !important; }
