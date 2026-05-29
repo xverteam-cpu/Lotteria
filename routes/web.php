@@ -38,6 +38,10 @@ Route::get('/dashboard', function () {
     return view('dashboard');
 })->middleware('auth')->name('dashboard');
 
+Route::get('/invest', function () {
+    return view('invest');
+})->middleware('auth')->name('invest');
+
 Route::get('/admin/dashboard', function () {
     abort_unless(Auth::user()?->is_admin, 403);
 

@@ -149,7 +149,7 @@
     </div>
   </section>
 
-  <div class="swipe-invest" role="link" tabindex="0" data-swipe-url="{{ route('unavailable') }}" aria-label="Swipe to invest">
+  <div class="swipe-invest" role="link" tabindex="0" data-swipe-url="{{ route('invest') }}" aria-label="Swipe to invest">
     <span class="swipe-knob">›</span>
     <span class="swipe-copy">
       <span class="swipe-title">Swipe to Invest</span>
