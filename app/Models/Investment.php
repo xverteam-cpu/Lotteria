@@ -13,6 +13,7 @@ class Investment extends Model
         'package_name',
         'package_price',
         'amount',
+        'payment_method',
         'daily_interest_rate',
         'duration_days',
         'starts_at',

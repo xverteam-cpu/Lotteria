@@ -62,6 +62,10 @@
   .estimate-value { margin-top:5px; color:#d91b0b; font-size:16px; line-height:20px; font-weight:900; }
   .estimate-note { margin:10px 0 0; color:#64748b; font-size:12px; line-height:17px; font-weight:600; }
   .form-error { margin:0 0 12px; border-radius:12px; background:#fff5f5; border:1px solid #ffc5cd; padding:10px 12px; color:#d91b0b; font-size:13px; line-height:18px; font-weight:800; }
+  .payment-options { display:grid; gap:10px; margin-top:14px; }
+  .payment-choice { display:flex; align-items:center; justify-content:space-between; gap:12px; width:100%; min-height:54px; border-radius:16px; border:1px solid #ffc5cd; background:#fff8f8; color:#d91b0b; padding:0 16px; font-size:14px; line-height:18px; font-weight:900; cursor:pointer; text-align:left; }
+  .payment-choice span { color:#64748b; font-size:12px; line-height:16px; font-weight:700; }
+  .payment-choice:hover, .payment-choice:focus { border-color:#d91b0b; box-shadow:0 0 0 3px rgba(217,27,11,.1); outline:none; }
   @media (max-width:430px) {
     .packages-page { padding-inline:13px; }
     .hero-title .black { font-size:40px; line-height:39px; }
@@ -174,9 +178,10 @@
 </div>
 
 <div class="package-modal" id="amountModal" aria-hidden="true">
-  <form class="modal-card" role="dialog" aria-modal="true" aria-label="Investment amount" method="post" action="{{ route('investments.store') }}">
+  <form class="modal-card" id="investmentForm" role="dialog" aria-modal="true" aria-label="Investment amount" method="post" action="{{ route('investments.store') }}">
     @csrf
     <input type="hidden" name="package" id="amountPackageKey" value="{{ old('package') }}">
+    <input type="hidden" name="payment_method" id="paymentMethodInput" value="{{ old('payment_method') }}">
     @if ($errors->any())
       <div class="form-error">{{ $errors->first() }}</div>
     @endif
@@ -206,10 +211,26 @@
     </div>
     <p class="estimate-note" id="estimateNote">Sample computation appears after selecting a package.</p>
     <div class="modal-actions">
-      <button class="modal-button confirm" type="submit">Confirm</button>
+      <button class="modal-button confirm" type="button" id="amountConfirmPayment">Confirm</button>
       <button class="modal-button cancel" type="button" id="amountModalCancel">Cancel</button>
     </div>
   </form>
+</div>
+
+<div class="package-modal" id="paymentModal" aria-hidden="true">
+  <div class="modal-card" role="dialog" aria-modal="true" aria-label="Mode of payment">
+    <h2 class="amount-title">Mode of payment</h2>
+    <p class="amount-copy">Choose how you want to pay for this investment.</p>
+    <div class="payment-options">
+      <button class="payment-choice" type="button" data-payment-method="bank_transfer">Bank transfer <span>Pay through bank deposit</span></button>
+      <button class="payment-choice" type="button" data-payment-method="account_balance">Account balance <span>Use available account funds</span></button>
+      <button class="payment-choice" type="button" data-payment-method="crypto">Crypto <span>Pay using cryptocurrency</span></button>
+    </div>
+    <div class="modal-actions">
+      <button class="modal-button cancel" type="button" id="paymentModalBack">Back</button>
+      <button class="modal-button cancel" type="button" id="paymentModalCancel">Cancel</button>
+    </div>
+  </div>
 </div>
 
 <script>
@@ -221,12 +242,19 @@
     var modalImage = document.getElementById('packageModalImage');
     var modalConfirm = document.getElementById('packageModalConfirm');
     var modalCancel = document.getElementById('packageModalCancel');
+    var investmentForm = document.getElementById('investmentForm');
     var amountModal = document.getElementById('amountModal');
     var amountPackageKey = document.getElementById('amountPackageKey');
+    var paymentMethodInput = document.getElementById('paymentMethodInput');
     var amountPackageTitle = document.getElementById('amountPackageTitle');
     var amountPackageCopy = document.getElementById('amountPackageCopy');
     var amountInput = document.getElementById('amountInput');
+    var amountConfirmPayment = document.getElementById('amountConfirmPayment');
     var amountModalCancel = document.getElementById('amountModalCancel');
+    var paymentModal = document.getElementById('paymentModal');
+    var paymentChoices = Array.prototype.slice.call(document.querySelectorAll('.payment-choice'));
+    var paymentModalBack = document.getElementById('paymentModalBack');
+    var paymentModalCancel = document.getElementById('paymentModalCancel');
     var currencyButtons = Array.prototype.slice.call(document.querySelectorAll('.currency-button'));
     var dailyEstimate = document.getElementById('dailyEstimate');
     var weeklyEstimate = document.getElementById('weeklyEstimate');
@@ -317,6 +345,29 @@
       amountModal.setAttribute('aria-hidden', 'true');
     }
 
+    function openPaymentModal() {
+      if (!paymentModal || !investmentForm) return;
+      if (typeof investmentForm.reportValidity === 'function' && !investmentForm.reportValidity()) return;
+      moveFocusOut(amountModal, false);
+      amountModal.classList.remove('is-open');
+      amountModal.setAttribute('aria-hidden', 'true');
+      paymentModal.classList.add('is-open');
+      paymentModal.setAttribute('aria-hidden', 'false');
+      if (paymentChoices[0]) paymentChoices[0].focus();
+    }
+
+    function closePaymentModal(returnToAmount) {
+      if (!paymentModal) return;
+      moveFocusOut(paymentModal, !returnToAmount);
+      paymentModal.classList.remove('is-open');
+      paymentModal.setAttribute('aria-hidden', 'true');
+      if (returnToAmount && amountModal) {
+        amountModal.classList.add('is-open');
+        amountModal.setAttribute('aria-hidden', 'false');
+        if (amountConfirmPayment) amountConfirmPayment.focus();
+      }
+    }
+
     function money(value) {
       var converted = selectedCurrency === 'PHP' ? Number(value || 0) * phpRate : Number(value || 0);
       var prefix = selectedCurrency === 'PHP' ? '₱' : '$';
@@ -373,6 +424,26 @@
     if (amountModalCancel) {
       amountModalCancel.addEventListener('click', closeAmountModal);
     }
+    if (amountConfirmPayment) {
+      amountConfirmPayment.addEventListener('click', openPaymentModal);
+    }
+    paymentChoices.forEach(function (choice) {
+      choice.addEventListener('click', function () {
+        if (!paymentMethodInput || !investmentForm) return;
+        paymentMethodInput.value = choice.dataset.paymentMethod || '';
+        investmentForm.submit();
+      });
+    });
+    if (paymentModalBack) {
+      paymentModalBack.addEventListener('click', function () {
+        closePaymentModal(true);
+      });
+    }
+    if (paymentModalCancel) {
+      paymentModalCancel.addEventListener('click', function () {
+        closePaymentModal(false);
+      });
+    }
     if (amountInput) {
       amountInput.addEventListener('input', updateEstimate);
     }
@@ -395,10 +466,16 @@
         if (event.target === amountModal) closeAmountModal();
       });
     }
+    if (paymentModal) {
+      paymentModal.addEventListener('click', function (event) {
+        if (event.target === paymentModal) closePaymentModal(false);
+      });
+    }
     document.addEventListener('keydown', function (event) {
       if (event.key === 'Escape') {
         closeModal();
         closeAmountModal();
+        closePaymentModal(false);
       }
     });
 

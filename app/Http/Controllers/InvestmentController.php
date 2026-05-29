@@ -14,6 +14,7 @@ class InvestmentController extends Controller
         $data = $request->validate([
             'package' => ['required', 'string'],
             'amount' => ['required', 'numeric', 'min:1'],
+            'payment_method' => ['required', 'string', 'in:bank_transfer,account_balance,crypto'],
         ]);
 
         $package = InvestmentPackages::find($data['package']);
@@ -35,6 +36,7 @@ class InvestmentController extends Controller
             'package_name' => $package['name'],
             'package_price' => $package['price'],
             'amount' => $data['amount'],
+            'payment_method' => $data['payment_method'],
             'daily_interest_rate' => $package['daily_interest_rate'],
             'duration_days' => $package['duration_days'],
             'starts_at' => now(),

@@ -133,6 +133,7 @@
   $activeCapital = $investments->sum(fn ($investment) => (float) $investment->amount);
   $dailyInterest = $investments->sum(fn ($investment) => $investment->dailyInterestAmount());
   $earnedIncome = $investments->sum(fn ($investment) => $investment->earnedInterest());
+  $recentInvestments = $investments->take(3);
 @endphp
 
 <main class="dashboard-shell">
@@ -204,6 +205,15 @@
       <div class="activity-title">Recent activity</div>
       <a href="{{ route('unavailable') }}" style="color:#c40000;text-decoration:none;font-size:13px;font-weight:800;">View all</a>
     </div>
+    @foreach ($recentInvestments as $investment)
+      <div class="activity-item">
+        <div>
+          <strong>{{ $investment->package_name }} availed</strong>
+          <span class="activity-time">{{ $investment->created_at?->format('h:i A') ?: 'Now' }} - investment submitted</span>
+        </div>
+        <div style="font-weight:800;color:#c40000;">${{ number_format((float) $investment->amount, 2) }}</div>
+      </div>
+    @endforeach
     <div class="activity-item"><div><strong>Partner account created</strong><span class="activity-time">{{ $user->created_at?->format('h:i A') ?: 'Now' }} - submitted</span></div><div style="font-weight:800;color:#c40000;">{{ $user->region ?: 'N/A' }}</div></div>
     <div class="activity-item"><div><strong>Application profile saved</strong><span class="activity-time">{{ $user->last_seen_at?->format('h:i A') ?: 'Now' }} - active</span></div><div style="font-weight:800;color:#c40000;">{{ $user->phone ?: 'N/A' }}</div></div>
   </section>
