@@ -31,7 +31,7 @@
   .package-desc { margin:16px 0 0; color:#232323; font-size:16px; line-height:21px; font-weight:500; }
   .price-row { display:flex; align-items:center; gap:10px; margin-top:18px; }
   .price { display:inline-flex; align-items:center; min-height:48px; padding:0 16px; border-radius:12px; background:linear-gradient(180deg, #ef3518, #d91705); color:#fff; font-size:31px; line-height:34px; font-weight:900; }
-  .save { display:inline-flex; align-items:center; min-height:48px; padding:0 15px; border-radius:12px; background:#f8f2ef; color:#d91b0b; font-size:18px; line-height:22px; font-weight:900; white-space:nowrap; }
+  .package-terms { display:inline-flex; align-items:center; min-height:38px; margin-top:10px; padding:0 13px; border-radius:12px; background:#f8f2ef; color:#d91b0b; font-size:14px; line-height:18px; font-weight:900; white-space:nowrap; }
   .product-label { position:absolute; z-index:2; right:22px; top:134px; color:#fff; font-size:34px; line-height:36px; font-weight:900; font-style:italic; letter-spacing:.07em; text-transform:uppercase; }
   .payment-card { display:flex; align-items:center; justify-content:space-between; gap:12px; margin:8px auto 0; padding:17px 18px; max-width:790px; border-radius:18px; background:#fff; box-shadow:0 8px 24px rgba(30,20,10,.1); }
   .payment-copy { color:#252525; font-size:13px; line-height:17px; font-weight:600; }
@@ -67,7 +67,7 @@
     .package-name { font-size:28px; line-height:32px; }
     .product-label { right:13px; font-size:29px; line-height:32px; }
     .price { font-size:27px; padding-inline:13px; }
-    .save { font-size:16px; padding-inline:12px; }
+    .package-terms { font-size:13px; padding-inline:11px; }
   }
   @media (min-width:760px) {
     .packages-page { padding:34px 22px 42px; }
@@ -115,7 +115,8 @@
         <div class="package-content">
           <h2 class="package-name"><span class="package-number">01</span>Crunch</h2>
           <p class="package-desc">Crispy satisfaction in every bite.</p>
-          <div class="price-row"><span class="price">$250</span><span class="save">0.5% daily</span></div>
+          <div class="price-row"><span class="price">$250</span></div>
+          <div class="package-terms">0.5% daily · 150 days</div>
         </div>
         <div class="product-label">Crunch</div>
       </article>
@@ -124,7 +125,8 @@
         <div class="package-content">
           <h2 class="package-name"><span class="package-number">02</span>Loaded</h2>
           <p class="package-desc">Loaded fries. Max taste. Zero regrets.</p>
-          <div class="price-row"><span class="price">$900</span><span class="save">0.7% daily</span></div>
+          <div class="price-row"><span class="price">$900</span></div>
+          <div class="package-terms">0.7% daily · 120 days</div>
         </div>
         <div class="product-label">Loaded</div>
       </article>
@@ -133,7 +135,8 @@
         <div class="package-content">
           <h2 class="package-name"><span class="package-number">03</span>Supreme</h2>
           <p class="package-desc">The ultimate combo for true cravings.</p>
-          <div class="price-row"><span class="price">$10,000</span><span class="save">0.9% daily</span></div>
+          <div class="price-row"><span class="price">$10,000</span></div>
+          <div class="package-terms">0.9% daily · 90 days</div>
         </div>
         <div class="product-label">Supreme</div>
       </article>
