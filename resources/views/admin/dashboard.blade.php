@@ -188,6 +188,7 @@
       <p class="admin-copy">Track newly registered partners, active accounts, and user records from one place.</p>
     </div>
     <div class="admin-actions">
+      <a class="admin-button" href="{{ route('admin.investments', ['status' => 'pending']) }}">Investment Approvals</a>
       <a class="admin-button" href="{{ route('dashboard') }}">User Dashboard</a>
       <form action="{{ route('logout') }}" method="post">
         @csrf

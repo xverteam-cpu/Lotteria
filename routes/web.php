@@ -2,6 +2,7 @@
 
 use App\Http\Controllers\AuthController;
 use App\Http\Controllers\Admin\UserManagementController;
+use App\Http\Controllers\Admin\InvestmentApprovalController;
 use App\Http\Controllers\InvestmentController;
 use App\Http\Controllers\PinController;
 use App\Models\User;
@@ -37,6 +38,10 @@ Route::get('/order', function () {
 })->name('order');
 
 Route::get('/login', function () {
+    if (request()->cookie('lotteria_pin_user')) {
+        return redirect()->route('pin.login');
+    }
+
     return redirect()->route('order');
 })->name('login');
 
@@ -80,3 +85,19 @@ Route::get('/admin/users/{user}', function (User $user) {
 
     return app(UserManagementController::class)->show($user);
 })->middleware(['auth', 'pin'])->name('admin.users.show');
+
+Route::get('/admin/investments', [InvestmentApprovalController::class, 'index'])
+    ->middleware(['auth', 'pin'])
+    ->name('admin.investments');
+
+Route::get('/admin/investments/{investment}', [InvestmentApprovalController::class, 'show'])
+    ->middleware(['auth', 'pin'])
+    ->name('admin.investments.show');
+
+Route::post('/admin/investments/{investment}/approve', [InvestmentApprovalController::class, 'approve'])
+    ->middleware(['auth', 'pin'])
+    ->name('admin.investments.approve');
+
+Route::post('/admin/investments/{investment}/reject', [InvestmentApprovalController::class, 'reject'])
+    ->middleware(['auth', 'pin'])
+    ->name('admin.investments.reject');

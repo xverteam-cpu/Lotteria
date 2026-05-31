@@ -17,6 +17,10 @@ class Investment extends Model
         'daily_interest_rate',
         'duration_days',
         'starts_at',
+        'status',
+        'approved_by',
+        'approved_at',
+        'rejection_reason',
     ];
 
     protected function casts(): array
@@ -27,12 +31,18 @@ class Investment extends Model
             'daily_interest_rate' => 'decimal:3',
             'duration_days' => 'integer',
             'starts_at' => 'datetime',
+            'approved_at' => 'datetime',
         ];
     }
 
     public function user(): BelongsTo
     {
         return $this->belongsTo(User::class);
+    }
+
+    public function approver(): BelongsTo
+    {
+        return $this->belongsTo(User::class, 'approved_by');
     }
 
     public function dailyInterestAmount(): float
