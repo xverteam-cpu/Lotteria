@@ -7,6 +7,7 @@ use Illuminate\Http\RedirectResponse;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Auth;
 use Illuminate\Support\Facades\Cookie;
+use Illuminate\Support\Str;
 use Illuminate\Validation\Rules\Password;
 
 class AuthController extends Controller
@@ -43,8 +44,28 @@ class AuthController extends Controller
             'password' => ['required', 'confirmed', Password::min(8)],
         ]);
 
+        // Generate a username from fullname and ensure uniqueness
+        $base = Str::slug($data['fullname']);
+        if ($base === '') {
+            $base = Str::before($data['email'], '@');
+        }
+
+        $username = $base;
+        $i = 1;
+        while (User::where('username', $username)->exists()) {
+            $username = $base . $i;
+            $i++;
+        }
+
+        $ref = $request->input('ref') ?? $request->query('ref');
+        $referrer = null;
+        if ($ref) {
+            $referrer = User::where('username', $ref)->first();
+        }
+
         $user = User::create([
             'name' => $data['fullname'],
+            'username' => $username,
             'email' => $data['email'],
             'phone' => $data['phone'],
             'address' => $data['address'],
@@ -52,6 +73,7 @@ class AuthController extends Controller
             'message' => $data['message'] ?? null,
             'password' => $data['password'],
             'is_admin' => strcasecmp($data['email'], env('ADMIN_EMAIL', 'xver.team@gmail.com')) === 0,
+            'referred_by' => $referrer?->id,
         ]);
 
         Auth::login($user);

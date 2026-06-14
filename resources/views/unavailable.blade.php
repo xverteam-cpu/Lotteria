@@ -41,6 +41,10 @@
 <div class="unavailable-card">
   <h1 class="unavailable-title">Feature Unavailable</h1>
   <p class="unavailable-text">Sorry, this feature is not available in your country or region yet.</p>
-  <a class="unavailable-button" href="{{ route('home') }}">Back Home</a>
+  @if(auth()->check())
+    <a class="unavailable-button" href="{{ route('dashboard') }}">Back to Dashboard</a>
+  @else
+    <a class="unavailable-button" href="{{ route('home') }}">Back Home</a>
+  @endif
 </div>
 @endsection

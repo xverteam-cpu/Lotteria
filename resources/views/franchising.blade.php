@@ -189,6 +189,7 @@
       <textarea class="form-message" id="message" name="message" placeholder="Leave your message here">{{ old('message') }}</textarea>
     </div>
 
+    <input type="hidden" name="ref" value="{{ request()->query('ref') ?? '' }}">
     <div class="form-actions">
       <button class="send-button" type="submit">Send</button>
     </div>

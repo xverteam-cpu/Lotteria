@@ -6,8 +6,9 @@
   <link rel="icon" type="image/png" href="https://www.lotteria.vn/grs-static/icons/logo_512.png">
   <link rel="shortcut icon" type="image/png" href="https://www.lotteria.vn/grs-static/icons/logo_512.png">
   <title>Lotteria</title>
+  <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;600;700;800;900&display=swap" rel="stylesheet">
   <style>
-    body { background:#eef1f4; font-family:'Helvetica Neue',Helvetica,Arial,-apple-system,BlinkMacSystemFont,'Segoe UI',system-ui,sans-serif; margin:0; }
+    body { background:#eef1f4; font-family:Inter, 'Helvetica Neue', Helvetica, Arial, -apple-system, BlinkMacSystemFont, 'Segoe UI', system-ui, sans-serif; margin:0; -webkit-font-smoothing:antialiased; -moz-osx-font-smoothing:grayscale; }
     .container { max-width:1100px; margin:0 auto; padding:18px; }
     a { color:#d90000; }
     .page-loader {

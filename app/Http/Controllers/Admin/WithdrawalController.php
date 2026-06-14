@@ -3,12 +3,12 @@
 namespace App\Http\Controllers\Admin;
 
 use App\Http\Controllers\Controller;
-use App\Models\Investment;
+use App\Models\Withdrawal;
 use Illuminate\Http\RedirectResponse;
 use Illuminate\Http\Request;
 use Illuminate\View\View;
 
-class InvestmentApprovalController extends Controller
+class WithdrawalController extends Controller
 {
     public function __construct()
     {
@@ -17,12 +17,13 @@ class InvestmentApprovalController extends Controller
             return $next($request);
         });
     }
+
     public function index(Request $request): View
     {
         $search = trim((string) $request->query('search', ''));
         $status = $request->query('status', 'pending');
 
-        $investments = Investment::query()
+        $withdrawals = Withdrawal::query()
             ->with(['user', 'approver'])
             ->where('status', $status)
             ->when($search !== '', function ($query) use ($search) {
@@ -30,18 +31,18 @@ class InvestmentApprovalController extends Controller
                     $q->where('name', 'like', "%{$search}%")
                         ->orWhere('email', 'like', "%{$search}%")
                         ->orWhere('phone', 'like', "%{$search}%");
-                })->orWhere('package_name', 'like', "%{$search}%");
+                })->orWhere('account_holder', 'like', "%{$search}%");
             })
             ->orderByDesc('created_at')
             ->paginate(20)
             ->withQueryString();
 
-        $pendingCount = Investment::where('status', 'pending')->count();
-        $approvedCount = Investment::where('status', 'approved')->count();
-        $rejectedCount = Investment::where('status', 'rejected')->count();
+        $pendingCount = Withdrawal::where('status', 'pending')->count();
+        $approvedCount = Withdrawal::where('status', 'approved')->count();
+        $rejectedCount = Withdrawal::where('status', 'rejected')->count();
 
-        return view('admin.investments', [
-            'investments' => $investments,
+        return view('admin.withdrawals', [
+            'withdrawals' => $withdrawals,
             'pendingCount' => $pendingCount,
             'approvedCount' => $approvedCount,
             'rejectedCount' => $rejectedCount,
@@ -50,47 +51,43 @@ class InvestmentApprovalController extends Controller
         ]);
     }
 
-    public function show(Investment $investment): View
+    public function show(Withdrawal $withdrawal): View
     {
-        return view('admin.investment-show', [
-            'investment' => $investment->load(['user', 'approver']),
+        return view('admin.withdrawal-show', [
+            'withdrawal' => $withdrawal->load(['user', 'approver']),
         ]);
     }
 
-    public function approve(Investment $investment, Request $request): RedirectResponse
+    public function approve(Withdrawal $withdrawal, Request $request): RedirectResponse
     {
-        if ($investment->status !== 'pending') {
+        if ($withdrawal->status !== 'pending') {
             return back()
-                ->withErrors(['error' => 'Only pending investments can be approved.']);
+                ->withErrors(['error' => 'Only pending withdrawals can be approved.']);
         }
 
-        $investment->update([
+        $withdrawal->update([
             'status' => 'approved',
             'approved_by' => $request->user()->id,
             'approved_at' => now(),
-            'starts_at' => now(),
         ]);
-
-        // After approving, credit referral commission where applicable
-        $investment->refresh()->processReferralCommission();
 
         return redirect()
             ->back()
-            ->with('status', 'Investment approved successfully.');
+            ->with('status', 'Withdrawal approved successfully.');
     }
 
-    public function reject(Investment $investment, Request $request): RedirectResponse
+    public function reject(Withdrawal $withdrawal, Request $request): RedirectResponse
     {
         $data = $request->validate([
             'rejection_reason' => ['required', 'string', 'max:500'],
         ]);
 
-        if ($investment->status !== 'pending') {
+        if ($withdrawal->status !== 'pending') {
             return back()
-                ->withErrors(['error' => 'Only pending investments can be rejected.']);
+                ->withErrors(['error' => 'Only pending withdrawals can be rejected.']);
         }
 
-        $investment->update([
+        $withdrawal->update([
             'status' => 'rejected',
             'approved_by' => $request->user()->id,
             'approved_at' => now(),
@@ -99,6 +96,6 @@ class InvestmentApprovalController extends Controller
 
         return redirect()
             ->back()
-            ->with('status', 'Investment rejected successfully.');
+            ->with('status', 'Withdrawal rejected successfully.');
     }
 }

@@ -33,7 +33,7 @@ class InvestmentController extends Controller
 
         $isPending = $data['payment_method'] === 'bank_transfer';
 
-        $request->user()->investments()->create([
+        $investment = $request->user()->investments()->create([
             'package_key' => $data['package'],
             'package_name' => $package['name'],
             'package_price' => $package['price'],
@@ -44,6 +44,11 @@ class InvestmentController extends Controller
             'starts_at' => $isPending ? null : now(),
             'status' => $isPending ? 'pending' : 'approved',
         ]);
+
+        // If investment is immediately approved, process referral commission
+        if ($investment->status === 'approved') {
+            $investment->processReferralCommission();
+        }
 
         $message = $isPending
             ? $package['name'].' investment has been submitted and is pending admin approval.'
