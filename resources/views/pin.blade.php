@@ -113,18 +113,8 @@
         <p class="pin-helper">{{ $mode === 'setup' ? 'You will only create this once.' : 'Use the 4 digit PIN you created.' }}</p>
         @if($mode === 'login')
           <div style="margin-top:14px; text-align:center;">
-            <a href="#" id="toggleEmailLogin" style="color:#071846; font-weight:800; text-decoration:none;">Or login with email & password</a>
+            <a href="{{ route('order') }}" id="emailLoginLink" style="color:#071846; font-weight:800; text-decoration:none;">Log in via email</a>
           </div>
-
-          <form id="emailLoginForm" method="post" action="{{ route('login.submit') }}" style="display:none; margin-top:16px; text-align:center;">
-            @csrf
-            <input type="email" name="email" placeholder="Email" required style="width:236px; height:44px; padding:8px 12px; border-radius:8px; border:1px solid #e6e9ef; margin-bottom:10px;">
-            <br>
-            <input type="password" name="password" placeholder="Password" required style="width:236px; height:44px; padding:8px 12px; border-radius:8px; border:1px solid #e6e9ef; margin-bottom:10px;">
-            <br>
-            <button class="pin-submit" type="submit" style="width:236px;">Login</button>
-            <div style="margin-top:8px;"><a href="#" id="backToPin" style="color:#8b91a3; font-weight:700; text-decoration:none;">Back to PIN</a></div>
-          </form>
         @endif
       </form>
     </section>
@@ -205,27 +195,7 @@
         }
       });
 
-      // Toggle email/password login
-      var toggle = document.getElementById('toggleEmailLogin');
-      var emailForm = document.getElementById('emailLoginForm');
-      var backLink = document.getElementById('backToPin');
-      var pinForm = input.form;
-
-      if (toggle && emailForm) {
-        toggle.addEventListener('click', function (e) {
-          e.preventDefault();
-          emailForm.style.display = 'block';
-          pinForm.style.display = 'none';
-        });
-      }
-
-      if (backLink && emailForm) {
-        backLink.addEventListener('click', function (e) {
-          e.preventDefault();
-          emailForm.style.display = 'none';
-          pinForm.style.display = '';
-        });
-      }
+      // Email login link redirects to the email login page (order)
 
       sync();
     })();
