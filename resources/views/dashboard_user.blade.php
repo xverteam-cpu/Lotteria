@@ -94,7 +94,7 @@
   <div class="card" style="margin-top:12px;">
     <div class="actions-grid" role="list">
       <a class="action" href="{{ route('send') }}">
-        <div class="icon"><svg viewBox="0 0 24 24" fill="none"><path d="M3 12l4-4 6 6 8-8" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round" fill="none"/></svg></div>
+        <div class="icon"><img src="{{ asset('Send%20(1).png') }}" alt="Send" style="width:28px;height:28px;object-fit:contain;border-radius:8px;background:#fff;padding:4px;"></div>
         <div>Send</div>
       </a>
 
