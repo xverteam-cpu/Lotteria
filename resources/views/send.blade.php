@@ -149,6 +149,8 @@
   .nav-item { text-align:center; font-size:11px; color:#6b7890; font-weight:900; }
   .nav-item span { display:block; font-size:20px; margin-bottom:5px; }
 
+  .nav-item img.nav-icon { width:36px; height:36px; border-radius:10px; background:#fff; padding:6px; display:block; margin:0 auto 6px; box-shadow:0 8px 22px rgba(0,0,0,0.06); }
+
   .center-action { width:68px; height:68px; border-radius:50%; background:#ed1c24; color:#fff; display:flex; align-items:center; justify-content:center; font-size:28px; margin-top:-42px; box-shadow:0 16px 30px rgba(237,28,36,0.3); }
 
   @media (max-width: 380px) {
@@ -246,8 +248,8 @@
 
 <nav class="bottom-nav">
   <div class="nav-item">
-    <span>⌂</span>
-    Home
+    <span><img src="{{ asset('Send%20(1).png') }}" alt="Send" class="nav-icon"></span>
+    Send
   </div>
 
   <div class="nav-item">
