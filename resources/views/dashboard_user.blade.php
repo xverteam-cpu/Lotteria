@@ -63,20 +63,6 @@
 @endphp
 
 <main class="wallet-shell">
-  <header class="topbar">
-    <div class="brand">
-      <div class="brand-mark">L</div>
-      <div>
-        <div class="brand-title">Lotteria Wallet</div>
-        <div style="font-size:11px;color:#8b91a3;font-weight:700;">Demo • For demonstration only</div>
-      </div>
-    </div>
-    <div style="display:flex;gap:12px;align-items:center;">
-      <a href="#" style="color:#e31b23;font-weight:900;text-decoration:none;">🔔</a>
-      <a href="#" style="width:36px;height:36px;border-radius:50%;background:#fff;display:inline-flex;align-items:center;justify-content:center;text-decoration:none;color:#c40000;">👤</a>
-    </div>
-  </header>
-
   <section class="hero">
     <div class="hero-top">
       <div class="hero-kicker">Available balance</div>
@@ -104,22 +90,22 @@
       </a>
 
       <a class="action" href="{{ route('referrals') }}">
-        <div class="icon"><svg viewBox="0 0 24 24" fill="none"><path d="M12 5v14M5 12h14" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round" fill="none"/></svg></div>
+        <div class="icon"><img src="{{ asset('referrals.png') }}" alt="Referrals" style="width:28px;height:28px;object-fit:contain;border-radius:8px;background:#fff;padding:4px;"></div>
         <div>Referrals</div>
       </a>
 
       <a class="action" href="{{ route('franchising') }}">
-        <div class="icon"><svg viewBox="0 0 24 24" fill="none"><rect x="3" y="7" width="18" height="13" rx="2" stroke="currentColor" stroke-width="1.6" fill="none"/><path d="M7 7V5a1 1 0 0 1 1-1h8a1 1 0 0 1 1 1v2" stroke="currentColor" stroke-width="1.6" stroke-linecap="round" stroke-linejoin="round" fill="none"/></svg></div>
+        <div class="icon"><img src="{{ asset('franchisebuttong.png') }}" alt="Franchise" style="width:28px;height:28px;object-fit:contain;border-radius:8px;background:#fff;padding:4px;"></div>
         <div>Franchise</div>
       </a>
 
       <a class="action" href="{{ route('cards') }}">
-        <div class="icon"><svg viewBox="0 0 24 24" fill="none"><rect x="2" y="6" width="20" height="12" rx="2" stroke="currentColor" stroke-width="1.6" fill="none"/><path d="M6 10h12" stroke="currentColor" stroke-width="1.6" stroke-linecap="round" fill="none"/></svg></div>
+        <div class="icon"><img src="{{ asset('cards.png') }}" alt="Cards" style="width:28px;height:28px;object-fit:contain;border-radius:8px;background:#fff;padding:4px;"></div>
         <div>Cards</div>
       </a>
 
       <a class="action" href="{{ route('loan') }}">
-        <div class="icon"><svg viewBox="0 0 24 24" fill="none"><path d="M12 3v4M8 11v6a2 2 0 0 0 2 2h4a2 2 0 0 0 2-2v-6" stroke="currentColor" stroke-width="1.6" stroke-linecap="round" stroke-linejoin="round" fill="none"/></svg></div>
+        <div class="icon"><img src="{{ asset('loan.png') }}" alt="Loan" style="width:28px;height:28px;object-fit:contain;border-radius:8px;background:#fff;padding:4px;"></div>
         <div>Loan</div>
       </a>
     </div>
