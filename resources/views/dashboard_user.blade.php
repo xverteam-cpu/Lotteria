@@ -99,7 +99,7 @@
       </a>
 
       <a class="action" href="{{ route('withdraw') }}">
-        <div class="icon"><svg viewBox="0 0 24 24" fill="none"><path d="M12 2v4M5 8v10a2 2 0 0 0 2 2h10a2 2 0 0 0 2-2V8" stroke="currentColor" stroke-width="1.6" stroke-linecap="round" stroke-linejoin="round" fill="none"/></svg></div>
+        <div class="icon"><img src="{{ asset('Withdraw.png') }}" alt="Withdraw" style="width:28px;height:28px;object-fit:contain;border-radius:8px;background:#fff;padding:4px;"></div>
         <div>Withdraw</div>
       </a>
 
