@@ -61,21 +61,6 @@
 
 <main class="phone">
 
-  <div class="topbar">
-    <div class="brand">
-      <div class="logo">L</div>
-      <div>
-        <h1>Lotteria Wallet</h1>
-        <p>Demo • For demonstration only</p>
-      </div>
-    </div>
-
-    <div class="icons">
-      <span>🔔</span>
-      <div class="profile">♟</div>
-    </div>
-  </div>
-
   <div class="back-row">
     <a href="{{ route('dashboard') }}" class="back-btn">‹</a>
     <div class="page-title">
