@@ -3,10 +3,10 @@
 @section('content')
 <style>
   :root{--lot-red:#D71920;--charcoal:#111827;--bg:#F8FAFC;--gold:#D4AF37;--text:#1F2937;--glass:rgba(255,255,255,0.90)}
-  .franchise-hero{background-image:linear-gradient(rgba(17,24,39,0.45),rgba(17,24,39,0.45)),url('{{ asset('Lotteria.png') }}');background-size:cover;background-position:center;color:#fff;padding:72px 20px;border-radius:12px;margin-bottom:28px}
-  .hero-inner{max-width:1100px;margin:0 auto;display:flex;gap:28px;align-items:center;justify-content:space-between;flex-wrap:wrap}
-  .hero-content{max-width:680px}
-  .hero-title{font-size:clamp(28px,4.6vw,48px);margin:0;font-weight:800;letter-spacing:-0.02em;color:#fff}
+  .franchise-hero{background-image:linear-gradient(rgba(17,24,39,0.68),rgba(17,24,39,0.56)),url('{{ asset('Lotteria.png') }}');background-size:cover;background-position:center;color:#fff;padding:56px 20px;border-radius:12px;margin-bottom:28px;position:relative;overflow:hidden}
+  .hero-inner{max-width:1100px;margin:0 auto;display:flex;gap:28px;align-items:center;justify-content:space-between;flex-wrap:nowrap}
+  .hero-content{max-width:640px}
+  .hero-title{font-size:clamp(30px,5vw,52px);margin:0;font-weight:800;letter-spacing:-0.02em;color:#fff;text-shadow:0 6px 20px rgba(0,0,0,0.5);line-height:1.05}
   .hero-sub{color:rgba(255,255,255,0.92);margin:12px 0 18px;font-size:18px}
   .hero-stats{display:flex;gap:12px;margin:18px 0}
   .stat{background:rgba(255,255,255,0.06);padding:12px 14px;border-radius:10px;text-align:center}
@@ -28,6 +28,10 @@
   .btn-select{background:var(--lot-red);color:#fff;padding:10px 14px;border-radius:10px;border:0;cursor:pointer;font-weight:700;flex:1}
   .btn-view{background:#fff;color:var(--lot-red);padding:10px 14px;border-radius:10px;border:1px solid rgba(215,25,32,0.12);cursor:pointer;flex:1}
 
+  /* Hero media */
+  .hero-media{min-width:260px;text-align:right;display:flex;align-items:center;justify-content:flex-end}
+  .hero-media img{max-width:360px;width:100%;height:auto;border-radius:12px;box-shadow:0 12px 36px rgba(0,0,0,0.18);transform:translateY(2px)}
+
   /* Ribbon */
   .ribbon{position:absolute;left:18px;top:18px;background:var(--gold);color:var(--charcoal);padding:6px 12px;border-radius:999px;font-weight:800;font-size:12px;box-shadow:0 8px 18px rgba(0,0,0,0.08)}
 
@@ -47,7 +51,16 @@
   .stat-card{background:#fff;padding:18px;border-radius:12px;text-align:center;box-shadow:0 10px 30px rgba(0,0,0,0.06)}
   .stat-card .big{font-size:28px;font-weight:900;color:var(--charcoal)}
 
-  @media (max-width:900px){.cards-grid{grid-template-columns:1fr}.stats-grid{grid-template-columns:repeat(2,1fr)}.hero-inner{flex-direction:column;align-items:flex-start}}
+  @media (max-width:900px){
+    .cards-grid{grid-template-columns:1fr}
+    .stats-grid{grid-template-columns:repeat(2,1fr)}
+    .hero-inner{flex-direction:column;align-items:flex-start}
+    .hero-media{display:none}
+  }
+  /* Presentation modal: hidden by default and non-interactive until opened */
+  #presentationModal { display:none; position:fixed; inset:0; background:rgba(0,0,0,0.6); z-index:9999; align-items:center; justify-content:center; padding:20px; pointer-events:none; }
+  #presentationModal.active { display:flex !important; pointer-events:auto; }
+  #presentationModal .modal-inner { position:relative; width:100%; height:100%; max-width:1120px; max-height:92vh; background:#fff; border-radius:12px; overflow:auto; }
 </style>
 
 <div class="franchise-hero">
@@ -63,8 +76,8 @@
       </div>
       <a href="#packages" class="cta">View Franchise Packages</a>
     </div>
-    <div style="min-width:260px;text-align:right;">
-      <img src="{{ asset('Lotteria.png') }}" alt="Lotteria" style="max-width:220px;border-radius:12px;box-shadow:0 8px 26px rgba(0,0,0,0.12)">
+    <div class="hero-media">
+      <img src="{{ asset('Lotteria.png') }}" alt="Lotteria">
     </div>
   </div>
 </div>
@@ -88,8 +101,8 @@
             <li>✓ Marketing Assistance</li>
           </ul>
           <div class="btn-row">
-            <button class="btn-select select-package" data-package="franchise_40pyeong">Select Package</button>
-            <button class="btn-view view-package" data-presentation="{{ asset('Lotteria_Philippines_40_Pyeong_Franchise_Cost_Presentation.pptx') }}" data-image="{{ asset('Franchise.png') }}">View Details</button>
+            <button class="btn-select select-package" data-package="franchise_40pyeong" data-app-url="{{ asset('franchise_40pyeong_application.html') }}">Select Package</button>
+            <button class="btn-view view-package" data-html-url="{{ asset('franchise_40pyeong.html') }}" data-presentation="{{ asset('Lotteria_Philippines_40_Pyeong_Franchise_Cost_Presentation.pptx') }}" data-image="{{ asset('Franchise.png') }}">View Details</button>
           </div>
         </div>
       </div>
@@ -109,8 +122,8 @@
             <li>✓ Site & Construction Assistance</li>
           </ul>
           <div class="btn-row">
-            <button class="btn-select select-package" data-package="franchise_60pyeong">Select Package</button>
-            <button class="btn-view view-package" data-image="{{ asset('60pyeong.png') }}">View Details</button>
+            <button class="btn-select select-package" data-package="franchise_60pyeong" data-app-url="{{ asset('franchise_60pyeong_application.html') }}">Select Package</button>
+            <button class="btn-view view-package" data-html-url="{{ asset('franchise_60pyeong.html') }}" data-image="{{ asset('60pyeong.png') }}">View Details</button>
           </div>
         </div>
       </div>
@@ -158,8 +171,8 @@
 </div>
 
 <!-- Modal -->
-<div id="presentationModal" style="display:none;position:fixed;inset:0;background:rgba(0,0,0,0.6);z-index:9999;align-items:center;justify-content:center;padding:20px;">
-  <div style="position:relative;width:100%;height:100%;max-width:1120px;max-height:92vh;background:#fff;border-radius:12px;overflow:auto;">
+<div id="presentationModal" aria-hidden="true">
+  <div class="modal-inner">
     <a id="presentationDownload" href="#" download style="position:absolute;left:12px;top:12px;z-index:3;background:#fff;border:0;border-radius:8px;padding:8px 10px;cursor:pointer;box-shadow:0 4px 14px rgba(0,0,0,0.12);color:var(--lot-red);font-weight:800;display:none;text-decoration:none;">Download</a>
     <button id="presentationClose" aria-label="Close" style="position:absolute;right:12px;top:12px;z-index:3;background:#fff;border:0;border-radius:8px;padding:8px 10px;cursor:pointer;box-shadow:0 4px 14px rgba(0,0,0,0.12);">✕</button>
     <img id="presentationImage" style="width:100%;height:auto;display:block;" src="" alt="Presentation" />
@@ -176,7 +189,34 @@ document.addEventListener('DOMContentLoaded', function () {
   var modal = document.getElementById('presentationModal');
   var modalClose = document.getElementById('presentationClose');
   var presentationImage = document.getElementById('presentationImage');
+  var downloadLink = document.getElementById('presentationDownload');
+  var frame = document.getElementById('presentationFrame');
 
+  function normalizeUrl(url) {
+    if (!url) return '';
+    if (/^(https?:)?\/\//i.test(url)) return url;
+    if (url.charAt(0) !== '/') url = '/' + url;
+    return window.location.origin + url;
+  }
+
+  function openModal() {
+    if (!modal) return;
+    modal.classList.add('active');
+    modal.setAttribute('aria-hidden', 'false');
+    document.body.style.overflow = 'hidden';
+  }
+
+  function closeModal() {
+    if (!modal) return;
+    modal.classList.remove('active');
+    modal.setAttribute('aria-hidden', 'true');
+    document.body.style.overflow = '';
+    if (frame) { frame.src = ''; frame.style.display = 'none'; }
+    if (presentationImage) presentationImage.src = '';
+    if (downloadLink) { downloadLink.style.display = 'none'; downloadLink.removeAttribute('download'); }
+  }
+
+  // Select package handler (opens application form for 40pyeong)
   selectButtons.forEach(function (btn) {
     btn.addEventListener('click', function () {
       var pkg = btn.dataset.package;
@@ -187,22 +227,30 @@ document.addEventListener('DOMContentLoaded', function () {
       var original = btn.textContent;
       btn.textContent = 'Selected';
       setTimeout(function () { btn.textContent = original; }, 1200);
+
+      var appUrl = btn.dataset.appUrl;
+      if (appUrl && frame) {
+        frame.src = normalizeUrl(appUrl);
+        frame.style.display = 'block';
+        if (presentationImage) presentationImage.style.display = 'none';
+        if (downloadLink) { downloadLink.style.display = 'none'; downloadLink.removeAttribute('download'); }
+        openModal();
+      }
     });
   });
 
-  var downloadLink = document.getElementById('presentationDownload');
-
+  // View details handler
   viewButtons.forEach(function (a) {
     a.addEventListener('click', function (e) {
       e.preventDefault();
       var pres = a.dataset.presentation;
       var img = a.dataset.image;
-      var frame = document.getElementById('presentationFrame');
-      // Set download link (prefer presentation file, else image)
+      var htmlUrl = a.dataset.htmlUrl;
+
       if (downloadLink) {
         var dl = pres || img || '';
         if (dl) {
-          downloadLink.href = dl;
+          downloadLink.href = normalizeUrl(dl);
           downloadLink.style.display = 'inline-block';
           downloadLink.setAttribute('download', '');
         } else {
@@ -210,45 +258,45 @@ document.addEventListener('DOMContentLoaded', function () {
           downloadLink.removeAttribute('download');
         }
       }
-      if (pres) {
-        var src = pres;
-        // If it's a PowerPoint or PPTX, use Office online embed viewer (requires public URL)
-        if (/\.pptx?$/i.test(pres)) {
-          src = 'https://view.officeapps.live.com/op/embed.aspx?src=' + encodeURIComponent(window.location.origin + pres);
-        }
-        // If it's a PDF, try Google Docs Viewer
-        if (/\.pdf$/i.test(pres)) {
-          src = 'https://docs.google.com/gview?url=' + encodeURIComponent(window.location.origin + pres) + '&embedded=true';
+
+      if (htmlUrl && frame) {
+        frame.src = normalizeUrl(htmlUrl);
+        frame.style.display = 'block';
+        if (presentationImage) presentationImage.style.display = 'none';
+        if (downloadLink) { downloadLink.href = normalizeUrl(htmlUrl); downloadLink.style.display = 'inline-block'; downloadLink.setAttribute('download', ''); }
+        openModal();
+        return;
+      }
+
+      if (pres && frame) {
+        var presUrl = normalizeUrl(pres);
+        var src = presUrl;
+        if (/\.pptx?$/i.test(presUrl)) {
+          src = 'https://view.officeapps.live.com/op/embed.aspx?src=' + encodeURIComponent(presUrl);
+        } else if (/\.pdf$/i.test(presUrl)) {
+          src = 'https://docs.google.com/gview?url=' + encodeURIComponent(presUrl) + '&embedded=true';
         }
         frame.src = src;
         frame.style.display = 'block';
-        presentationImage.style.display = 'none';
-        modal.style.display = 'flex';
-        document.body.style.overflow = 'hidden';
+        if (presentationImage) presentationImage.style.display = 'none';
+        if (downloadLink) { downloadLink.href = presUrl; downloadLink.style.display = 'inline-block'; downloadLink.setAttribute('download', ''); }
+        openModal();
         return;
       }
-      if (img) {
-        presentationImage.src = img;
+
+      if (img && presentationImage) {
+        presentationImage.src = normalizeUrl(img);
         presentationImage.style.display = 'block';
-        frame.style.display = 'none';
-        modal.style.display = 'flex';
-        document.body.style.overflow = 'hidden';
+        if (frame) frame.style.display = 'none';
+        openModal();
       }
     });
   });
 
-  function closeModal() {
-    modal.style.display = 'none';
-    document.body.style.overflow = '';
-    presentationImage.src = '';
-    var frame = document.getElementById('presentationFrame');
-    if (frame) { frame.src = ''; frame.style.display = 'none'; }
-    if (downloadLink) { downloadLink.style.display = 'none'; downloadLink.removeAttribute('download'); }
-  }
+  // Close handlers
   if (modalClose) modalClose.addEventListener('click', closeModal);
   if (modal) modal.addEventListener('click', function (e) { if (e.target === modal) closeModal(); });
   document.addEventListener('keydown', function (e) { if (e.key === 'Escape') closeModal(); });
-
 });
 </script>
 
