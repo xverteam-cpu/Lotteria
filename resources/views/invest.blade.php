@@ -17,7 +17,8 @@
   .swipe-hint { margin:0 0 10px; color:#d91b0b; font-size:12px; line-height:16px; font-weight:900; letter-spacing:.08em; text-transform:uppercase; }
   .package-track { display:flex; gap:18px; overflow-x:auto; overscroll-behavior-x:contain; scroll-snap-type:x mandatory; padding:0 8px 20px 0; margin-right:-16px; -webkit-overflow-scrolling:touch; }
   .package-track::-webkit-scrollbar { display:none; }
-  .package-card { position:relative; flex:0 0 88%; min-height:286px; scroll-snap-align:center; border-radius:28px; background:#fff; border:1px solid rgba(224,30,10,.08); box-shadow:0 14px 28px rgba(45,24,10,.14); overflow:hidden; cursor:pointer; }
+  .package-card { position:relative; flex:0 0 88%; min-height:286px; scroll-snap-align:center; border-radius:28px; background:#fff; border:1px solid rgba(224,30,10,.08); box-shadow:0 14px 28px rgba(45,24,10,.14); overflow:hidden; cursor:pointer; touch-action:manipulation; transition:transform .2s ease, box-shadow .2s ease, border-color .2s ease; }
+  .package-card:hover { transform:translateY(-4px); box-shadow:0 18px 36px rgba(45,24,10,.18); border-color:rgba(224,30,10,.16); }
   .package-card:focus-visible { outline:3px solid #f5a400; outline-offset:4px; }
   .package-card::after { content:''; position:absolute; right:-40px; top:108px; width:62%; height:96px; background:linear-gradient(90deg, #e12a10, #d61505); box-shadow:0 8px 20px rgba(165,24,9,.22); z-index:1; pointer-events:none; }
   .package-content { position:relative; z-index:2; padding:30px 24px 26px; max-width:58%; }
@@ -78,8 +79,8 @@
     .hero-title .black { font-size:40px; line-height:39px; }
     .hero-title .red { font-size:47px; line-height:46px; }
     .hero-copy { font-size:20px; line-height:26px; }
-    .package-card { flex-basis:91%; min-height:296px; }
-    .package-content { padding:28px 20px 24px; max-width:62%; }
+    .package-card { flex-basis:91%; min-height:320px; padding:14px; }
+    .package-content { padding:28px 20px 24px; max-width:100%; }
     .package-name { font-size:28px; line-height:32px; }
     .product-label { right:13px; font-size:29px; line-height:32px; }
     .price { font-size:27px; padding-inline:13px; }
