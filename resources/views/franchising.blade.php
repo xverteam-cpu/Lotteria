@@ -102,7 +102,7 @@
           </ul>
           <div class="btn-row">
             <button class="btn-select select-package" data-package="franchise_40pyeong" data-app-url="{{ asset('franchise_40pyeong_application.html') }}">Select Package</button>
-            <button class="btn-view view-package" data-html-url="{{ asset('franchise_40pyeong.html') }}" data-presentation="{{ asset('Lotteria_Philippines_40_Pyeong_Franchise_Cost_Presentation.pptx') }}" data-image="{{ asset('Franchise.png') }}">View Details</button>
+            <button type="button" class="btn-view view-package" data-html-url="{{ asset('franchise_40pyeong.html') }}" data-presentation="{{ asset('Lotteria_Philippines_40_Pyeong_Franchise_Cost_Presentation.pptx') }}" data-image="{{ asset('Franchise.png') }}">View Details</button>
           </div>
         </div>
       </div>
@@ -123,7 +123,7 @@
           </ul>
           <div class="btn-row">
             <button class="btn-select select-package" data-package="franchise_60pyeong" data-app-url="{{ asset('franchise_60pyeong_application.html') }}">Select Package</button>
-            <button class="btn-view view-package" data-html-url="{{ asset('franchise_60pyeong.html') }}" data-image="{{ asset('60pyeong.png') }}">View Details</button>
+            <button type="button" class="btn-view view-package" data-html-url="{{ asset('franchise_60pyeong.html') }}" data-image="{{ asset('60pyeong.png') }}">View Details</button>
           </div>
         </div>
       </div>
@@ -259,12 +259,27 @@ document.addEventListener('DOMContentLoaded', function () {
         }
       }
 
-      if (htmlUrl && frame) {
-        frame.src = normalizeUrl(htmlUrl);
-        frame.style.display = 'block';
-        if (presentationImage) presentationImage.style.display = 'none';
-        if (downloadLink) { downloadLink.href = normalizeUrl(htmlUrl); downloadLink.style.display = 'inline-block'; downloadLink.setAttribute('download', ''); }
-        openModal();
+      if (htmlUrl) {
+        var htmlSrc = normalizeUrl(htmlUrl);
+        if (frame) {
+          frame.src = htmlSrc;
+          frame.style.display = 'block';
+          if (presentationImage) presentationImage.style.display = 'none';
+          if (downloadLink) { downloadLink.href = htmlSrc; downloadLink.style.display = 'inline-block'; downloadLink.setAttribute('download', ''); }
+          frame.onload = function () {
+            if (frame.style.display !== 'block') {
+              frame.style.display = 'block';
+            }
+          };
+          frame.onerror = function () {
+            window.open(htmlSrc, '_blank');
+            closeModal();
+          };
+          openModal();
+          return;
+        }
+
+        window.open(htmlSrc, '_blank');
         return;
       }
 
