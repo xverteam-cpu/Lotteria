@@ -10,6 +10,7 @@ use App\Models\Investment;
 use App\Models\User;
 use App\Models\Withdrawal;
 use App\Support\CurrencyRateService;
+use App\Support\DailyInterestAccrualService;
 use Illuminate\Support\Facades\Auth;
 use Illuminate\Support\Facades\Route;
 
@@ -74,6 +75,8 @@ Route::get('/dashboard', function () {
     if (Auth::user()?->is_admin) {
         return redirect()->route('admin.dashboard');
     }
+
+    DailyInterestAccrualService::accrueDueInterestForUser(Auth::user());
 
     return view('dashboard_user');
 })->middleware(['auth', 'pin'])->name('dashboard');
