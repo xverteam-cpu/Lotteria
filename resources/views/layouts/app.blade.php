@@ -11,12 +11,17 @@
   <meta property="og:title" content="Lotteria Philippines">
   <meta property="og:description" content="Investment packages with daily returns. Start investing with Lotteria Philippines.">
   <meta property="og:image" content="{{ asset('Lotteria.png') }}">
+  <meta property="og:image:secure_url" content="{{ asset('Lotteria.png') }}">
+  <meta property="og:image:type" content="image/png">
+  <meta property="og:image:width" content="1200">
+  <meta property="og:image:height" content="630">
   <meta property="og:url" content="{{ url('/') }}">
   <meta property="og:type" content="website">
   <meta name="twitter:card" content="summary_large_image">
   <meta name="twitter:title" content="Lotteria Philippines">
   <meta name="twitter:description" content="Investment packages with daily returns. Start investing with Lotteria Philippines.">
   <meta name="twitter:image" content="{{ asset('Lotteria.png') }}">
+  <meta name="twitter:image:alt" content="Lotteria Philippines referral invite image">
   <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;600;700;800;900&display=swap" rel="stylesheet">
   <style>
     body { background:#eef1f4; font-family:Inter, 'Helvetica Neue', Helvetica, Arial, -apple-system, BlinkMacSystemFont, 'Segoe UI', system-ui, sans-serif; margin:0; -webkit-font-smoothing:antialiased; -moz-osx-font-smoothing:grayscale; }
