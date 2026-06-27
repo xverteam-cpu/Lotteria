@@ -397,12 +397,11 @@
     top: -24px;
     width: 64px;
     height: 64px;
-    border-radius: 18px;
     display: flex;
     align-items: center;
     justify-content: center;
-    background: var(--color-primary) url('{{ asset('menu.png') }}') center/cover no-repeat;
-    box-shadow: 0 12px 30px rgba(215,25,32,.25);
+    background: transparent;
+    box-shadow: none;
     transition: transform .18s ease;
   }
 
@@ -411,7 +410,10 @@
   }
 
   .nav-scan img {
-    display: none;
+    width: 100%;
+    height: 100%;
+    object-fit: contain;
+    display: block;
   }
 
   .fab-scrim {
