@@ -17,10 +17,11 @@
   .swipe-hint { margin:0 0 10px; color:#d91b0b; font-size:12px; line-height:16px; font-weight:900; letter-spacing:.08em; text-transform:uppercase; }
   .package-track { display:flex; gap:18px; overflow-x:auto; overscroll-behavior-x:contain; scroll-snap-type:x mandatory; padding:0 8px 20px 0; margin-right:-16px; -webkit-overflow-scrolling:touch; }
   .package-track::-webkit-scrollbar { display:none; }
-  .package-card { position:relative; flex:0 0 88%; min-height:286px; scroll-snap-align:center; border-radius:28px; background:#fff; border:1px solid rgba(224,30,10,.08); box-shadow:0 14px 28px rgba(45,24,10,.14); overflow:hidden; cursor:pointer; touch-action:manipulation; transition:transform .2s ease, box-shadow .2s ease, border-color .2s ease; }
+  .package-card { position:relative; z-index:0; flex:0 0 88%; min-height:286px; scroll-snap-align:center; border-radius:28px; background:#fff; border:1px solid rgba(224,30,10,.08); box-shadow:0 14px 28px rgba(45,24,10,.14); overflow:hidden; cursor:pointer; touch-action:manipulation; transition:transform .2s ease, box-shadow .2s ease, border-color .2s ease; pointer-events:auto !important; }
   .package-card:hover { transform:translateY(-4px); box-shadow:0 18px 36px rgba(45,24,10,.18); border-color:rgba(224,30,10,.16); }
   .package-card:focus-visible { outline:3px solid #f5a400; outline-offset:4px; }
   .package-card::after { content:''; position:absolute; right:-40px; top:108px; width:62%; height:96px; background:linear-gradient(90deg, #e12a10, #d61505); box-shadow:0 8px 20px rgba(165,24,9,.22); z-index:1; pointer-events:none; }
+  .package-card * { pointer-events:auto !important; }
   .package-content { position:relative; z-index:2; padding:30px 24px 26px; max-width:58%; }
   .package-name { margin:0; color:#e12610; font-size:32px; line-height:36px; font-weight:900; font-style:italic; letter-spacing:.04em; text-transform:uppercase; }
   .package-number { color:#f5a400; margin-right:8px; }
@@ -514,16 +515,32 @@
     }
 
     cards.forEach(function (card) {
+      var cardPointerDownX = 0;
+      var cardPointerDownY = 0;
+      var pointerDownOnCard = false;
+
       card.addEventListener('pointerdown', function (event) {
-        pointerStartX = event.clientX;
-        pointerStartY = event.clientY;
+        cardPointerDownX = event.clientX;
+        cardPointerDownY = event.clientY;
+        pointerDownOnCard = true;
       });
-      card.addEventListener('click', function (event) {
-        var movedX = Math.abs(event.clientX - pointerStartX);
-        var movedY = Math.abs(event.clientY - pointerStartY);
+
+      card.addEventListener('pointerup', function (event) {
+        if (!pointerDownOnCard) return;
+        pointerDownOnCard = false;
+        var movedX = Math.abs(event.clientX - cardPointerDownX);
+        var movedY = Math.abs(event.clientY - cardPointerDownY);
         if (movedX > 12 || movedY > 12) return;
         openModal(card);
       });
+
+      card.addEventListener('click', function (event) {
+        var movedX = Math.abs(event.clientX - cardPointerDownX);
+        var movedY = Math.abs(event.clientY - cardPointerDownY);
+        if (movedX > 12 || movedY > 12) return;
+        openModal(card);
+      });
+
       card.addEventListener('keydown', function (event) {
         if (event.key === 'Enter' || event.key === ' ') {
           openModal(card);
