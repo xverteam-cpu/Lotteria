@@ -135,34 +135,34 @@
 
     <p class="swipe-hint">Swipe packages</p>
     <section class="package-track" aria-label="Swipeable package list">
-      <article class="package-card crunch" role="button" tabindex="0" data-package-key="crunch" data-package-title="Crunch Package - Basic Share" data-package-price="120" data-package-rate="0.6" data-package-days="180" data-package-image="{{ asset('basic.png') }}">
+      <article class="package-card crunch" role="button" tabindex="0" data-package-key="crunch" data-package-title="Basic Package - Basic Share" data-package-price="120" data-package-rate="0.6" data-package-days="180" data-package-image="{{ asset('basic.png') }}">
         <div class="package-content">
-          <h2 class="package-name"><span class="package-number">01</span>Crunch</h2>
+          <h2 class="package-name"><span class="package-number">01</span>Basic</h2>
           <p class="package-desc">Basic share package for steady returns.</p>
           <div class="price-row"><span class="price">$120</span></div>
           <div class="package-terms">0.60% daily · 180 days</div>
         </div>
-        <div class="product-label">Crunch</div>
+        <div class="product-label">Basic</div>
       </article>
 
-      <article class="package-card loaded" role="button" tabindex="0" data-package-key="loaded" data-package-title="Loaded Package - Standard Share" data-package-price="800" data-package-rate="0.7" data-package-days="150" data-package-image="{{ asset('standard.png') }}">
+      <article class="package-card loaded" role="button" tabindex="0" data-package-key="loaded" data-package-title="Standard Package - Standard Share" data-package-price="800" data-package-rate="0.7" data-package-days="150" data-package-image="{{ asset('standard.png') }}">
         <div class="package-content">
-          <h2 class="package-name"><span class="package-number">02</span>Loaded</h2>
+          <h2 class="package-name"><span class="package-number">02</span>Standard</h2>
           <p class="package-desc">Standard share package for strong market growth.</p>
           <div class="price-row"><span class="price">$800</span></div>
           <div class="package-terms">0.70% daily · 150 days</div>
         </div>
-        <div class="product-label">Loaded</div>
+        <div class="product-label">Standard</div>
       </article>
 
-      <article class="package-card supreme" role="button" tabindex="0" data-package-key="supreme" data-package-title="Supreme Package - Premium Package" data-package-price="4000" data-package-rate="0.75" data-package-days="120" data-package-image="{{ asset('premium.png') }}">
+      <article class="package-card supreme" role="button" tabindex="0" data-package-key="supreme" data-package-title="Premium Package - Premium Package" data-package-price="4000" data-package-rate="0.75" data-package-days="120" data-package-image="{{ asset('premium.png') }}">
         <div class="package-content">
-          <h2 class="package-name"><span class="package-number">03</span>Supreme</h2>
+          <h2 class="package-name"><span class="package-number">03</span>Premium</h2>
           <p class="package-desc">Premium package for higher return potential.</p>
           <div class="price-row"><span class="price">$4,000</span></div>
           <div class="package-terms">0.75% daily · 120 days</div>
         </div>
-        <div class="product-label">Supreme</div>
+        <div class="product-label">Premium</div>
       </article>
 
       <article class="package-card premium-plus" role="button" tabindex="0" data-package-key="premium_plus" data-package-title="Premium+ Package - Elite Share" data-package-price="8000" data-package-rate="0.9" data-package-days="80" data-package-image="{{ asset('premium+.png') }}">
