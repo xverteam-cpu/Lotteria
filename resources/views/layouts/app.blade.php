@@ -5,7 +5,18 @@
   <meta name="viewport" content="width=device-width, initial-scale=1">
   <link rel="icon" type="image/png" href="https://www.lotteria.vn/grs-static/icons/logo_512.png">
   <link rel="shortcut icon" type="image/png" href="https://www.lotteria.vn/grs-static/icons/logo_512.png">
-  <title>Lotteria</title>
+  <title>Lotteria Philippines</title>
+  
+  <!-- Open Graph Meta Tags for Social Sharing -->
+  <meta property="og:title" content="Lotteria Philippines">
+  <meta property="og:description" content="Investment packages with daily returns. Start investing with Lotteria Philippines.">
+  <meta property="og:image" content="{{ asset('Lotteria.png') }}">
+  <meta property="og:url" content="{{ url('/') }}">
+  <meta property="og:type" content="website">
+  <meta name="twitter:card" content="summary_large_image">
+  <meta name="twitter:title" content="Lotteria Philippines">
+  <meta name="twitter:description" content="Investment packages with daily returns. Start investing with Lotteria Philippines.">
+  <meta name="twitter:image" content="{{ asset('Lotteria.png') }}">
   <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;600;700;800;900&display=swap" rel="stylesheet">
   <style>
     body { background:#eef1f4; font-family:Inter, 'Helvetica Neue', Helvetica, Arial, -apple-system, BlinkMacSystemFont, 'Segoe UI', system-ui, sans-serif; margin:0; -webkit-font-smoothing:antialiased; -moz-osx-font-smoothing:grayscale; }
