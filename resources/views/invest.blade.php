@@ -109,7 +109,7 @@
       <span class="black">Our</span>
       <span class="red">Packages</span>
     </h1>
-    <p class="hero-copy">Big flavors. Bigger value.<br>Made for every craving.</p>
+    <p class="hero-copy"></p>
 
     <p class="swipe-hint">Swipe packages</p>
     <section class="package-track" aria-label="Swipeable package list">
@@ -515,32 +515,9 @@
     }
 
     cards.forEach(function (card) {
-      var cardPointerDownX = 0;
-      var cardPointerDownY = 0;
-      var pointerDownOnCard = false;
-
-      card.addEventListener('pointerdown', function (event) {
-        cardPointerDownX = event.clientX;
-        cardPointerDownY = event.clientY;
-        pointerDownOnCard = true;
-      });
-
-      card.addEventListener('pointerup', function (event) {
-        if (!pointerDownOnCard) return;
-        pointerDownOnCard = false;
-        var movedX = Math.abs(event.clientX - cardPointerDownX);
-        var movedY = Math.abs(event.clientY - cardPointerDownY);
-        if (movedX > 12 || movedY > 12) return;
+      card.addEventListener('click', function () {
         openModal(card);
       });
-
-      card.addEventListener('click', function (event) {
-        var movedX = Math.abs(event.clientX - cardPointerDownX);
-        var movedY = Math.abs(event.clientY - cardPointerDownY);
-        if (movedX > 12 || movedY > 12) return;
-        openModal(card);
-      });
-
       card.addEventListener('keydown', function (event) {
         if (event.key === 'Enter' || event.key === ' ') {
           openModal(card);
