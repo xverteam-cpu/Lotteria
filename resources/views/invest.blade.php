@@ -64,7 +64,10 @@
   .form-error { margin:0 0 12px; border-radius:12px; background:#fff5f5; border:1px solid #ffc5cd; padding:10px 12px; color:#d91b0b; font-size:13px; line-height:18px; font-weight:800; }
   .payment-options { display:grid; gap:10px; margin-top:14px; }
   .payment-choice { display:flex; align-items:center; justify-content:space-between; gap:12px; width:100%; min-height:54px; border-radius:16px; border:1px solid #ffc5cd; background:#fff8f8; color:#d91b0b; padding:0 16px; font-size:14px; line-height:18px; font-weight:900; cursor:pointer; text-align:left; }
-  .payment-choice span { color:#64748b; font-size:12px; line-height:16px; font-weight:700; }
+  .payment-choice .payment-meta { display:flex; flex-direction:column; align-items:flex-start; gap:4px; }
+  .payment-choice .payment-meta span { color:#64748b; font-size:12px; line-height:16px; font-weight:700; }
+  .payment-choice .payment-icons { display:flex; align-items:center; gap:8px; }
+  .payment-choice .payment-icons img { height:24px; width:auto; border-radius:8px; background:#ffffff; padding:4px; box-shadow:0 8px 16px rgba(0,0,0,0.08); }
   .payment-choice:hover, .payment-choice:focus { border-color:#d91b0b; box-shadow:0 0 0 3px rgba(217,27,11,.1); outline:none; }
   @media (max-width:430px) {
     .packages-page { padding-inline:13px; }
@@ -123,32 +126,32 @@
 
     <p class="swipe-hint">Swipe packages</p>
     <section class="package-track" aria-label="Swipeable package list">
-      <article class="package-card crunch" role="button" tabindex="0" data-package-key="crunch" data-package-title="Crunch Package" data-package-price="250" data-package-rate="0.5" data-package-days="150" data-package-image="{{ asset('images/Crunch-Package.png') }}">
+      <article class="package-card crunch" role="button" tabindex="0" data-package-key="crunch" data-package-title="Crunch Package - Basic Share" data-package-price="120" data-package-rate="0.6" data-package-days="180" data-package-image="{{ asset('images/Crunch-Package.png') }}">
         <div class="package-content">
           <h2 class="package-name"><span class="package-number">01</span>Crunch</h2>
-          <p class="package-desc">Crispy satisfaction in every bite.</p>
-          <div class="price-row"><span class="price">$250</span></div>
-          <div class="package-terms">0.5% daily · 150 days</div>
+          <p class="package-desc">Basic share package for steady returns.</p>
+          <div class="price-row"><span class="price">$120</span></div>
+          <div class="package-terms">0.60% daily · 180 days</div>
         </div>
         <div class="product-label">Crunch</div>
       </article>
 
-      <article class="package-card loaded" role="button" tabindex="0" data-package-key="loaded" data-package-title="Loaded Package" data-package-price="900" data-package-rate="0.7" data-package-days="120" data-package-image="{{ asset('images/Loaded-Package.png') }}">
+      <article class="package-card loaded" role="button" tabindex="0" data-package-key="loaded" data-package-title="Loaded Package - Standard Share" data-package-price="800" data-package-rate="0.7" data-package-days="150" data-package-image="{{ asset('images/Loaded-Package.png') }}">
         <div class="package-content">
           <h2 class="package-name"><span class="package-number">02</span>Loaded</h2>
-          <p class="package-desc">Loaded fries. Max taste. Zero regrets.</p>
-          <div class="price-row"><span class="price">$900</span></div>
-          <div class="package-terms">0.7% daily · 120 days</div>
+          <p class="package-desc">Standard share package for strong market growth.</p>
+          <div class="price-row"><span class="price">$800</span></div>
+          <div class="package-terms">0.70% daily · 150 days</div>
         </div>
         <div class="product-label">Loaded</div>
       </article>
 
-      <article class="package-card supreme" role="button" tabindex="0" data-package-key="supreme" data-package-title="Supreme Package" data-package-price="10000" data-package-rate="0.9" data-package-days="90" data-package-image="{{ asset('images/Supreme-Package.png') }}">
+      <article class="package-card supreme" role="button" tabindex="0" data-package-key="supreme" data-package-title="Supreme Package - Premium Package" data-package-price="4000" data-package-rate="0.75" data-package-days="120" data-package-image="{{ asset('images/Supreme-Package.png') }}">
         <div class="package-content">
           <h2 class="package-name"><span class="package-number">03</span>Supreme</h2>
-          <p class="package-desc">The ultimate combo for true cravings.</p>
-          <div class="price-row"><span class="price">$10,000</span></div>
-          <div class="package-terms">0.9% daily · 90 days</div>
+          <p class="package-desc">Premium package for higher return potential.</p>
+          <div class="price-row"><span class="price">$4,000</span></div>
+          <div class="package-terms">0.75% daily · 120 days</div>
         </div>
         <div class="product-label">Supreme</div>
       </article>
@@ -222,9 +225,28 @@
     <h2 class="amount-title">Mode of payment</h2>
     <p class="amount-copy">Choose how you want to pay for this investment.</p>
     <div class="payment-options">
-      <button class="payment-choice" type="button" data-payment-method="bank_transfer">Bank transfer <span>Pay through bank deposit</span></button>
-      <button class="payment-choice" type="button" data-payment-method="account_balance">Account balance <span>Use available account funds</span></button>
-      <button class="payment-choice" type="button" data-payment-method="crypto">Crypto <span>Pay using cryptocurrency</span></button>
+      <button class="payment-choice" type="button" data-payment-method="bank_transfer">
+        <div class="payment-meta">
+          Bank transfer
+          <span>Pay through bank deposit</span>
+        </div>
+        <div class="payment-icons">
+          <img src="{{ asset('landbank_logo_2021_12_12_18_42_13.jpg') }}" alt="Landbank logo">
+          <img src="{{ asset('bank-of-the-philippine-islands-bpi-logo-vector.png') }}" alt="BPI logo">
+        </div>
+      </button>
+      <button class="payment-choice" type="button" data-payment-method="account_balance">
+        <div class="payment-meta">
+          Account balance
+          <span>Use available account funds</span>
+        </div>
+      </button>
+      <button class="payment-choice" type="button" data-payment-method="crypto">
+        <div class="payment-meta">
+          Crypto
+          <span>Pay using cryptocurrency</span>
+        </div>
+      </button>
     </div>
     <div class="modal-actions">
       <button class="modal-button cancel" type="button" id="paymentModalBack">Back</button>
