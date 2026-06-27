@@ -540,7 +540,7 @@
   $activeCapital = $investments->sum(fn($i) => (float) $i->amount);
   $dailyInterest = $investments->sum(fn($i) => $i->dailyInterestAmount());
   $earnedIncome = $investments->sum(fn($i) => $i->earnedInterest());
-  $availableBalance = (float) $user->balance + $earnedIncome;
+  $availableBalance = (float) $user->balance;
 @endphp
 
 <main class="wallet-shell">

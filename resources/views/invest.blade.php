@@ -374,7 +374,7 @@
     var selectedPackage = null;
     var lastPackageCard = null;
     var selectedCurrency = 'USD';
-    var phpRate = {{ json_encode(config('currency.usd_to_php', 58)) }};
+    var phpRate = {{ json_encode($phpRate ?? config('currency.usd_to_php', 61.31)) }};
     if (!track || !dots.length) return;
 
     function updateDots() {

@@ -133,6 +133,7 @@
   $activeCapital = $investments->sum(fn ($investment) => (float) $investment->amount);
   $dailyInterest = $investments->sum(fn ($investment) => $investment->dailyInterestAmount());
   $earnedIncome = $investments->sum(fn ($investment) => $investment->earnedInterest());
+  $availableBalance = (float) $user->balance;
   $recentInvestments = $investments->take(3);
 @endphp
 

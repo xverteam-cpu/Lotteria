@@ -9,6 +9,7 @@ use App\Http\Controllers\PinController;
 use App\Models\Investment;
 use App\Models\User;
 use App\Models\Withdrawal;
+use App\Support\CurrencyRateService;
 use Illuminate\Support\Facades\Auth;
 use Illuminate\Support\Facades\Route;
 
@@ -83,7 +84,9 @@ Route::get('/deposit', function () {
 })->middleware(['auth', 'pin'])->name('deposit');
 
 Route::get('/invest', function () {
-    return view('invest');
+    return view('invest', [
+        'phpRate' => CurrencyRateService::latestUsdToPhp(),
+    ]);
 })->name('invest');
 
 // User actions (authenticated)

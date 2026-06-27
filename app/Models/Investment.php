@@ -4,6 +4,7 @@ namespace App\Models;
 
 use Illuminate\Database\Eloquent\Model;
 use Illuminate\Database\Eloquent\Relations\BelongsTo;
+use Illuminate\Support\Carbon;
 use App\Models\User;
 use App\Models\ReferralEarning;
 
@@ -23,6 +24,8 @@ class Investment extends Model
         'approved_by',
         'approved_at',
         'rejection_reason',
+        'interest_days_credited',
+        'last_interest_accrued_at',
     ];
 
     protected function casts(): array
@@ -32,8 +35,10 @@ class Investment extends Model
             'amount' => 'decimal:2',
             'daily_interest_rate' => 'decimal:3',
             'duration_days' => 'integer',
+            'interest_days_credited' => 'integer',
             'starts_at' => 'datetime',
             'approved_at' => 'datetime',
+            'last_interest_accrued_at' => 'datetime',
         ];
     }
 
@@ -67,6 +72,48 @@ class Investment extends Model
     public function earnedInterest(): float
     {
         return $this->dailyInterestAmount() * $this->elapsedInterestDays();
+    }
+
+    public function accrueDailyInterest(): float
+    {
+        if ($this->status !== 'approved' || ! $this->starts_at) {
+            return 0.0;
+        }
+
+        $creditedDays = (int) $this->interest_days_credited;
+        if ($creditedDays >= $this->duration_days) {
+            return 0.0;
+        }
+
+        $today = now()->startOfDay();
+        $startDate = $this->starts_at->startOfDay();
+        $nextDueDate = $this->last_interest_accrued_at
+            ? $this->last_interest_accrued_at->copy()->startOfDay()->addDay()
+            : $startDate->copy()->addDay();
+
+        if ($today->lt($nextDueDate)) {
+            return 0.0;
+        }
+
+        $daysDue = $today->diffInDays($nextDueDate) + 1;
+        $daysDue = min($daysDue, $this->duration_days - $creditedDays);
+
+        if ($daysDue <= 0) {
+            return 0.0;
+        }
+
+        $interest = round($this->dailyInterestAmount() * $daysDue, 2);
+        $this->interest_days_credited = $creditedDays + $daysDue;
+        $this->last_interest_accrued_at = $today;
+        $this->save();
+
+        $user = $this->user;
+        if ($user) {
+            $user->balance = ($user->balance ?? 0) + $interest;
+            $user->save();
+        }
+
+        return $interest;
     }
 
     /**
