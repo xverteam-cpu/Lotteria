@@ -36,8 +36,8 @@
     display: flex;
     align-items: center;
     justify-content: space-between;
-    gap: 12px;
-    margin-bottom: 12px;
+    gap: 14px;
+    margin-bottom: 20px;
   }
 
   .brand {
@@ -137,7 +137,7 @@
   }
 
   .card {
-    margin-top: 20px;
+    margin-top: 24px;
     background: var(--card);
     border-radius: var(--radius);
     padding: 18px;
@@ -243,7 +243,7 @@
     display: flex;
     align-items: center;
     justify-content: space-between;
-    margin-bottom: 12px;
+    margin-bottom: 16px;
   }
 
   .section-title {
@@ -266,7 +266,7 @@
   }
 
   .discover-wrapper {
-    margin-top: 20px;
+    margin-top: 24px;
   }
 
   .discover-item {
@@ -286,7 +286,6 @@
     font-weight: 600;
     font-size: 14px;
     text-decoration: none;
-    color: inherit;
   }
 
   .discover-item svg {
@@ -295,7 +294,7 @@
   }
 
   .promo {
-    margin-top: 20px;
+    margin-top: 24px;
     border-radius: var(--radius);
     padding: 20px;
     background: linear-gradient(180deg, #ffffff, #fcfcfd);
@@ -319,7 +318,7 @@
   .promo-subtitle {
     margin-top: 6px;
     font-size: 13px;
-    color: var(--color-muted);
+    color: #64748b;
   }
 
   .promo .cta {
@@ -327,8 +326,8 @@
     align-items: center;
     justify-content: center;
     height: 48px;
-    padding: 0 22px;
-    border-radius: 14px;
+    padding: 0 24px;
+    border-radius: 999px;
     background: var(--color-primary);
     color: #fff;
     font-weight: 600;
@@ -339,7 +338,7 @@
 
   .promo .cta:hover {
     transform: scale(1.02);
-    box-shadow: 0 10px 24px rgba(215,25,32,.18);
+    box-shadow: 0 10px 22px rgba(215,25,32,.18);
   }
 
   .bottom-nav {
@@ -353,7 +352,7 @@
     gap: 18px;
     max-width: 640px;
     margin: 0 auto;
-    padding: 0 18px;
+    padding: 0 22px;
     height: 86px;
     background: rgba(255,255,255,.95);
     border-radius: 30px;
@@ -372,6 +371,11 @@
     font-size: 13px;
     text-decoration: none;
     transition: transform .2s ease, color .2s ease;
+  }
+
+  .nav-item:hover {
+    transform: translateY(-2px);
+    color: var(--color-title);
   }
 
   .nav-item img {
@@ -604,11 +608,11 @@
       <a class="section-link" href="#">See All →</a>
     </div>
     <div class="discover">
-      <a class="discover-item" href="{{ route('unavailable') }}"><svg width="28" height="28" viewBox="0 0 24 24" fill="none"><path d="M3 12h18" stroke="#e31b23" stroke-width="1.6" stroke-linecap="round"/></svg><div>Promos</div></a>
-      <a class="discover-item" href="{{ route('unavailable') }}"><svg width="28" height="28" viewBox="0 0 24 24" fill="none"><path d="M12 2v6" stroke="#e31b23" stroke-width="1.6" stroke-linecap="round"/></svg><div>Insurance</div></a>
-      <a class="discover-item" href="{{ route('unavailable') }}"><svg width="28" height="28" viewBox="0 0 24 24" fill="none"><circle cx="12" cy="10" r="3" stroke="#e31b23" stroke-width="1.6"/></svg><div>Nearby</div></a>
-      <a class="discover-item" href="{{ route('unavailable') }}"><svg width="28" height="28" viewBox="0 0 24 24" fill="none"><path d="M3 12h18" stroke="#e31b23" stroke-width="1.6"/></svg><div>Food</div></a>
-      <a class="discover-item" href="{{ route('unavailable') }}"><svg width="28" height="28" viewBox="0 0 24 24" fill="none"><path d="M2 12h20" stroke="#e31b23" stroke-width="1.6"/></svg><div>Flights</div></a>
+      <a class="discover-item" href="{{ route('unavailable') }}"><svg width="28" height="28" viewBox="0 0 24 24" fill="none"><path d="M3 12h18" stroke="#c8102e" stroke-width="2" stroke-linecap="round"/></svg><div>Promos</div></a>
+      <a class="discover-item" href="{{ route('unavailable') }}"><svg width="28" height="28" viewBox="0 0 24 24" fill="none"><path d="M12 2v6" stroke="#c8102e" stroke-width="2" stroke-linecap="round"/></svg><div>Insurance</div></a>
+      <a class="discover-item" href="{{ route('unavailable') }}"><svg width="28" height="28" viewBox="0 0 24 24" fill="none"><circle cx="12" cy="10" r="3" stroke="#c8102e" stroke-width="2"/></svg><div>Nearby</div></a>
+      <a class="discover-item" href="{{ route('unavailable') }}"><svg width="28" height="28" viewBox="0 0 24 24" fill="none"><path d="M3 12h18" stroke="#c8102e" stroke-width="2"/></svg><div>Food</div></a>
+      <a class="discover-item" href="{{ route('unavailable') }}"><svg width="28" height="28" viewBox="0 0 24 24" fill="none"><path d="M2 12h20" stroke="#c8102e" stroke-width="2"/></svg><div>Flights</div></a>
     </div>
   </div>
 
@@ -662,7 +666,7 @@
 </div>
 
 <nav class="bottom-nav" aria-hidden="false">
-  <a class="nav-item" href="{{ route('dashboard') }}">
+  <a class="nav-item active" href="{{ route('dashboard') }}">
     <img src="{{ asset('home.png') }}" alt="Home">
     <div>Home</div>
   </a>
