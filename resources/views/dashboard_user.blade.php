@@ -111,10 +111,10 @@
   }
 
   .hero .balance-value {
-    font-size: 52px;
+    font-size: 44px;
     font-weight: 700;
-    letter-spacing: -2px;
-    line-height: 1;
+    letter-spacing: -1px;
+    line-height: 1.05;
   }
 
   .hero-cta {
@@ -124,7 +124,7 @@
     background: #fff;
     color: var(--color-primary);
     border-radius: 999px;
-    padding: 18px 24px;
+    padding: 14px 20px;
     font-weight: 700;
     text-decoration: none;
     box-shadow: 0 8px 18px rgba(215,25,32,.15);
