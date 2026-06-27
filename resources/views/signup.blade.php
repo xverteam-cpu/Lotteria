@@ -128,42 +128,13 @@
       </div>
 
       <div class="signup-field">
-        <label class="signup-label" for="email">Email</label>
-        <input class="signup-input" id="email" name="email" type="email" value="{{ old('email') }}" placeholder="Enter your email">
+        <label class="signup-label" for="username">Username</label>
+        <input class="signup-input" id="username" name="username" type="text" value="{{ old('username') }}" placeholder="Choose a username">
       </div>
 
       <div class="signup-field">
-        <label class="signup-label" for="phone">Phone</label>
-        <input class="signup-input" id="phone" name="phone" type="tel" value="{{ old('phone') }}" placeholder="Enter your phone number">
-      </div>
-
-      <div class="signup-field">
-        <label class="signup-label" for="address">Address</label>
-        <input class="signup-input" id="address" name="address" type="text" value="{{ old('address') }}" placeholder="Enter your address">
-      </div>
-
-      <div class="signup-field full">
-        <label class="signup-label" for="region">Region</label>
-        <select class="signup-select" id="region" name="region">
-          <option value="" disabled @selected(! old('region'))>Select your region</option>
-          <option value="ncr" @selected(old('region') === 'ncr')>National Capital Region (NCR)</option>
-          <option value="car" @selected(old('region') === 'car')>Cordillera Administrative Region (CAR)</option>
-          <option value="region-1" @selected(old('region') === 'region-1')>Region I - Ilocos Region</option>
-          <option value="region-2" @selected(old('region') === 'region-2')>Region II - Cagayan Valley</option>
-          <option value="region-3" @selected(old('region') === 'region-3')>Region III - Central Luzon</option>
-          <option value="region-4a" @selected(old('region') === 'region-4a')>Region IV-A - CALABARZON</option>
-          <option value="mimaropa" @selected(old('region') === 'mimaropa')>MIMAROPA Region</option>
-          <option value="region-5" @selected(old('region') === 'region-5')>Region V - Bicol Region</option>
-          <option value="region-6" @selected(old('region') === 'region-6')>Region VI - Western Visayas</option>
-          <option value="region-7" @selected(old('region') === 'region-7')>Region VII - Central Visayas</option>
-          <option value="region-8" @selected(old('region') === 'region-8')>Region VIII - Eastern Visayas</option>
-          <option value="region-9" @selected(old('region') === 'region-9')>Region IX - Zamboanga Peninsula</option>
-          <option value="region-10" @selected(old('region') === 'region-10')>Region X - Northern Mindanao</option>
-          <option value="region-11" @selected(old('region') === 'region-11')>Region XI - Davao Region</option>
-          <option value="region-12" @selected(old('region') === 'region-12')>Region XII - SOCCSKSARGEN</option>
-          <option value="region-13" @selected(old('region') === 'region-13')>Region XIII - Caraga</option>
-          <option value="barmm" @selected(old('region') === 'barmm')>Bangsamoro Autonomous Region in Muslim Mindanao (BARMM)</option>
-        </select>
+        <label class="signup-label" for="referral">Referral</label>
+        <input class="signup-input" id="referral" name="referral" type="text" value="{{ old('referral') }}" placeholder="Enter referral code or username">
       </div>
 
       <div class="signup-field">
@@ -174,11 +145,6 @@
       <div class="signup-field">
         <label class="signup-label" for="password_confirmation">Confirm Password</label>
         <input class="signup-input" id="password_confirmation" name="password_confirmation" type="password" placeholder="Confirm password">
-      </div>
-
-      <div class="signup-field full">
-        <label class="signup-label" for="message">Message</label>
-        <textarea class="signup-textarea" id="message" name="message" placeholder="Leave your message here">{{ old('message') }}</textarea>
       </div>
 
       <div class="signup-actions">

@@ -11,22 +11,22 @@ class InvestmentPackages
     {
         return [
             'crunch' => [
-                'name' => 'Crunch Package',
-                'price' => 250.00,
-                'daily_interest_rate' => 0.5,
-                'duration_days' => 150,
+                'name' => 'Crunch Package - Basic Share',
+                'price' => 120.00,
+                'daily_interest_rate' => 0.60,
+                'duration_days' => 180,
             ],
             'loaded' => [
-                'name' => 'Loaded Package',
-                'price' => 900.00,
-                'daily_interest_rate' => 0.7,
-                'duration_days' => 120,
+                'name' => 'Loaded Package - Standard Share',
+                'price' => 800.00,
+                'daily_interest_rate' => 0.70,
+                'duration_days' => 150,
             ],
             'supreme' => [
-                'name' => 'Supreme Package',
-                'price' => 10000.00,
-                'daily_interest_rate' => 0.9,
-                'duration_days' => 90,
+                'name' => 'Supreme Package - Premium Package',
+                'price' => 4000.00,
+                'daily_interest_rate' => 0.75,
+                'duration_days' => 120,
             ],
         ];
     }

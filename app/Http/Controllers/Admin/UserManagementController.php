@@ -96,3 +96,4 @@ class UserManagementController extends Controller
         return redirect()->route('admin.dashboard')
             ->with('status', "Sent \${$amount} to {$user->name} successfully! New balance: \${$user->balance}");
     }
+}

@@ -36,43 +36,29 @@ class AuthController extends Controller
     {
         $data = $request->validate([
             'fullname' => ['required', 'string', 'max:255'],
-            'email' => ['required', 'email', 'max:255', 'unique:users,email'],
-            'phone' => ['required', 'string', 'max:30'],
-            'address' => ['required', 'string', 'max:255'],
-            'region' => ['required', 'string', 'max:80'],
-            'message' => ['nullable', 'string', 'max:2000'],
+            'username' => ['required', 'string', 'max:255', 'unique:users,username'],
+            'referral' => ['nullable', 'string', 'max:255'],
             'password' => ['required', 'confirmed', Password::min(8)],
         ]);
 
-        // Generate a username from fullname and ensure uniqueness
-        $base = Str::slug($data['fullname']);
-        if ($base === '') {
-            $base = Str::before($data['email'], '@');
-        }
-
-        $username = $base;
-        $i = 1;
-        while (User::where('username', $username)->exists()) {
-            $username = $base . $i;
-            $i++;
-        }
-
-        $ref = $request->input('ref') ?? $request->query('ref');
         $referrer = null;
-        if ($ref) {
-            $referrer = User::where('username', $ref)->first();
+
+        if (! empty($data['referral'])) {
+            $referrer = User::where('username', $data['referral'])
+                ->orWhere('email', $data['referral'])
+                ->first();
         }
 
         $user = User::create([
             'name' => $data['fullname'],
-            'username' => $username,
-            'email' => $data['email'],
-            'phone' => $data['phone'],
-            'address' => $data['address'],
-            'region' => $data['region'],
-            'message' => $data['message'] ?? null,
+            'username' => $data['username'],
+            'email' => $this->generateUniqueEmail($data['username']),
+            'phone' => null,
+            'address' => '',
+            'region' => 'ncr',
+            'message' => null,
             'password' => $data['password'],
-            'is_admin' => strcasecmp($data['email'], env('ADMIN_EMAIL', 'xver.team@gmail.com')) === 0,
+            'is_admin' => false,
             'referred_by' => $referrer?->id,
         ]);
 
@@ -92,5 +78,20 @@ class AuthController extends Controller
         $request->session()->regenerateToken();
 
         return redirect()->route('pin.login');
+    }
+
+    private function generateUniqueEmail(string $username): string
+    {
+        $base = strtolower((string) preg_replace('/[^a-z0-9]+/i', '', $username));
+        $base = $base !== '' ? $base : 'user';
+        $email = $base.'@lotteria.local';
+        $counter = 1;
+
+        while (User::where('email', $email)->exists()) {
+            $email = $base.$counter.'@lotteria.local';
+            $counter++;
+        }
+
+        return $email;
     }
 }

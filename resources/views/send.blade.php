@@ -249,10 +249,10 @@
     Rewards
   </div>
 
-  <div class="nav-item">
+  <a class="nav-item" href="{{ route('profile') }}">
     <span>♙</span>
     Profile
-  </div>
+  </a>
 </nav>
 
 @endsection

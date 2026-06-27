@@ -105,6 +105,10 @@ Route::get('/loan', function () {
     return view('loan');
 })->middleware(['auth', 'pin'])->name('loan');
 
+Route::get('/profile', function () {
+    return view('profile');
+})->middleware(['auth', 'pin'])->name('profile');
+
 Route::post('/investments', [InvestmentController::class, 'store'])
     ->middleware(['auth', 'pin'])
     ->name('investments.store');
