@@ -14,11 +14,6 @@
   .hero-title .black { display:block; color:#101010; font-size:48px; line-height:46px; font-weight:900; font-style:italic; letter-spacing:.02em; text-transform:uppercase; }
   .hero-title .red { display:block; margin-top:4px; color:#e12610; font-size:56px; line-height:54px; font-weight:900; font-style:italic; letter-spacing:.02em; text-transform:uppercase; }
   .hero-copy { margin:18px 0 0; color:#2b2b2b; font-size:23px; line-height:29px; font-weight:800; }
-  .benefits { display:grid; grid-template-columns:repeat(3, minmax(0,1fr)); gap:8px; margin:26px 0 24px; }
-  .benefit { min-width:0; display:grid; grid-template-columns:28px 1fr; gap:7px; align-items:start; }
-  .benefit-icon { display:flex; align-items:center; justify-content:center; width:24px; height:24px; border:2px solid #ef2b14; border-radius:7px; color:#ef2b14; font-size:13px; line-height:1; font-weight:900; }
-  .benefit-title { color:#222; font-size:12px; line-height:15px; font-weight:900; }
-  .benefit-text { margin-top:1px; color:#4b4b4b; font-size:11px; line-height:14px; font-weight:500; }
   .swipe-hint { margin:0 0 10px; color:#d91b0b; font-size:12px; line-height:16px; font-weight:900; letter-spacing:.08em; text-transform:uppercase; }
   .package-track { display:flex; gap:18px; overflow-x:auto; overscroll-behavior-x:contain; scroll-snap-type:x mandatory; padding:0 8px 20px 0; margin-right:-16px; -webkit-overflow-scrolling:touch; }
   .package-track::-webkit-scrollbar { display:none; }
@@ -83,9 +78,6 @@
     .hero-title .black { font-size:40px; line-height:39px; }
     .hero-title .red { font-size:47px; line-height:46px; }
     .hero-copy { font-size:20px; line-height:26px; }
-    .benefits { gap:6px; }
-    .benefit { grid-template-columns:1fr; gap:5px; }
-    .benefit-text { font-size:10px; line-height:13px; }
     .package-card { flex-basis:91%; min-height:296px; }
     .package-content { padding:28px 20px 24px; max-width:62%; }
     .package-name { font-size:28px; line-height:32px; }
@@ -99,7 +91,6 @@
     .hero-title .black { font-size:62px; line-height:60px; }
     .hero-title .red { font-size:76px; line-height:72px; }
     .hero-copy { font-size:28px; line-height:34px; }
-    .benefits { max-width:560px; gap:20px; }
     .package-track { gap:22px; margin-right:0; }
     .package-card { flex-basis:520px; }
   }
@@ -117,21 +108,6 @@
       <span class="red">Packages</span>
     </h1>
     <p class="hero-copy">Big flavors. Bigger value.<br>Made for every craving.</p>
-
-    <section class="benefits" aria-label="Package benefits">
-      <div class="benefit">
-        <span class="benefit-icon">+</span>
-        <div><div class="benefit-title">Best Value</div><div class="benefit-text">Save more with every combo</div></div>
-      </div>
-      <div class="benefit">
-        <span class="benefit-icon">!</span>
-        <div><div class="benefit-title">Fast & Easy</div><div class="benefit-text">Quick checkout & instant order</div></div>
-      </div>
-      <div class="benefit">
-        <span class="benefit-icon">&#10003;</span>
-        <div><div class="benefit-title">Secure</div><div class="benefit-text">100% safe payments</div></div>
-      </div>
-    </section>
 
     <p class="swipe-hint">Swipe packages</p>
     <section class="package-track" aria-label="Swipeable package list">

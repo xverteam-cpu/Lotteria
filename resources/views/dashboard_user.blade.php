@@ -212,8 +212,9 @@
     <div>History</div>
   </a>
   <a class="nav-item" href="#" id="fabToggle" style="text-decoration:none;">
-    <div class="nav-scan"> <svg viewBox="0 0 24 24" fill="none" width="26" height="26"><rect x="4" y="4" width="6" height="6" stroke="currentColor" stroke-width="1.6"/><rect x="14" y="4" width="6" height="6" stroke="currentColor" stroke-width="1.6"/><rect x="4" y="14" width="6" height="6" stroke="currentColor" stroke-width="1.6"/><rect x="14" y="14" width="6" height="6" stroke="currentColor" stroke-width="1.6"/></svg></div>
-    <div>Menu</div>
+    <div class="nav-scan">
+      <img src="{{ asset('menu.png') }}" alt="Menu" style="width:28px; height:28px; object-fit:contain;">
+    </div>
   </a>
   <a class="nav-item" href="{{ route('unavailable') }}" style="text-decoration:none;">
     <svg viewBox="0 0 24 24" fill="none"><path d="M2 12h20" stroke="currentColor" stroke-width="1.6"/></svg>
