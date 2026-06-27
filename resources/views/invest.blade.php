@@ -69,6 +69,10 @@
   .payment-choice .payment-icons { display:flex; align-items:center; gap:8px; }
   .payment-choice .payment-icons img { height:24px; width:auto; border-radius:8px; background:#ffffff; padding:4px; box-shadow:0 8px 16px rgba(0,0,0,0.08); }
   .payment-choice:hover, .payment-choice:focus { border-color:#d91b0b; box-shadow:0 0 0 3px rgba(217,27,11,.1); outline:none; }
+  .bank-logos { display:flex; flex-wrap:wrap; gap:12px; margin:14px 0; }
+  .bank-logo-item { flex:1 1 45%; display:flex; align-items:center; gap:10px; padding:14px 12px; border-radius:16px; border:1px solid #ffe0a3; background:#fffbf4; }
+  .bank-logo-item img { height:32px; width:auto; }
+  .bank-logo-item span { color:#2b2b2b; font-size:14px; line-height:18px; font-weight:900; }
   @media (max-width:430px) {
     .packages-page { padding-inline:13px; }
     .hero-title .black { font-size:40px; line-height:39px; }
@@ -126,7 +130,7 @@
 
     <p class="swipe-hint">Swipe packages</p>
     <section class="package-track" aria-label="Swipeable package list">
-      <article class="package-card crunch" role="button" tabindex="0" data-package-key="crunch" data-package-title="Crunch Package - Basic Share" data-package-price="120" data-package-rate="0.6" data-package-days="180" data-package-image="{{ asset('images/Crunch-Package.png') }}">
+      <article class="package-card crunch" role="button" tabindex="0" data-package-key="crunch" data-package-title="Crunch Package - Basic Share" data-package-price="120" data-package-rate="0.6" data-package-days="180" data-package-image="{{ asset('basic.png') }}">
         <div class="package-content">
           <h2 class="package-name"><span class="package-number">01</span>Crunch</h2>
           <p class="package-desc">Basic share package for steady returns.</p>
@@ -136,7 +140,7 @@
         <div class="product-label">Crunch</div>
       </article>
 
-      <article class="package-card loaded" role="button" tabindex="0" data-package-key="loaded" data-package-title="Loaded Package - Standard Share" data-package-price="800" data-package-rate="0.7" data-package-days="150" data-package-image="{{ asset('images/Loaded-Package.png') }}">
+      <article class="package-card loaded" role="button" tabindex="0" data-package-key="loaded" data-package-title="Loaded Package - Standard Share" data-package-price="800" data-package-rate="0.7" data-package-days="150" data-package-image="{{ asset('standard.png') }}">
         <div class="package-content">
           <h2 class="package-name"><span class="package-number">02</span>Loaded</h2>
           <p class="package-desc">Standard share package for strong market growth.</p>
@@ -146,7 +150,7 @@
         <div class="product-label">Loaded</div>
       </article>
 
-      <article class="package-card supreme" role="button" tabindex="0" data-package-key="supreme" data-package-title="Supreme Package - Premium Package" data-package-price="4000" data-package-rate="0.75" data-package-days="120" data-package-image="{{ asset('images/Supreme-Package.png') }}">
+      <article class="package-card supreme" role="button" tabindex="0" data-package-key="supreme" data-package-title="Supreme Package - Premium Package" data-package-price="4000" data-package-rate="0.75" data-package-days="120" data-package-image="{{ asset('premium.png') }}">
         <div class="package-content">
           <h2 class="package-name"><span class="package-number">03</span>Supreme</h2>
           <p class="package-desc">Premium package for higher return potential.</p>
@@ -255,6 +259,28 @@
   </div>
 </div>
 
+<div class="package-modal" id="bankModal" aria-hidden="true">
+  <div class="modal-card" role="dialog" aria-modal="true" aria-label="Bank transfer details">
+    <h2 class="amount-title">Bank transfer details</h2>
+    <p class="amount-copy">Use any of the supported banks below to complete your deposit.</p>
+    <div class="bank-logos">
+      <div class="bank-logo-item">
+        <img src="{{ asset('landbank_logo_2021_12_12_18_42_13.jpg') }}" alt="Landbank logo">
+        <span>Landbank</span>
+      </div>
+      <div class="bank-logo-item">
+        <img src="{{ asset('bank-of-the-philippine-islands-bpi-logo-vector.png') }}" alt="BPI logo">
+        <span>BPI</span>
+      </div>
+    </div>
+    <p class="amount-copy">After payment, tap Confirm to submit your deposit details. An admin will review and activate your investment.</p>
+    <div class="modal-actions">
+      <button class="modal-button confirm" type="button" id="bankModalConfirm">Confirm Payment</button>
+      <button class="modal-button cancel" type="button" id="bankModalCancel">Cancel</button>
+    </div>
+  </div>
+</div>
+
 <script>
   (function () {
     var track = document.querySelector('.package-track');
@@ -274,6 +300,9 @@
     var amountConfirmPayment = document.getElementById('amountConfirmPayment');
     var amountModalCancel = document.getElementById('amountModalCancel');
     var paymentModal = document.getElementById('paymentModal');
+    var bankModal = document.getElementById('bankModal');
+    var bankModalConfirm = document.getElementById('bankModalConfirm');
+    var bankModalCancel = document.getElementById('bankModalCancel');
     var paymentChoices = Array.prototype.slice.call(document.querySelectorAll('.payment-choice'));
     var paymentModalBack = document.getElementById('paymentModalBack');
     var paymentModalCancel = document.getElementById('paymentModalCancel');
@@ -452,10 +481,49 @@
     paymentChoices.forEach(function (choice) {
       choice.addEventListener('click', function () {
         if (!paymentMethodInput || !investmentForm) return;
+        if (choice.dataset.paymentMethod === 'bank_transfer') {
+          openBankModal();
+          return;
+        }
         paymentMethodInput.value = choice.dataset.paymentMethod || '';
         investmentForm.submit();
       });
     });
+
+    function openBankModal() {
+      if (!bankModal) return;
+      closePaymentModal(false);
+      bankModal.classList.add('is-open');
+      bankModal.setAttribute('aria-hidden', 'false');
+      if (bankModalConfirm) bankModalConfirm.focus();
+    }
+
+    function closeBankModal(returnToPayment) {
+      if (!bankModal) return;
+      moveFocusOut(bankModal, !returnToPayment);
+      bankModal.classList.remove('is-open');
+      bankModal.setAttribute('aria-hidden', 'true');
+      if (returnToPayment && paymentModal) {
+        paymentModal.classList.add('is-open');
+        paymentModal.setAttribute('aria-hidden', 'false');
+        if (paymentModalBack) paymentModalBack.focus();
+      }
+    }
+
+    if (bankModalConfirm) {
+      bankModalConfirm.addEventListener('click', function () {
+        if (!paymentMethodInput || !investmentForm) return;
+        paymentMethodInput.value = 'bank_transfer';
+        investmentForm.submit();
+      });
+    }
+
+    if (bankModalCancel) {
+      bankModalCancel.addEventListener('click', function () {
+        closeBankModal(true);
+      });
+    }
+
     if (paymentModalBack) {
       paymentModalBack.addEventListener('click', function () {
         closePaymentModal(true);
