@@ -177,9 +177,6 @@
                 <div style="font-size:18px; line-height:24px; color:#d90000; font-weight:bold; text-transform:uppercase; letter-spacing:0.5px;">
                   Lotteria
                 </div>
-                <div style="font-size:13px; line-height:20px; color:#555555; padding-top:8px;">
-                  This email-style page is a demo. Please use the navigation above to proceed.
-                </div>
                 <div style="font-size:12px; line-height:18px; color:#888888; padding-top:12px;">
                   © 2026 Lotteria. All rights reserved.
                 </div>

@@ -232,24 +232,24 @@
 </main>
 
 <nav class="bottom-nav">
-  <div class="nav-item">
+  <a class="nav-item" href="{{ route('unavailable') }}" style="text-decoration:none;">
     <span><img src="{{ asset('Send%20(1).png') }}" alt="Send" class="nav-icon"></span>
     Send
-  </div>
+  </a>
 
-  <div class="nav-item">
+  <a class="nav-item" href="{{ route('withdraw') }}" style="text-decoration:none;">
     <span>—</span>
     History
-  </div>
+  </a>
 
-  <div class="center-action">▦</div>
+  <a class="center-action" href="{{ route('unavailable') }}" style="text-decoration:none;">▦</a>
 
-  <div class="nav-item">
+  <a class="nav-item" href="{{ route('unavailable') }}" style="text-decoration:none;">
     <span>—</span>
     Rewards
-  </div>
+  </a>
 
-  <a class="nav-item" href="{{ route('profile') }}">
+  <a class="nav-item" href="{{ route('profile') }}" style="text-decoration:none;">
     <span>♙</span>
     Profile
   </a>
