@@ -31,6 +31,12 @@ class InvestmentController extends Controller
             ]);
         }
 
+        if ($data['payment_method'] === 'account_balance' && $request->user()->balance < (float) $data['amount']) {
+            throw ValidationException::withMessages([
+                'amount' => 'Insufficient account balance for this purchase.',
+            ]);
+        }
+
         $isPending = $data['payment_method'] === 'bank_transfer';
 
         $investment = $request->user()->investments()->create([
@@ -44,6 +50,12 @@ class InvestmentController extends Controller
             'starts_at' => $isPending ? null : now(),
             'status' => $isPending ? 'pending' : 'approved',
         ]);
+
+        if ($data['payment_method'] === 'account_balance') {
+            $user = $request->user();
+            $user->balance = max(0, ($user->balance ?? 0) - (float) $data['amount']);
+            $user->save();
+        }
 
         // If investment is immediately approved, process referral commission
         if ($investment->status === 'approved') {
