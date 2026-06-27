@@ -90,7 +90,13 @@
                   {{ ucfirst($investment->status) }}
                 </span>
               </td>
-              <td>${{ number_format($investment->dailyInterestAmount(), 2) }}</td>
+              <td>
+                @if ($investment->status === 'approved')
+                  ${{ number_format($investment->dailyInterestAmount(), 2) }}
+                @else
+                  —
+                @endif
+              </td>
             </tr>
           @endforeach
         </tbody>
