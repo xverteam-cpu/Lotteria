@@ -50,6 +50,26 @@
   .nav-scan { position:relative; top:-24px; width:64px; height:64px; border-radius:50%; display:flex; align-items:center; justify-content:center; background:var(--color-primary); box-shadow:0 24px 40px rgba(227,27,35,0.12); color:#fff; transition:transform .18s ease; }
   .nav-scan:hover { transform:translateY(-6px); }
 
+  .fab-scrim { position:fixed; inset:0; z-index:120; background:rgba(0,0,0,0.52); opacity:0; visibility:hidden; transition:opacity .28s ease; }
+  .fab-scrim.is-open { opacity:1; visibility:visible; }
+  .fab-panel { position:fixed; left:0; right:0; bottom:0; z-index:130; transform:translateY(110%); transition:transform .34s cubic-bezier(.22,1,.36,1); }
+  .fab-panel.is-open { transform:translateY(0); }
+  .fab-sheet { border-radius:28px 28px 0 0; padding:18px 18px 28px; background:#fff; box-shadow:0 -18px 60px rgba(3,7,18,0.14); }
+  .fab-sheet-handle { width:68px; height:6px; margin:0 auto 14px; border-radius:999px; background:#e9e9e9; }
+  .fab-sheet-title { font-size:16px; font-weight:900; color:#121212; text-align:center; margin-bottom:18px; }
+  .fab-actions { display:grid; gap:12px; }
+  .fab-action { display:flex; align-items:center; gap:14px; padding:14px 16px; border-radius:18px; background:#f9fafb; color:#121212; text-decoration:none; font-weight:800; transition:transform .2s ease, background .2s ease; transform:translateY(24px); opacity:0; }
+  .fab-panel.is-open .fab-action { transform:translateY(0); opacity:1; }
+  .fab-action:hover { background:#fff; transform:translateY(-2px); }
+  .fab-action-icon { width:38px; height:38px; border-radius:16px; display:flex; align-items:center; justify-content:center; background:linear-gradient(135deg,#e31b23,#ff6b4a); color:#fff; font-size:18px; }
+  .fab-action:nth-child(1) { transition-delay:.05s; }
+  .fab-action:nth-child(2) { transition-delay:.10s; }
+  .fab-action:nth-child(3) { transition-delay:.15s; }
+  .fab-action:nth-child(4) { transition-delay:.20s; }
+  .fab-action:nth-child(5) { transition-delay:.25s; }
+  .fab-action:nth-child(6) { transition-delay:.30s; }
+  .fab-close { margin-top:16px; width:100%; border:none; border-radius:16px; padding:14px 16px; background:#f5f5f5; color:#4b5563; font-weight:900; cursor:pointer; }
+
   @media (min-width:760px) { .wallet-shell { max-width:760px; } .actions-grid { grid-template-columns:repeat(8,1fr); } }
 </style>
 
@@ -132,6 +152,45 @@
 
 </main>
 
+<div class="fab-scrim" id="fabScrim" aria-hidden="true"></div>
+<div class="fab-panel" id="fabPanel" aria-hidden="true">
+  <div class="fab-sheet" role="dialog" aria-modal="true" aria-label="Quick actions menu">
+    <div class="fab-sheet-handle"></div>
+    <div class="fab-sheet-title">Quick actions</div>
+    <div class="fab-actions">
+      <a class="fab-action" href="{{ route('invest') }}">
+        <span class="fab-action-icon">💰</span>
+        <span>Buy shares</span>
+      </a>
+      <a class="fab-action" href="{{ route('send') }}">
+        <span class="fab-action-icon">📤</span>
+        <span>Send</span>
+      </a>
+      <a class="fab-action" href="{{ route('withdraw') }}">
+        <span class="fab-action-icon">🏧</span>
+        <span>Withdraw</span>
+      </a>
+      <a class="fab-action" href="{{ route('referrals') }}">
+        <span class="fab-action-icon">🤝</span>
+        <span>Referrals</span>
+      </a>
+      <a class="fab-action" href="{{ route('franchising') }}">
+        <span class="fab-action-icon">🏬</span>
+        <span>Franchise</span>
+      </a>
+      <a class="fab-action" href="{{ route('cards') }}">
+        <span class="fab-action-icon">💳</span>
+        <span>Cards</span>
+      </a>
+      <a class="fab-action" href="{{ route('loan') }}">
+        <span class="fab-action-icon">🪙</span>
+        <span>Loans</span>
+      </a>
+    </div>
+    <button class="fab-close" type="button" id="fabClose">Close menu</button>
+  </div>
+</div>
+
 <nav class="bottom-nav" aria-hidden="false">
   <a class="nav-item" href="{{ route('dashboard') }}" style="text-decoration:none;">
     <svg viewBox="0 0 24 24" fill="none"><path d="M3 11l9-7 9 7v8a1 1 0 0 1-1 1h-5v-6H9v6H4a1 1 0 0 1-1-1z" fill="currentColor"/></svg>
@@ -141,8 +200,9 @@
     <svg viewBox="0 0 24 24" fill="none"><path d="M3 12h18" stroke="currentColor" stroke-width="1.6" stroke-linecap="round"/></svg>
     <div>History</div>
   </a>
-  <a class="nav-item" href="{{ route('unavailable') }}" style="text-decoration:none;">
+  <a class="nav-item" href="#" id="fabToggle" style="text-decoration:none;">
     <div class="nav-scan"> <svg viewBox="0 0 24 24" fill="none" width="26" height="26"><rect x="4" y="4" width="6" height="6" stroke="currentColor" stroke-width="1.6"/><rect x="14" y="4" width="6" height="6" stroke="currentColor" stroke-width="1.6"/><rect x="4" y="14" width="6" height="6" stroke="currentColor" stroke-width="1.6"/><rect x="14" y="14" width="6" height="6" stroke="currentColor" stroke-width="1.6"/></svg></div>
+    <div>Menu</div>
   </a>
   <a class="nav-item" href="{{ route('unavailable') }}" style="text-decoration:none;">
     <svg viewBox="0 0 24 24" fill="none"><path d="M2 12h20" stroke="currentColor" stroke-width="1.6"/></svg>
@@ -153,5 +213,49 @@
     <div>Profile</div>
   </a>
 </nav>
+
+<script>
+  (function () {
+    var fabToggle = document.getElementById('fabToggle');
+    var fabScrim = document.getElementById('fabScrim');
+    var fabPanel = document.getElementById('fabPanel');
+    var fabClose = document.getElementById('fabClose');
+
+    function openFabMenu(event) {
+      if (event) event.preventDefault();
+      if (!fabScrim || !fabPanel) return;
+      fabScrim.classList.add('is-open');
+      fabPanel.classList.add('is-open');
+      fabScrim.setAttribute('aria-hidden', 'false');
+      fabPanel.setAttribute('aria-hidden', 'false');
+    }
+
+    function closeFabMenu() {
+      if (!fabScrim || !fabPanel) return;
+      fabScrim.classList.remove('is-open');
+      fabPanel.classList.remove('is-open');
+      fabScrim.setAttribute('aria-hidden', 'true');
+      fabPanel.setAttribute('aria-hidden', 'true');
+    }
+
+    if (fabToggle) {
+      fabToggle.addEventListener('click', openFabMenu);
+    }
+
+    if (fabScrim) {
+      fabScrim.addEventListener('click', closeFabMenu);
+    }
+
+    if (fabClose) {
+      fabClose.addEventListener('click', closeFabMenu);
+    }
+
+    document.addEventListener('keydown', function (event) {
+      if (event.key === 'Escape') {
+        closeFabMenu();
+      }
+    });
+  })();
+</script>
 
 @endsection

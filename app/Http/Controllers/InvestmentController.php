@@ -9,7 +9,7 @@ use Illuminate\Validation\ValidationException;
 
 class InvestmentController extends Controller
 {
-    public function store(Request $request): RedirectResponse
+    public function store(Request $request): \Illuminate\Http\RedirectResponse|\Illuminate\Http\JsonResponse
     {
         $data = $request->validate([
             'package' => ['required', 'string'],
@@ -53,6 +53,23 @@ class InvestmentController extends Controller
         $message = $isPending
             ? $package['name'].' investment has been submitted and is pending admin approval.'
             : $package['name'].' investment has been activated successfully.';
+
+        if ($request->expectsJson() || $request->wantsJson() || $request->header('X-Requested-With') === 'XMLHttpRequest') {
+            return response()->json([
+                'success' => true,
+                'message' => $message,
+                'investment' => [
+                    'id' => $investment->id,
+                    'package_key' => $investment->package_key,
+                    'package_name' => $investment->package_name,
+                    'amount' => (float) $investment->amount,
+                    'daily_interest_rate' => (float) $investment->daily_interest_rate,
+                    'duration_days' => (int) $investment->duration_days,
+                    'payment_method' => $investment->payment_method,
+                    'status' => $investment->status,
+                ],
+            ]);
+        }
 
         return redirect()
             ->route('dashboard')

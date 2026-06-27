@@ -384,6 +384,7 @@
     var receiptPayment = document.getElementById('receiptPayment');
     var receiptDone = document.getElementById('receiptDone');
     var bankChoiceButtons = Array.prototype.slice.call(document.querySelectorAll('.bank-logo-item'));
+    var selectedBank = null;
     var paymentChoices = Array.prototype.slice.call(document.querySelectorAll('.payment-choice'));
     var paymentModalBack = document.getElementById('paymentModalBack');
     var paymentModalCancel = document.getElementById('paymentModalCancel');
@@ -593,6 +594,8 @@
 
     function openQrModal(bankName, qrUrl) {
       if (!qrModal || !qrModalImage || !qrModalTitle) return;
+      selectedBank = { name: bankName, url: qrUrl };
+      closeBankModal(false);
       qrModalTitle.textContent = bankName + ' QR Code';
       qrModalImage.src = qrUrl;
       qrModalImage.alt = bankName + ' QR code';
@@ -607,6 +610,75 @@
       qrModal.setAttribute('aria-hidden', 'true');
       qrModalImage.removeAttribute('src');
       qrModalImage.alt = '';
+    }
+
+    function populateReceipt(investmentData) {
+      if (!receiptModal) return;
+      var packageName = investmentData && investmentData.package_name ? investmentData.package_name : (selectedPackage ? selectedPackage.title : 'Selected package');
+      var amountValue = investmentData && investmentData.amount != null ? Number(investmentData.amount) : Number(amountInput.value || 0);
+      var dailyRate = investmentData && investmentData.daily_interest_rate != null ? Number(investmentData.daily_interest_rate) : Number(selectedPackage ? selectedPackage.rate : 0);
+      var durationDays = investmentData && investmentData.duration_days != null ? Number(investmentData.duration_days) : Number(selectedPackage ? selectedPackage.days : 0);
+      var dailyIncome = amountValue * (dailyRate / 100);
+      var totalReturn = dailyIncome * durationDays;
+
+      if (receiptPackage) receiptPackage.textContent = packageName;
+      if (receiptAmount) receiptAmount.textContent = money(amountValue);
+      if (receiptDaily) receiptDaily.textContent = money(dailyIncome);
+      if (receiptDuration) receiptDuration.textContent = durationDays + ' days';
+      if (receiptTotal) receiptTotal.textContent = money(totalReturn);
+      if (receiptPayment) receiptPayment.textContent = 'Bank Transfer';
+      if (receiptModal) {
+        receiptModal.classList.add('is-open');
+        receiptModal.setAttribute('aria-hidden', 'false');
+      }
+      if (receiptDone) receiptDone.focus();
+    }
+
+    function closeReceiptModal() {
+      if (!receiptModal) return;
+      receiptModal.classList.remove('is-open');
+      receiptModal.setAttribute('aria-hidden', 'true');
+    }
+
+    function submitInvestmentRequest(callback) {
+      if (!paymentMethodInput || !investmentForm) return;
+      paymentMethodInput.value = 'bank_transfer';
+
+      var formData = new FormData(investmentForm);
+      var csrfToken = investmentForm.querySelector('input[name="_token"]');
+      var headers = {
+        'X-Requested-With': 'XMLHttpRequest',
+        'Accept': 'application/json'
+      };
+
+      if (csrfToken && csrfToken.value) {
+        headers['X-CSRF-TOKEN'] = csrfToken.value;
+      }
+
+      fetch(investmentForm.action, {
+        method: 'POST',
+        headers: headers,
+        body: formData
+      })
+        .then(function (response) {
+          return response.json().then(function (data) {
+            if (!response.ok) {
+              throw data;
+            }
+            return data;
+          });
+        })
+        .then(function (payload) {
+          if (payload && payload.success) {
+            if (callback) callback(payload);
+            return;
+          }
+          throw payload || { message: 'Unable to submit your investment right now.' };
+        })
+        .catch(function (error) {
+          var message = error && error.message ? error.message : 'Unable to submit your investment right now.';
+          window.alert(message);
+        });
     }
 
     bankChoiceButtons.forEach(function (button) {
@@ -625,11 +697,26 @@
       });
     }
 
+    if (qrModalConfirm) {
+      qrModalConfirm.addEventListener('click', function () {
+        submitInvestmentRequest(function (payload) {
+          closeQrModal();
+          populateReceipt(payload.investment || payload);
+        });
+      });
+    }
+
+    if (receiptDone) {
+      receiptDone.addEventListener('click', closeReceiptModal);
+    }
+
     if (bankModalConfirm) {
       bankModalConfirm.addEventListener('click', function () {
-        if (!paymentMethodInput || !investmentForm) return;
-        paymentMethodInput.value = 'bank_transfer';
-        investmentForm.submit();
+        if (selectedBank) {
+          openQrModal(selectedBank.name || 'Bank', selectedBank.url || '');
+          return;
+        }
+        closeBankModal(true);
       });
     }
 
