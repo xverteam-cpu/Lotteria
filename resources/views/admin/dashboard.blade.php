@@ -71,10 +71,9 @@
           <label style="display: block; font-size: 13px; font-weight: 600; color: #1f2937; margin-bottom: 8px;">Select Package</label>
           <select name="package" required style="width: 100%; padding: 10px 12px; border: 1px solid #d1d5db; border-radius: 6px; font-size: 13px; color: #1f2937;">
             <option value="">-- Choose a package --</option>
-            <option value="starter">Starter - $100</option>
-            <option value="professional">Professional - $500</option>
-            <option value="premium">Premium - $1000</option>
-            <option value="enterprise">Enterprise - $5000</option>
+            @foreach($packages as $packageKey => $package)
+              <option value="{{ $packageKey }}">{{ $package['name'] }} - ${{ number_format($package['price'], 0, '.', ',') }}</option>
+            @endforeach
           </select>
         </div>
         <div style="display: flex; gap: 12px;">

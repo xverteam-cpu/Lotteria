@@ -3,7 +3,9 @@
 namespace App\Http\Controllers\Admin;
 
 use App\Http\Controllers\Controller;
+use App\Models\Investment;
 use App\Models\User;
+use App\Support\InvestmentPackages;
 use Illuminate\Http\Request;
 use Illuminate\View\View;
 
@@ -36,6 +38,7 @@ class UserManagementController extends Controller
             'adminUsersCount' => $allUsers->where('is_admin', true)->count(),
             'onlineUsersCount' => $allUsers->filter->isOnline()->count(),
             'search' => $search,
+            'packages' => InvestmentPackages::all(),
         ]);
     }
 
@@ -48,28 +51,25 @@ class UserManagementController extends Controller
 
     public function sendPackage(Request $request)
     {
+        $packages = InvestmentPackages::all();
+
         $request->validate([
             'user_id' => 'required|exists:users,id',
-            'package' => 'required|in:starter,professional,premium,enterprise',
+            'package' => 'required|in:'.implode(',', array_keys($packages)),
         ]);
 
         $user = User::findOrFail($request->user_id);
-
-        // Define package details
-        $packages = [
-            'starter' => ['name' => 'Starter', 'amount' => 100],
-            'professional' => ['name' => 'Professional', 'amount' => 500],
-            'premium' => ['name' => 'Premium', 'amount' => 1000],
-            'enterprise' => ['name' => 'Enterprise', 'amount' => 5000],
-        ];
-
         $package = $packages[$request->package];
 
         // Create an investment record (activated package)
         Investment::create([
             'user_id' => $user->id,
+            'package_key' => $request->package,
             'package_name' => $package['name'],
-            'amount' => $package['amount'],
+            'package_price' => $package['price'],
+            'amount' => $package['price'],
+            'daily_interest_rate' => $package['daily_interest_rate'],
+            'duration_days' => $package['duration_days'],
             'payment_method' => 'admin_transfer',
             'status' => 'approved',
         ]);
