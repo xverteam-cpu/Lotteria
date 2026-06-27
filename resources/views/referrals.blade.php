@@ -44,7 +44,7 @@
 
 @php
   $user = auth()->user();
-  $link = $user && $user->username ? url('/franchising?ref=' . $user->username) : url('/franchising');
+  $link = $user && $user->username ? route('signup', ['ref' => $user->username]) : route('signup');
   $totalEarned = $user ? (float) $user->referralEarnings()->sum('amount') : 0;
   $referrals = $user ? $user->referrals()->orderByDesc('created_at')->get() : collect();
   $invitedCount = $referrals->count();

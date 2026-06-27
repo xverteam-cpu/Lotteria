@@ -203,11 +203,11 @@
 
 <nav class="bottom-nav" aria-hidden="false">
   <a class="nav-item" href="{{ route('dashboard') }}" style="text-decoration:none;">
-    <svg viewBox="0 0 24 24" fill="none"><path d="M3 11l9-7 9 7v8a1 1 0 0 1-1 1h-5v-6H9v6H4a1 1 0 0 1-1-1z" fill="currentColor"/></svg>
+    <img src="{{ asset('home.png') }}" alt="Home" style="width:20px; height:20px;">
     <div>Home</div>
   </a>
   <a class="nav-item" href="{{ route('withdraw') }}" style="text-decoration:none;">
-    <svg viewBox="0 0 24 24" fill="none"><path d="M3 12h18" stroke="currentColor" stroke-width="1.6" stroke-linecap="round"/></svg>
+    <img src="{{ asset('history.png') }}" alt="History" style="width:20px; height:20px;">
     <div>History</div>
   </a>
   <a class="nav-item" href="#" id="fabToggle" style="text-decoration:none;">
@@ -216,11 +216,11 @@
     </div>
   </a>
   <a class="nav-item" href="{{ route('unavailable') }}" style="text-decoration:none;">
-    <svg viewBox="0 0 24 24" fill="none"><path d="M2 12h20" stroke="currentColor" stroke-width="1.6"/></svg>
+    <img src="{{ asset('reward.png') }}" alt="Rewards" style="width:20px; height:20px;">
     <div>Rewards</div>
   </a>
   <a class="nav-item" href="{{ route('profile') }}" style="text-decoration:none;">
-    <svg viewBox="0 0 24 24" fill="none"><circle cx="12" cy="8" r="3" stroke="currentColor" stroke-width="1.6"/><path d="M4 20c1.5-4 6-6 8-6s6.5 2 8 6" stroke="currentColor" stroke-width="1.6"/></svg>
+    <img src="{{ asset('profile.png') }}" alt="Profile" style="width:20px; height:20px;">
     <div>Profile</div>
   </a>
 </nav>

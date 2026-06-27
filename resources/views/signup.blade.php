@@ -134,7 +134,7 @@
 
       <div class="signup-field">
         <label class="signup-label" for="referral">Referral</label>
-        <input class="signup-input" id="referral" name="referral" type="text" value="{{ old('referral') }}" placeholder="Enter referral code or username">
+        <input class="signup-input" id="referral" name="referral" type="text" value="{{ old('referral', $referral ?? '') }}" placeholder="Enter referral code or username">
       </div>
 
       <div class="signup-field">

@@ -56,11 +56,11 @@ Route::get('/pin/login', [PinController::class, 'login'])->name('pin.login');
 Route::post('/pin/login', [PinController::class, 'verify'])->name('pin.verify');
 
 Route::get('/signup', function () {
-    return view('signup');
+    return view('signup', ['referral' => request('ref')]);
 })->name('signup');
 
 Route::get('/franchising', function () {
-    return redirect()->route('signup');
+    return redirect()->route('signup', request()->query());
 })->name('franchising');
 
 Route::get('/unavailable', function () {
