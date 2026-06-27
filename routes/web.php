@@ -76,9 +76,11 @@ Route::get('/dashboard', function () {
         return redirect()->route('admin.dashboard');
     }
 
-    DailyInterestAccrualService::accrueDueInterestForUser(Auth::user());
+    $user = Auth::user();
+    DailyInterestAccrualService::accrueDueInterestForUser($user);
+    $user->refresh();
 
-    return view('dashboard_user');
+    return view('dashboard_user', ['user' => $user]);
 })->middleware(['auth', 'pin'])->name('dashboard');
 
 // Deposit page for buying shares

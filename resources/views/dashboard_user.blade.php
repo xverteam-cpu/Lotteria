@@ -540,7 +540,7 @@
 </style>
 
 @php
-  $user = auth()->user();
+  $user = $user ?? auth()->user();
   $investments = $user->investments()->latest()->get();
   $activeCapital = $investments->sum(fn($i) => (float) $i->amount);
   $dailyInterest = $investments->sum(fn($i) => $i->dailyInterestAmount());
