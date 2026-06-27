@@ -111,6 +111,11 @@
 
         <button class="pin-submit" id="pinSubmit" type="submit" disabled>{{ $mode === 'setup' ? 'Save PIN' : 'Login' }}</button>
         <p class="pin-helper">{{ $mode === 'setup' ? 'You will only create this once.' : 'Use the 4 digit PIN you created.' }}</p>
+        @if($mode === 'login')
+          <div style="margin-top:14px; text-align:center;">
+            <a href="{{ route('order') }}" id="emailLoginLink" style="color:#071846; font-weight:800; text-decoration:none;">Log in via email</a>
+          </div>
+        @endif
       </form>
     </section>
   </main>
@@ -189,6 +194,8 @@
           event.preventDefault();
         }
       });
+
+      // Email login link redirects to the email login page (order)
 
       sync();
     })();

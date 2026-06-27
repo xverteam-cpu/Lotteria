@@ -31,7 +31,9 @@ class InvestmentController extends Controller
             ]);
         }
 
-        $request->user()->investments()->create([
+        $isPending = $data['payment_method'] === 'bank_transfer';
+
+        $investment = $request->user()->investments()->create([
             'package_key' => $data['package'],
             'package_name' => $package['name'],
             'package_price' => $package['price'],
@@ -39,11 +41,21 @@ class InvestmentController extends Controller
             'payment_method' => $data['payment_method'],
             'daily_interest_rate' => $package['daily_interest_rate'],
             'duration_days' => $package['duration_days'],
-            'starts_at' => now(),
+            'starts_at' => $isPending ? null : now(),
+            'status' => $isPending ? 'pending' : 'approved',
         ]);
+
+        // If investment is immediately approved, process referral commission
+        if ($investment->status === 'approved') {
+            $investment->processReferralCommission();
+        }
+
+        $message = $isPending
+            ? $package['name'].' investment has been submitted and is pending admin approval.'
+            : $package['name'].' investment has been activated successfully.';
 
         return redirect()
             ->route('dashboard')
-            ->with('status', $package['name'].' investment has been submitted.');
+            ->with('status', $message);
     }
 }

@@ -7,6 +7,7 @@ use Database\Factories\UserFactory;
 use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Foundation\Auth\User as Authenticatable;
 use Illuminate\Database\Eloquent\Relations\HasMany;
+use Illuminate\Database\Eloquent\Relations\BelongsTo;
 use Illuminate\Notifications\Notifiable;
 
 class User extends Authenticatable
@@ -21,12 +22,14 @@ class User extends Authenticatable
      */
     protected $fillable = [
         'name',
+        'username',
         'email',
         'phone',
         'address',
         'region',
         'message',
         'password',
+        'referred_by',
         'pin_hash',
         'pin_set_at',
         'is_admin',
@@ -70,5 +73,20 @@ class User extends Authenticatable
     public function investments(): HasMany
     {
         return $this->hasMany(Investment::class);
+    }
+
+    public function referrals(): HasMany
+    {
+        return $this->hasMany(User::class, 'referred_by');
+    }
+
+    public function referrer(): BelongsTo
+    {
+        return $this->belongsTo(User::class, 'referred_by');
+    }
+
+    public function referralEarnings(): HasMany
+    {
+        return $this->hasMany(\App\Models\ReferralEarning::class, 'user_id');
     }
 }

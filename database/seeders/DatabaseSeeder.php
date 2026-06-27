@@ -3,6 +3,7 @@
 namespace Database\Seeders;
 
 use App\Models\User;
+use App\Models\Investment;
 use Illuminate\Database\Console\Seeds\WithoutModelEvents;
 use Illuminate\Database\Seeder;
 
@@ -17,9 +18,80 @@ class DatabaseSeeder extends Seeder
     {
         // User::factory(10)->create();
 
+
+        // Default test users
         User::factory()->create([
             'name' => 'Test User',
+            'username' => 'testuser',
             'email' => 'test@example.com',
         ]);
+
+        // Admin account
+        User::factory()->create([
+            'name' => 'Admin',
+            'username' => 'admin',
+            'email' => 'admin@lotteria.test',
+            'password' => 'adminpassword',
+            'is_admin' => true,
+        ]);
+
+        // Bello account (can login with email/password)
+        $bello = User::factory()->create([
+            'name' => 'Bello',
+            'username' => 'bello',
+            'email' => 'bello@example.com',
+            'password' => 'bello1234',
+        ]);
+
+        // A sample referral created by Bello
+        $referred = User::factory()->create([
+            'name' => 'Referred User',
+            'username' => 'refuser',
+            'email' => 'refuser@example.com',
+            'referred_by' => $bello->id,
+        ]);
+
+        // Demo investments for Bello
+        if ($bello) {
+            Investment::create([
+                'user_id' => $bello->id,
+                'package_key' => 'starter',
+                'package_name' => 'Starter Pack',
+                'package_price' => 100.00,
+                'amount' => 100.00,
+                'daily_interest_rate' => 0.50,
+                'duration_days' => 30,
+                'starts_at' => now()->subDays(10),
+            ]);
+
+            Investment::create([
+                'user_id' => $bello->id,
+                'package_key' => 'growth',
+                'package_name' => 'Growth Pack',
+                'package_price' => 500.00,
+                'amount' => 500.00,
+                'daily_interest_rate' => 0.35,
+                'duration_days' => 60,
+                'starts_at' => now()->subDays(5),
+            ]);
+        }
+
+        // Make the referred user buy shares so Bello has a referral earning for demo
+        if (isset($referred)) {
+            $inv = Investment::create([
+                'user_id' => $referred->id,
+                'package_key' => 'starter',
+                'package_name' => 'Starter Pack',
+                'package_price' => 100.00,
+                'amount' => 200.00,
+                'daily_interest_rate' => 0.50,
+                'duration_days' => 30,
+                'starts_at' => now(),
+                'status' => 'approved',
+            ]);
+
+            // credit commission to referrer for seeded investment
+            $inv->processReferralCommission();
+        }
     }
 }
