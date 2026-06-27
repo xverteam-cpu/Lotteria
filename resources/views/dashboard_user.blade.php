@@ -401,14 +401,17 @@
     display: flex;
     align-items: center;
     justify-content: center;
-    background: var(--color-primary);
+    background: var(--color-primary) url('{{ asset('menu.png') }}') center/cover no-repeat;
     box-shadow: 0 12px 30px rgba(215,25,32,.25);
-    color: #fff;
     transition: transform .18s ease;
   }
 
   .nav-scan:hover {
     transform: translateY(-6px);
+  }
+
+  .nav-scan img {
+    display: none;
   }
 
   .fab-scrim {
