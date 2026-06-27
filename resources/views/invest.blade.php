@@ -515,13 +515,30 @@
       }
     }
 
-    cards.forEach(function (card) {
-      card.addEventListener('click', function () {
-        openModal(card);
+    function activatePackageCard(card) {
+      if (!card) return;
+      openModal(card);
+    }
+
+    if (track) {
+      track.addEventListener('click', function (event) {
+        var card = event.target.closest('.package-card');
+        if (card) {
+          activatePackageCard(card);
+        }
       });
+      track.addEventListener('pointerup', function (event) {
+        var card = event.target.closest('.package-card');
+        if (card) {
+          activatePackageCard(card);
+        }
+      });
+    }
+
+    cards.forEach(function (card) {
       card.addEventListener('keydown', function (event) {
         if (event.key === 'Enter' || event.key === ' ') {
-          openModal(card);
+          activatePackageCard(card);
           event.preventDefault();
         }
       });

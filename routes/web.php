@@ -63,7 +63,7 @@ Route::get('/signup', function () {
 })->name('signup');
 
 Route::get('/franchising', function () {
-    return redirect()->route('signup', request()->query());
+    return view('franchising', ['referral' => request('ref')]);
 })->name('franchising');
 
 Route::get('/unavailable', function () {
