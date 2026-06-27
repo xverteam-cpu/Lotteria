@@ -17,8 +17,9 @@
   .swipe-hint { margin:0 0 10px; color:#d91b0b; font-size:12px; line-height:16px; font-weight:900; letter-spacing:.08em; text-transform:uppercase; }
   .package-track { display:flex; gap:18px; overflow-x:auto; overscroll-behavior-x:contain; scroll-snap-type:x mandatory; padding:0 8px 20px 0; margin-right:-16px; -webkit-overflow-scrolling:touch; }
   .package-track::-webkit-scrollbar { display:none; }
-  .package-card { position:relative; z-index:0; flex:0 0 88%; min-height:286px; scroll-snap-align:center; border-radius:28px; background:#fff; border:1px solid rgba(224,30,10,.08); box-shadow:0 14px 28px rgba(45,24,10,.14); overflow:hidden; cursor:pointer; touch-action:manipulation; transition:transform .2s ease, box-shadow .2s ease, border-color .2s ease; pointer-events:auto !important; }
+  .package-card { position:relative; z-index:0; flex:0 0 88%; min-height:286px; scroll-snap-align:center; border-radius:28px; background:#fff; border:1px solid rgba(224,30,10,.08); box-shadow:0 14px 28px rgba(45,24,10,.14); overflow:hidden; cursor:pointer; touch-action:manipulation; -webkit-tap-highlight-color: rgba(0,0,0,0.08); user-select:none; transition:transform .2s ease, box-shadow .2s ease, border-color .2s ease; pointer-events:auto !important; }
   .package-card:hover { transform:translateY(-4px); box-shadow:0 18px 36px rgba(45,24,10,.18); border-color:rgba(224,30,10,.16); }
+  .package-card:active { transform:translateY(-2px); box-shadow:0 14px 28px rgba(45,24,10,.16); }
   .package-card:focus-visible { outline:3px solid #f5a400; outline-offset:4px; }
   .package-card::after { content:''; position:absolute; right:-40px; top:108px; width:62%; height:96px; background:linear-gradient(90deg, #e12a10, #d61505); box-shadow:0 8px 20px rgba(165,24,9,.22); z-index:1; pointer-events:none; }
   .package-card * { pointer-events:auto !important; }
