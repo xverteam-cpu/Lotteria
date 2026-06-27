@@ -302,7 +302,48 @@
     <h2 class="amount-title" id="qrModalTitle">Bank QR</h2>
     <img class="modal-image" id="qrModalImage" src="" alt="Bank QR code">
     <div class="modal-actions">
-      <button class="modal-button confirm" type="button" id="qrModalClose">Close</button>
+      <button class="modal-button confirm" type="button" id="qrModalConfirm">Confirm</button>
+      <button class="modal-button cancel" type="button" id="qrModalClose">Cancel</button>
+    </div>
+  </div>
+</div>
+
+<div class="package-modal" id="receiptModal" aria-hidden="true">
+  <div class="modal-card" role="dialog" aria-modal="true" aria-label="Investment receipt">
+    <h2 class="amount-title">Investment Receipt</h2>
+    <div style="background: #f5f5f5; padding: 24px; border-radius: 16px; margin: 20px 0;">
+      <div style="display: flex; justify-content: space-between; padding: 12px 0; border-bottom: 1px solid #e0e0e0;">
+        <span style="color: #666; font-weight: 500;">Package</span>
+        <span id="receiptPackage" style="font-weight: 600; color: #333;"></span>
+      </div>
+      <div style="display: flex; justify-content: space-between; padding: 12px 0; border-bottom: 1px solid #e0e0e0;">
+        <span style="color: #666; font-weight: 500;">Investment Amount</span>
+        <span id="receiptAmount" style="font-weight: 600; color: #333;"></span>
+      </div>
+      <div style="display: flex; justify-content: space-between; padding: 12px 0; border-bottom: 1px solid #e0e0e0;">
+        <span style="color: #666; font-weight: 500;">Daily Interest</span>
+        <span id="receiptDaily" style="font-weight: 600; color: #d91b0b;"></span>
+      </div>
+      <div style="display: flex; justify-content: space-between; padding: 12px 0; border-bottom: 1px solid #e0e0e0;">
+        <span style="color: #666; font-weight: 500;">Duration</span>
+        <span id="receiptDuration" style="font-weight: 600; color: #333;"></span>
+      </div>
+      <div style="display: flex; justify-content: space-between; padding: 12px 0; border-bottom: 1px solid #e0e0e0;">
+        <span style="color: #666; font-weight: 500;">Total Expected Return</span>
+        <span id="receiptTotal" style="font-weight: 600; color: #d91b0b;"></span>
+      </div>
+      <div style="display: flex; justify-content: space-between; padding: 12px 0; border-bottom: 1px solid #e0e0e0;">
+        <span style="color: #666; font-weight: 500;">Payment Method</span>
+        <span id="receiptPayment" style="font-weight: 600; color: #333;"></span>
+      </div>
+      <div style="display: flex; justify-content: space-between; padding: 12px 0;">
+        <span style="color: #666; font-weight: 500;">Status</span>
+        <span style="font-weight: 600; color: #ff9800; background: #fff3e0; padding: 4px 12px; border-radius: 8px; font-size: 12px;">⏳ Pending Approval</span>
+      </div>
+    </div>
+    <p class="amount-copy" style="color: #666; text-align: center; margin: 20px 0;">Admin will review and activate your investment. You'll receive a notification once approved.</p>
+    <div class="modal-actions">
+      <button class="modal-button confirm" type="button" id="receiptDone">Done</button>
     </div>
   </div>
 </div>
@@ -333,6 +374,15 @@
     var qrModalTitle = document.getElementById('qrModalTitle');
     var qrModalImage = document.getElementById('qrModalImage');
     var qrModalClose = document.getElementById('qrModalClose');
+    var qrModalConfirm = document.getElementById('qrModalConfirm');
+    var receiptModal = document.getElementById('receiptModal');
+    var receiptPackage = document.getElementById('receiptPackage');
+    var receiptAmount = document.getElementById('receiptAmount');
+    var receiptDaily = document.getElementById('receiptDaily');
+    var receiptDuration = document.getElementById('receiptDuration');
+    var receiptTotal = document.getElementById('receiptTotal');
+    var receiptPayment = document.getElementById('receiptPayment');
+    var receiptDone = document.getElementById('receiptDone');
     var bankChoiceButtons = Array.prototype.slice.call(document.querySelectorAll('.bank-logo-item'));
     var paymentChoices = Array.prototype.slice.call(document.querySelectorAll('.payment-choice'));
     var paymentModalBack = document.getElementById('paymentModalBack');
