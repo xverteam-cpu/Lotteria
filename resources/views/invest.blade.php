@@ -19,7 +19,7 @@
   .package-track::-webkit-scrollbar { display:none; }
   .package-card { position:relative; flex:0 0 88%; min-height:286px; scroll-snap-align:center; border-radius:28px; background:#fff; border:1px solid rgba(224,30,10,.08); box-shadow:0 14px 28px rgba(45,24,10,.14); overflow:hidden; cursor:pointer; }
   .package-card:focus-visible { outline:3px solid #f5a400; outline-offset:4px; }
-  .package-card::after { content:''; position:absolute; right:-40px; top:108px; width:62%; height:96px; background:linear-gradient(90deg, #e12a10, #d61505); box-shadow:0 8px 20px rgba(165,24,9,.22); z-index:1; }
+  .package-card::after { content:''; position:absolute; right:-40px; top:108px; width:62%; height:96px; background:linear-gradient(90deg, #e12a10, #d61505); box-shadow:0 8px 20px rgba(165,24,9,.22); z-index:1; pointer-events:none; }
   .package-content { position:relative; z-index:2; padding:30px 24px 26px; max-width:58%; }
   .package-name { margin:0; color:#e12610; font-size:32px; line-height:36px; font-weight:900; font-style:italic; letter-spacing:.04em; text-transform:uppercase; }
   .package-number { color:#f5a400; margin-right:8px; }
