@@ -69,12 +69,32 @@
         </div>
         <div>
           <label style="display: block; font-size: 13px; font-weight: 600; color: #1f2937; margin-bottom: 8px;">Select Package</label>
-          <select name="package" required style="width: 100%; padding: 10px 12px; border: 1px solid #d1d5db; border-radius: 6px; font-size: 13px; color: #1f2937;">
+          <select id="adminPackageSelect" name="package" required style="width: 100%; padding: 10px 12px; border: 1px solid #d1d5db; border-radius: 6px; font-size: 13px; color: #1f2937;">
             <option value="">-- Choose a package --</option>
             @foreach($packages as $packageKey => $package)
-              <option value="{{ $packageKey }}">{{ $package['name'] }} - ${{ number_format($package['price'], 0, '.', ',') }}</option>
+              <option value="{{ $packageKey }}">{{ $package['name'] }} — ${{ number_format($package['price'], 2, '.', ',') }} — {{ number_format($package['daily_interest_rate'], 2) }}% daily</option>
             @endforeach
           </select>
+
+          <div style="margin-top:10px; display:flex; gap:8px; flex-wrap:wrap;">
+            @foreach($packages as $packageKey => $package)
+              <button type="button" class="package-quick-btn" data-package-key="{{ $packageKey }}" style="padding:8px 12px; border-radius:6px; border:1px solid #d1d5db; background:white; cursor:pointer; font-weight:700;">
+                {{ $package['name'] }}
+              </button>
+            @endforeach
+          </div>
+          <script>
+            (function () {
+              var buttons = document.querySelectorAll('.package-quick-btn');
+              var select = document.getElementById('adminPackageSelect');
+              buttons.forEach(function (btn) {
+                btn.addEventListener('click', function () {
+                  var key = btn.getAttribute('data-package-key');
+                  if (select) select.value = key;
+                });
+              });
+            }());
+          </script>
         </div>
         <div style="display: flex; gap: 12px;">
           <button type="submit" class="header-btn" style="flex: 1; margin: 0;">
