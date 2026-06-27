@@ -9,16 +9,45 @@ class CurrencyRateService
 {
     public static function latestUsdToPhp(): float
     {
-        return Cache::remember(
-            self::cacheKey(),
+        $meta = Cache::remember(
+            self::metaCacheKey(),
             config('currency.cache_ttl', 3600),
-            fn () => self::fetchFromApi()
+            function () {
+                $rate = self::fetchFromApi();
+                return [
+                    'rate' => $rate,
+                    'updated_at' => now()->toDateTimeString(),
+                ];
+            }
         );
+
+        return (float) ($meta['rate'] ?? config('currency.usd_to_php', 61.31));
     }
 
     private static function cacheKey(): string
     {
         return 'usd_to_php_rate';
+    }
+
+    private static function metaCacheKey(): string
+    {
+        return 'usd_to_php_rate_meta';
+    }
+
+    public static function latestUsdToPhpWithMeta(): array
+    {
+        $meta = Cache::get(self::metaCacheKey());
+
+        if (! $meta) {
+            $rate = self::fetchFromApi();
+            $meta = [
+                'rate' => $rate,
+                'updated_at' => now()->toDateTimeString(),
+            ];
+            Cache::put(self::metaCacheKey(), $meta, config('currency.cache_ttl', 3600));
+        }
+
+        return $meta;
     }
 
     private static function fetchFromApi(): float

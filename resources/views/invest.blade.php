@@ -111,7 +111,7 @@
 
     <p class="swipe-hint">Swipe packages</p>
     <section class="package-track" aria-label="Swipeable package list">
-      <article class="package-card crunch" role="button" tabindex="0" data-package-key="crunch" data-package-title="Basic Package - Basic Share" data-package-price="120" data-package-rate="0.6" data-package-days="180" data-package-image="{{ asset('basic.png') }}">
+      <article class="package-card crunch" role="button" tabindex="0" data-package-key="crunch" data-package-title="Basic" data-package-price="120" data-package-rate="0.6" data-package-days="180" data-package-image="{{ asset('basic.png') }}">
         <div class="package-content">
           <h2 class="package-name"><span class="package-number">01</span>Basic</h2>
           <p class="package-desc">Basic share package for steady returns.</p>
@@ -121,7 +121,7 @@
         <div class="product-label">Basic</div>
       </article>
 
-      <article class="package-card loaded" role="button" tabindex="0" data-package-key="loaded" data-package-title="Standard Package - Standard Share" data-package-price="800" data-package-rate="0.7" data-package-days="150" data-package-image="{{ asset('standard.png') }}">
+      <article class="package-card loaded" role="button" tabindex="0" data-package-key="loaded" data-package-title="Standard" data-package-price="800" data-package-rate="0.7" data-package-days="150" data-package-image="{{ asset('standard.png') }}">
         <div class="package-content">
           <h2 class="package-name"><span class="package-number">02</span>Standard</h2>
           <p class="package-desc">Standard share package for strong market growth.</p>
@@ -131,7 +131,7 @@
         <div class="product-label">Standard</div>
       </article>
 
-      <article class="package-card supreme" role="button" tabindex="0" data-package-key="supreme" data-package-title="Premium Package - Premium Package" data-package-price="4000" data-package-rate="0.75" data-package-days="120" data-package-image="{{ asset('premium.png') }}">
+      <article class="package-card supreme" role="button" tabindex="0" data-package-key="supreme" data-package-title="Premium" data-package-price="4000" data-package-rate="0.75" data-package-days="120" data-package-image="{{ asset('premium.png') }}">
         <div class="package-content">
           <h2 class="package-name"><span class="package-number">03</span>Premium</h2>
           <p class="package-desc">Premium package for higher return potential.</p>
@@ -141,7 +141,7 @@
         <div class="product-label">Premium</div>
       </article>
 
-      <article class="package-card premium-plus" role="button" tabindex="0" data-package-key="premium_plus" data-package-title="Premium+ Package - Elite Share" data-package-price="8000" data-package-rate="0.9" data-package-days="80" data-package-image="{{ asset('premium+.png') }}">
+      <article class="package-card premium-plus" role="button" tabindex="0" data-package-key="premium_plus" data-package-title="Premium+" data-package-price="8000" data-package-rate="0.9" data-package-days="80" data-package-image="{{ asset('premium+.png') }}">
         <div class="package-content">
           <h2 class="package-name"><span class="package-number">04</span>Premium+</h2>
           <p class="package-desc">Elite package for maximum returns.</p>
@@ -375,6 +375,7 @@
     var lastPackageCard = null;
     var selectedCurrency = 'USD';
     var phpRate = {{ json_encode($phpRate ?? config('currency.usd_to_php', 61.31)) }};
+    var phpRateUpdatedAt = {{ json_encode($phpRateUpdatedAt ?? null) }};
     if (!track || !dots.length) return;
 
     function updateDots() {
@@ -500,7 +501,13 @@
       if (weeklyEstimate) weeklyEstimate.textContent = money(weekly);
       if (totalEstimate) totalEstimate.textContent = money(total);
       if (estimateNote) {
-        var convertedLabel = selectedCurrency === 'PHP' ? 'PHP estimate at ₱' + phpRate + ' per $1. ' : '';
+        var convertedLabel = '';
+        if (selectedCurrency === 'PHP') {
+          var formattedRate = Number(phpRate || 0).toFixed(2);
+          var updatedSuffix = phpRateUpdatedAt ? ' (updated ' + phpRateUpdatedAt + ')' : ' (updated: —)';
+          convertedLabel = 'PHP estimate at ₱' + formattedRate + ' per $1' + updatedSuffix + '. ';
+        }
+
         estimateNote.textContent = convertedLabel + money(amount) + ' x ' + selectedPackage.rate + '% = ' + money(daily) + ' daily. Estimated total income for ' + days + ' days is ' + money(total) + '.';
       }
     }

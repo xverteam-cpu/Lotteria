@@ -84,8 +84,10 @@ Route::get('/deposit', function () {
 })->middleware(['auth', 'pin'])->name('deposit');
 
 Route::get('/invest', function () {
+    $meta = CurrencyRateService::latestUsdToPhpWithMeta();
     return view('invest', [
-        'phpRate' => CurrencyRateService::latestUsdToPhp(),
+        'phpRate' => $meta['rate'],
+        'phpRateUpdatedAt' => $meta['updated_at'],
     ]);
 })->name('invest');
 
