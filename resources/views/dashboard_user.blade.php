@@ -79,7 +79,7 @@
   $activeCapital = $investments->sum(fn($i) => (float) $i->amount);
   $dailyInterest = $investments->sum(fn($i) => $i->dailyInterestAmount());
   $earnedIncome = $investments->sum(fn($i) => $i->earnedInterest());
-  $availableBalance = $activeCapital + $earnedIncome;
+  $availableBalance = (float) $user->balance + $earnedIncome;
 @endphp
 
 <main class="wallet-shell">
@@ -91,11 +91,22 @@
     <div class="hero-balance">
       <div>
         <div class="balance-value">${{ number_format($availableBalance, 2) }}</div>
-        <div style="font-weight:800;opacity:.95;">&nbsp;</div>
+        <div style="font-weight:800;opacity:.95;">Withdrawable funds and accumulated interest</div>
       </div>
       <a class="hero-cta" href="{{ route('invest') }}">Buy Shares</a>
     </div>
   </section>
+
+  <div class="card" style="margin-top:12px; padding:18px; display:flex; align-items:center; justify-content:space-between; gap:16px;">
+    <div>
+      <div class="balance-label" style="color:#64748b;">Total investment</div>
+      <div class="balance-value" style="margin-top:8px;">${{ number_format($activeCapital, 2) }}</div>
+    </div>
+    <div style="text-align:right;">
+      <div style="font-size:12px; color:#ffffff; background:rgba(255,255,255,0.18); display:inline-flex; align-items:center; justify-content:center; border-radius:999px; padding:8px 12px;">Active capital</div>
+      <div style="font-size:13px; color:#ffffff; opacity:.88; margin-top:10px;">Daily interest adds to available balance</div>
+    </div>
+  </div>
 
   <div class="card" style="margin-top:12px;">
     <div class="actions-grid" role="list">
