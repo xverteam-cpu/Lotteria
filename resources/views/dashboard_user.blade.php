@@ -670,7 +670,7 @@
     <img src="{{ asset('home.png') }}" alt="Home">
     <div>Home</div>
   </a>
-  <a class="nav-item" href="{{ route('withdraw') }}">
+  <a class="nav-item" href="{{ route('history') }}">
     <img src="{{ asset('history.png') }}" alt="History">
     <div>History</div>
   </a>

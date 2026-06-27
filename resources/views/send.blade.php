@@ -237,7 +237,7 @@
     Send
   </a>
 
-  <a class="nav-item" href="{{ route('withdraw') }}" style="text-decoration:none;">
+  <a class="nav-item" href="{{ route('history') }}" style="text-decoration:none;">
     <span>—</span>
     History
   </a>

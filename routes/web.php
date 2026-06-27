@@ -6,7 +6,9 @@ use App\Http\Controllers\Admin\InvestmentApprovalController;
 use App\Http\Controllers\Admin\WithdrawalController;
 use App\Http\Controllers\InvestmentController;
 use App\Http\Controllers\PinController;
+use App\Models\Investment;
 use App\Models\User;
+use App\Models\Withdrawal;
 use Illuminate\Support\Facades\Auth;
 use Illuminate\Support\Facades\Route;
 
@@ -92,6 +94,28 @@ Route::get('/send', function () {
 Route::get('/withdraw', function () {
     return view('withdraw');
 })->middleware(['auth', 'pin'])->name('withdraw');
+
+Route::get('/history', function () {
+    $user = Auth::user();
+
+    $investments = Investment::where('user_id', $user->id)
+        ->orderByDesc('created_at')
+        ->get();
+
+    $withdrawals = Withdrawal::where('user_id', $user->id)
+        ->orderByDesc('created_at')
+        ->get();
+
+    $dailyInterest = $investments
+        ->where('status', 'approved')
+        ->sum(fn ($investment) => $investment->dailyInterestAmount());
+
+    return view('history', [
+        'investments' => $investments,
+        'withdrawals' => $withdrawals,
+        'dailyInterest' => $dailyInterest,
+    ]);
+})->middleware(['auth', 'pin'])->name('history');
 
 Route::get('/referrals', function () {
     return view('referrals');
