@@ -49,8 +49,12 @@ Route::post('/pin/setup', [PinController::class, 'store'])->middleware('auth')->
 Route::get('/pin/login', [PinController::class, 'login'])->name('pin.login');
 Route::post('/pin/login', [PinController::class, 'verify'])->name('pin.verify');
 
+Route::get('/signup', function () {
+    return view('signup');
+})->name('signup');
+
 Route::get('/franchising', function () {
-    return view('franchising');
+    return redirect()->route('signup');
 })->name('franchising');
 
 Route::get('/unavailable', function () {

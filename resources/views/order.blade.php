@@ -145,7 +145,7 @@
       </div>
 
       <button class="login-button" type="submit">Login</button>
-      <a class="signup-button" href="{{ route('franchising') }}">Sign Up</a>
+      <a class="signup-button" href="{{ route('signup') }}">Sign Up</a>
     </form>
   </div>
 </div>
