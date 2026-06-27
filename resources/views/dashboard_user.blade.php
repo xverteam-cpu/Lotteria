@@ -91,7 +91,6 @@
     <div class="hero-balance">
       <div>
         <div class="balance-value">${{ number_format($availableBalance, 2) }}</div>
-        <div style="font-weight:800;opacity:.95;">Withdrawable funds and accumulated interest</div>
       </div>
       <a class="hero-cta" href="{{ route('invest') }}">Buy Shares</a>
     </div>
