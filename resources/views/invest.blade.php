@@ -41,38 +41,43 @@
   .dot.is-active { width:22px; border-radius:999px; background:#e12610; }
   .package-modal { position:fixed; inset:0; z-index:50; display:none; align-items:center; justify-content:center; padding:20px; background:rgba(10,10,10,.62); }
   .package-modal.is-open { display:flex; }
-  .modal-card { width:min(100%, 430px); max-height:92vh; overflow:auto; border-radius:24px; background:#fff; padding:14px; box-shadow:0 24px 60px rgba(0,0,0,.3); }
-  .modal-image { display:block; width:100%; height:auto; border-radius:18px; background:#fff8e8; }
-  .modal-actions { display:grid; grid-template-columns:1fr 1fr; gap:10px; margin-top:14px; }
-  .modal-button { display:inline-flex; align-items:center; justify-content:center; min-height:46px; border-radius:999px; border:0; font-size:14px; line-height:18px; font-weight:900; letter-spacing:.04em; text-transform:uppercase; text-decoration:none; cursor:pointer; }
-  .modal-button.confirm { background:#d91b0b; color:#fff; box-shadow:0 10px 22px rgba(217,27,11,.22); }
-  .modal-button.cancel { background:#fff5f5; color:#d91b0b; border:1px solid #ffc5cd; }
-  .amount-title { margin:4px 0 8px; color:#d91b0b; font-size:23px; line-height:28px; font-weight:900; }
-  .amount-copy { margin:0 0 14px; color:#475569; font-size:14px; line-height:20px; font-weight:600; }
-  .amount-field { display:block; margin-top:12px; }
-  .amount-field span { display:block; margin-bottom:7px; color:#252525; font-size:13px; line-height:17px; font-weight:900; }
-  .amount-field input { width:100%; min-height:48px; border-radius:14px; border:1px solid #ffc5cd; padding:0 14px; color:#001a33; font-size:16px; font-weight:800; outline:none; }
-  .amount-field input:focus { border-color:#d91b0b; box-shadow:0 0 0 3px rgba(217,27,11,.12); }
-  .estimate-grid { display:grid; grid-template-columns:repeat(3, minmax(0, 1fr)); gap:8px; margin-top:14px; }
-  .currency-toggle { display:grid; grid-template-columns:1fr 1fr; gap:8px; margin-top:14px; }
-  .currency-button { min-height:38px; border-radius:999px; border:1px solid #ffc5cd; background:#fff5f5; color:#d91b0b; font-size:13px; line-height:17px; font-weight:900; cursor:pointer; }
-  .currency-button.is-active { background:#d91b0b; color:#fff; border-color:#d91b0b; box-shadow:0 8px 18px rgba(217,27,11,.18); }
-  .estimate-card { border-radius:14px; background:#fff8e8; border:1px solid #ffe0a3; padding:11px 10px; }
-  .estimate-label { color:#8a4b00; font-size:10px; line-height:13px; font-weight:900; letter-spacing:.05em; text-transform:uppercase; }
-  .estimate-value { margin-top:5px; color:#d91b0b; font-size:16px; line-height:20px; font-weight:900; }
-  .estimate-note { margin:10px 0 0; color:#64748b; font-size:12px; line-height:17px; font-weight:600; }
-  .form-error { margin:0 0 12px; border-radius:12px; background:#fff5f5; border:1px solid #ffc5cd; padding:10px 12px; color:#d91b0b; font-size:13px; line-height:18px; font-weight:800; }
-  .payment-options { display:grid; gap:10px; margin-top:14px; }
-  .payment-choice { display:flex; align-items:center; justify-content:space-between; gap:12px; width:100%; min-height:54px; border-radius:16px; border:1px solid #ffc5cd; background:#fff8f8; color:#d91b0b; padding:0 16px; font-size:14px; line-height:18px; font-weight:900; cursor:pointer; text-align:left; }
+  .modal-card { width:min(100%, 480px); max-height:92vh; overflow:auto; border-radius:28px; background:#fff; padding:32px 28px; box-shadow:0 32px 80px rgba(0,0,0,.15); }
+  .modal-image { display:block; width:100%; height:auto; border-radius:20px; background:#fff8e8; }
+  .modal-actions { display:grid; grid-template-columns:1fr 1fr; gap:12px; margin-top:28px; }
+  .modal-button { display:inline-flex; align-items:center; justify-content:center; min-height:52px; border-radius:12px; border:0; font-size:14px; line-height:18px; font-weight:900; letter-spacing:.04em; text-transform:uppercase; text-decoration:none; cursor:pointer; transition:all 0.2s ease; }
+  .modal-button.confirm { background:#d91b0b; color:#fff; box-shadow:0 8px 24px rgba(217,27,11,.25); }
+  .modal-button.confirm:hover { background:#b01609; box-shadow:0 12px 32px rgba(217,27,11,.35); }
+  .modal-button.cancel { background:#f5f5f5; color:#666; border:1.5px solid #e0e0e0; }
+  .modal-button.cancel:hover { background:#efefef; border-color:#d0d0d0; }
+  .amount-title { margin:0 0 12px; color:#1a1a1a; font-size:26px; line-height:32px; font-weight:900; letter-spacing:-.4px; }
+  .amount-copy { margin:0 0 24px; color:#666; font-size:15px; line-height:22px; font-weight:500; }
+  .amount-field { display:block; margin-bottom:24px; }
+  .amount-field span { display:block; margin-bottom:10px; color:#1a1a1a; font-size:13px; line-height:17px; font-weight:700; letter-spacing:.3px; text-transform:uppercase; }
+  .amount-field input { width:100%; min-height:56px; border-radius:14px; border:1.5px solid #e5e5e5; padding:16px 18px; color:#1a1a1a; font-size:18px; font-weight:700; outline:none; background:#fafafa; transition:all 0.2s ease; }
+  .amount-field input::placeholder { color:#999; font-weight:500; }
+  .amount-field input:focus { border-color:#d91b0b; background:#fff; box-shadow:0 0 0 4px rgba(217,27,11,.08); }
+  .estimate-grid { display:grid; grid-template-columns:repeat(3, minmax(0, 1fr)); gap:12px; margin-top:24px; margin-bottom:20px; }
+  .currency-toggle { display:grid; grid-template-columns:1fr 1fr; gap:12px; margin-top:20px; margin-bottom:24px; }
+  .currency-button { min-height:44px; border-radius:10px; border:1.5px solid #e0e0e0; background:#f9f9f9; color:#666; font-size:14px; line-height:18px; font-weight:800; cursor:pointer; transition:all 0.2s ease; }
+  .currency-button:hover { border-color:#d0d0d0; background:#f5f5f5; }
+  .currency-button.is-active { background:#d91b0b; color:#fff; border-color:#d91b0b; box-shadow:0 6px 20px rgba(217,27,11,.2); }
+  .estimate-card { border-radius:14px; background:linear-gradient(135deg, #fafafa 0%, #f5f5f5 100%); border:1.5px solid #e8e8e8; padding:16px 14px; }
+  .estimate-label { color:#888; font-size:11px; line-height:14px; font-weight:800; letter-spacing:.5px; text-transform:uppercase; }
+  .estimate-value { margin-top:8px; color:#d91b0b; font-size:18px; line-height:24px; font-weight:900; }
+  .estimate-note { margin:18px 0 0; color:#999; font-size:13px; line-height:19px; font-weight:500; }
+  .form-error { margin:0 0 20px; border-radius:12px; background:#ffebeb; border:1.5px solid #f5c2c2; padding:14px 16px; color:#c41e1e; font-size:13px; line-height:18px; font-weight:700; }
+  .payment-options { display:grid; gap:12px; margin-top:20px; }
+  .payment-choice { display:flex; align-items:center; justify-content:space-between; gap:14px; width:100%; min-height:64px; border-radius:14px; border:1.5px solid #e8e8e8; background:#f9f9f9; color:#1a1a1a; padding:0 18px; font-size:14px; line-height:18px; font-weight:800; cursor:pointer; text-align:left; transition:all 0.2s ease; }
+  .payment-choice:hover, .payment-choice:focus { border-color:#d91b0b; background:#fff; box-shadow:0 6px 20px rgba(217,27,11,.12); outline:none; }
   .payment-choice .payment-meta { display:flex; flex-direction:column; align-items:flex-start; gap:4px; }
-  .payment-choice .payment-meta span { color:#64748b; font-size:12px; line-height:16px; font-weight:700; }
-  .payment-choice .payment-icons { display:flex; align-items:center; gap:8px; }
-  .payment-choice .payment-icons img { height:24px; width:auto; border-radius:8px; background:#ffffff; padding:4px; box-shadow:0 8px 16px rgba(0,0,0,0.08); }
-  .payment-choice:hover, .payment-choice:focus { border-color:#d91b0b; box-shadow:0 0 0 3px rgba(217,27,11,.1); outline:none; }
-  .bank-logos { display:flex; flex-wrap:wrap; gap:12px; margin:14px 0; }
-  .bank-logo-item { flex:1 1 45%; display:flex; align-items:center; gap:10px; padding:14px 12px; border-radius:16px; border:1px solid #ffe0a3; background:#fffbf4; }
-  .bank-logo-item img { height:32px; width:auto; }
-  .bank-logo-item span { color:#2b2b2b; font-size:14px; line-height:18px; font-weight:900; }
+  .payment-choice .payment-meta span { color:#888; font-size:13px; line-height:17px; font-weight:600; }
+  .payment-choice .payment-icons { display:flex; align-items:center; gap:10px; }
+  .payment-choice .payment-icons img { height:28px; width:auto; border-radius:8px; background:#ffffff; padding:4px; box-shadow:0 4px 12px rgba(0,0,0,.08); }
+  .bank-logos { display:flex; flex-wrap:wrap; gap:12px; margin:24px 0; }
+  .bank-logo-item { flex:1 1 45%; display:flex; align-items:center; justify-content:center; gap:10px; padding:18px 14px; border-radius:14px; border:1.5px solid #e8e8e8; background:#f9f9f9; cursor:pointer; text-align:center; transition:all 0.2s ease; }
+  .bank-logo-item img { height:36px; width:auto; }
+  .bank-logo-item span { color:#1a1a1a; font-size:14px; line-height:18px; font-weight:800; }
+  .bank-logo-item:hover, .bank-logo-item:focus { border-color:#d91b0b; background:#fff; box-shadow:0 6px 20px rgba(217,27,11,.12); outline:none; }
   @media (max-width:430px) {
     .packages-page { padding-inline:13px; }
     .hero-title .black { font-size:40px; line-height:39px; }
@@ -159,10 +164,21 @@
         </div>
         <div class="product-label">Supreme</div>
       </article>
+
+      <article class="package-card premium-plus" role="button" tabindex="0" data-package-key="premium_plus" data-package-title="Premium+ Package - Elite Share" data-package-price="8000" data-package-rate="0.9" data-package-days="80" data-package-image="{{ asset('premium+.png') }}">
+        <div class="package-content">
+          <h2 class="package-name"><span class="package-number">04</span>Premium+</h2>
+          <p class="package-desc">Elite package for maximum returns.</p>
+          <div class="price-row"><span class="price">$8,000</span></div>
+          <div class="package-terms">0.90% daily · 80 days</div>
+        </div>
+        <div class="product-label">Premium+</div>
+      </article>
     </section>
 
     <div class="dot-row" aria-hidden="true">
       <span class="dot is-active"></span>
+      <span class="dot"></span>
       <span class="dot"></span>
       <span class="dot"></span>
     </div>
@@ -264,19 +280,29 @@
     <h2 class="amount-title">Bank transfer details</h2>
     <p class="amount-copy">Use any of the supported banks below to complete your deposit.</p>
     <div class="bank-logos">
-      <div class="bank-logo-item">
+      <button class="bank-logo-item" type="button" data-bank-qr="{{ asset('LandbankQR.png') }}" data-bank-name="Landbank">
         <img src="{{ asset('landbank_logo_2021_12_12_18_42_13.jpg') }}" alt="Landbank logo">
         <span>Landbank</span>
-      </div>
-      <div class="bank-logo-item">
+      </button>
+      <button class="bank-logo-item" type="button" data-bank-qr="{{ asset('BPIQR.png') }}" data-bank-name="BPI">
         <img src="{{ asset('bank-of-the-philippine-islands-bpi-logo-vector.png') }}" alt="BPI logo">
         <span>BPI</span>
-      </div>
+      </button>
     </div>
     <p class="amount-copy">After payment, tap Confirm to submit your deposit details. An admin will review and activate your investment.</p>
     <div class="modal-actions">
       <button class="modal-button confirm" type="button" id="bankModalConfirm">Confirm Payment</button>
       <button class="modal-button cancel" type="button" id="bankModalCancel">Cancel</button>
+    </div>
+  </div>
+</div>
+
+<div class="package-modal" id="qrModal" aria-hidden="true">
+  <div class="modal-card" role="dialog" aria-modal="true" aria-label="Bank QR code">
+    <h2 class="amount-title" id="qrModalTitle">Bank QR</h2>
+    <img class="modal-image" id="qrModalImage" src="" alt="Bank QR code">
+    <div class="modal-actions">
+      <button class="modal-button confirm" type="button" id="qrModalClose">Close</button>
     </div>
   </div>
 </div>
@@ -303,6 +329,11 @@
     var bankModal = document.getElementById('bankModal');
     var bankModalConfirm = document.getElementById('bankModalConfirm');
     var bankModalCancel = document.getElementById('bankModalCancel');
+    var qrModal = document.getElementById('qrModal');
+    var qrModalTitle = document.getElementById('qrModalTitle');
+    var qrModalImage = document.getElementById('qrModalImage');
+    var qrModalClose = document.getElementById('qrModalClose');
+    var bankChoiceButtons = Array.prototype.slice.call(document.querySelectorAll('.bank-logo-item'));
     var paymentChoices = Array.prototype.slice.call(document.querySelectorAll('.payment-choice'));
     var paymentModalBack = document.getElementById('paymentModalBack');
     var paymentModalCancel = document.getElementById('paymentModalCancel');
@@ -508,6 +539,40 @@
         paymentModal.setAttribute('aria-hidden', 'false');
         if (paymentModalBack) paymentModalBack.focus();
       }
+    }
+
+    function openQrModal(bankName, qrUrl) {
+      if (!qrModal || !qrModalImage || !qrModalTitle) return;
+      qrModalTitle.textContent = bankName + ' QR Code';
+      qrModalImage.src = qrUrl;
+      qrModalImage.alt = bankName + ' QR code';
+      qrModal.classList.add('is-open');
+      qrModal.setAttribute('aria-hidden', 'false');
+      if (qrModalClose) qrModalClose.focus();
+    }
+
+    function closeQrModal() {
+      if (!qrModal || !qrModalImage) return;
+      qrModal.classList.remove('is-open');
+      qrModal.setAttribute('aria-hidden', 'true');
+      qrModalImage.removeAttribute('src');
+      qrModalImage.alt = '';
+    }
+
+    bankChoiceButtons.forEach(function (button) {
+      button.addEventListener('click', function () {
+        openQrModal(button.dataset.bankName || 'Bank', button.dataset.bankQr || '');
+      });
+    });
+
+    if (qrModalClose) {
+      qrModalClose.addEventListener('click', closeQrModal);
+    }
+
+    if (qrModal) {
+      qrModal.addEventListener('click', function (event) {
+        if (event.target === qrModal) closeQrModal();
+      });
     }
 
     if (bankModalConfirm) {

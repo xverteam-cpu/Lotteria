@@ -28,6 +28,12 @@ class InvestmentPackages
                 'daily_interest_rate' => 0.75,
                 'duration_days' => 120,
             ],
+            'premium_plus' => [
+                'name' => 'Premium+ Package - Elite Share',
+                'price' => 8000.00,
+                'daily_interest_rate' => 0.90,
+                'duration_days' => 80,
+            ],
         ];
     }
 

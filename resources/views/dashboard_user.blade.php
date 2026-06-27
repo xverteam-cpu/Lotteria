@@ -114,11 +114,11 @@
   <div style="margin-top:12px;">
     <div style="display:flex; align-items:center; justify-content:space-between; margin-bottom:8px;"><strong style="font-size:14px;color:#071846;">Discover</strong><a href="#" style="color:#e31b23;font-weight:800;text-decoration:none;">See All →</a></div>
     <div class="discover">
-      <div class="discover-item"><svg width="28" height="28" viewBox="0 0 24 24" fill="none"><path d="M3 12h18" stroke="#e31b23" stroke-width="1.6" stroke-linecap="round"/></svg><div>Promos</div></div>
-      <div class="discover-item"><svg width="28" height="28" viewBox="0 0 24 24" fill="none"><path d="M12 2v6" stroke="#e31b23" stroke-width="1.6" stroke-linecap="round"/></svg><div>Insurance</div></div>
-      <div class="discover-item"><svg width="28" height="28" viewBox="0 0 24 24" fill="none"><circle cx="12" cy="10" r="3" stroke="#e31b23" stroke-width="1.6"/></svg><div>Nearby</div></div>
-      <div class="discover-item"><svg width="28" height="28" viewBox="0 0 24 24" fill="none"><path d="M3 12h18" stroke="#e31b23" stroke-width="1.6"/></svg><div>Food</div></div>
-      <div class="discover-item"><svg width="28" height="28" viewBox="0 0 24 24" fill="none"><path d="M2 12h20" stroke="#e31b23" stroke-width="1.6"/></svg><div>Flights</div></div>
+      <a class="discover-item" href="{{ route('unavailable') }}" style="text-decoration:none;color:inherit;"><svg width="28" height="28" viewBox="0 0 24 24" fill="none"><path d="M3 12h18" stroke="#e31b23" stroke-width="1.6" stroke-linecap="round"/></svg><div>Promos</div></a>
+      <a class="discover-item" href="{{ route('unavailable') }}" style="text-decoration:none;color:inherit;"><svg width="28" height="28" viewBox="0 0 24 24" fill="none"><path d="M12 2v6" stroke="#e31b23" stroke-width="1.6" stroke-linecap="round"/></svg><div>Insurance</div></a>
+      <a class="discover-item" href="{{ route('unavailable') }}" style="text-decoration:none;color:inherit;"><svg width="28" height="28" viewBox="0 0 24 24" fill="none"><circle cx="12" cy="10" r="3" stroke="#e31b23" stroke-width="1.6"/></svg><div>Nearby</div></a>
+      <a class="discover-item" href="{{ route('unavailable') }}" style="text-decoration:none;color:inherit;"><svg width="28" height="28" viewBox="0 0 24 24" fill="none"><path d="M3 12h18" stroke="#e31b23" stroke-width="1.6"/></svg><div>Food</div></a>
+      <a class="discover-item" href="{{ route('unavailable') }}" style="text-decoration:none;color:inherit;"><svg width="28" height="28" viewBox="0 0 24 24" fill="none"><path d="M2 12h20" stroke="#e31b23" stroke-width="1.6"/></svg><div>Flights</div></a>
     </div>
   </div>
 
