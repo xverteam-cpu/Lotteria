@@ -67,7 +67,7 @@ class UserManagementController extends Controller
                 return false;
             }
 
-            Investment::create([
+            $investment = Investment::create([
                 'user_id' => $user->id,
                 'package_key' => $request->package,
                 'package_name' => $package['name'],
@@ -77,7 +77,10 @@ class UserManagementController extends Controller
                 'duration_days' => $package['duration_days'],
                 'payment_method' => 'admin_transfer',
                 'status' => 'approved',
+                'starts_at' => now(),
             ]);
+
+            $investment->processReferralCommission();
 
             return true;
         });

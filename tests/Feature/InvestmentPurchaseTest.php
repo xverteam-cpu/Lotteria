@@ -103,4 +103,42 @@ class InvestmentPurchaseTest extends TestCase
             'remaining_slots' => 249,
         ]);
     }
+
+    public function test_admin_send_package_triggers_referral_commission_and_starts_immediately(): void
+    {
+        $referrer = User::factory()->create([
+            'pin_hash' => Hash::make('123456'),
+        ]);
+
+        $user = User::factory()->create([
+            'pin_hash' => Hash::make('123456'),
+            'referred_by' => $referrer->id,
+        ]);
+
+        $admin = User::factory()->create([
+            'pin_hash' => Hash::make('123456'),
+            'is_admin' => true,
+        ]);
+
+        $response = $this->actingAs($admin)
+            ->withSession(['pin_verified' => true])
+            ->post('/admin/send-package', [
+                'user_id' => $user->id,
+                'package' => 'crunch',
+            ]);
+
+        $response->assertRedirect('/admin/dashboard');
+
+        $this->assertDatabaseHas('investments', [
+            'user_id' => $user->id,
+            'package_key' => 'crunch',
+            'status' => 'approved',
+            'payment_method' => 'admin_transfer',
+        ]);
+
+        $this->assertDatabaseHas('users', [
+            'id' => $referrer->id,
+            'balance' => 6.00,
+        ]);
+    }
 }

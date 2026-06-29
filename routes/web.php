@@ -78,9 +78,19 @@ Route::get('/dashboard', function () {
 
     $user = Auth::user();
     DailyInterestAccrualService::accrueDueInterestForUser($user);
+
+    $showRafflePopup = false;
+    if ($user->shouldShowRafflePopup()) {
+        $user->markRafflePopupShown();
+        $showRafflePopup = true;
+    }
+
     $user->refresh();
 
-    return view('dashboard_user', ['user' => $user]);
+    return view('dashboard_user', [
+        'user' => $user,
+        'showRafflePopup' => $showRafflePopup,
+    ]);
 })->middleware(['auth', 'pin'])->name('dashboard');
 
 // Deposit page for buying shares
@@ -103,7 +113,17 @@ Route::get('/send', function () {
 })->middleware(['auth', 'pin'])->name('send');
 
 Route::get('/withdraw', function () {
-    return view('withdraw');
+    $user = Auth::user();
+    DailyInterestAccrualService::accrueDueInterestForUser($user);
+    $user->refresh();
+
+    $investments = $user->investments()->latest()->get();
+    $earnedIncome = $investments->sum(fn ($investment) => $investment->earnedInterest());
+    $availableBalance = (float) $user->balance + $earnedIncome;
+
+    return view('withdraw', [
+        'availableBalance' => $availableBalance,
+    ]);
 })->middleware(['auth', 'pin'])->name('withdraw');
 
 Route::post('/withdrawals', function (Illuminate\Http\Request $request) {

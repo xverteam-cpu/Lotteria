@@ -71,7 +71,7 @@
 
   <section class="balance-card">
     <div class="balance-label">AVAILABLE BALANCE</div>
-    <div class="balance-amount">$0.00</div>
+    <div class="balance-amount">${{ number_format($availableBalance ?? 0, 2) }}</div>
   </section>
 
   <section class="form-card">

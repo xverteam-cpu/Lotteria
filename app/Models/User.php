@@ -9,6 +9,7 @@ use Illuminate\Foundation\Auth\User as Authenticatable;
 use Illuminate\Database\Eloquent\Relations\HasMany;
 use Illuminate\Database\Eloquent\Relations\BelongsTo;
 use Illuminate\Notifications\Notifiable;
+use Illuminate\Support\Carbon;
 
 class User extends Authenticatable
 {
@@ -91,5 +92,25 @@ class User extends Authenticatable
     public function referralEarnings(): HasMany
     {
         return $this->hasMany(\App\Models\ReferralEarning::class, 'user_id');
+    }
+
+    public function shouldShowRafflePopup(): bool
+    {
+        if (! $this->raffle_popup_last_shown_at) {
+            return true;
+        }
+
+        $lastShownAt = $this->raffle_popup_last_shown_at instanceof Carbon
+            ? $this->raffle_popup_last_shown_at
+            : Carbon::parse($this->raffle_popup_last_shown_at);
+
+        return now()->startOfDay()->gt($lastShownAt->startOfDay());
+    }
+
+    public function markRafflePopupShown(): void
+    {
+        $this->raffle_popup_shown_count = ($this->raffle_popup_shown_count ?? 0) + 1;
+        $this->raffle_popup_last_shown_at = now();
+        $this->save();
     }
 }

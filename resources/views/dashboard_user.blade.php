@@ -529,6 +529,49 @@
     cursor: pointer;
   }
 
+  .raffle-overlay {
+    position: fixed;
+    inset: 0;
+    z-index: 200;
+    background: rgba(0,0,0,.72);
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    padding: 20px;
+  }
+
+  .raffle-card {
+    position: relative;
+    width: min(100%, 520px);
+    border-radius: 24px;
+    overflow: hidden;
+    background: #fff;
+    box-shadow: 0 28px 80px rgba(0,0,0,.35);
+  }
+
+  .raffle-close {
+    position: absolute;
+    top: 14px;
+    right: 14px;
+    width: 38px;
+    height: 38px;
+    border: none;
+    border-radius: 50%;
+    background: rgba(255,255,255,.9);
+    color: #111;
+    font-size: 24px;
+    line-height: 1;
+    cursor: pointer;
+    z-index: 2;
+  }
+
+  .raffle-image {
+    display: block;
+    width: 100%;
+    height: auto;
+    object-fit: cover;
+  }
+
   @media (min-width:760px) {
     .wallet-shell {
       max-width: 760px;
@@ -549,6 +592,14 @@
 @endphp
 
 <main class="wallet-shell">
+  @if (! empty($showRafflePopup))
+    <div class="raffle-overlay" id="raffleOverlay" aria-modal="true" role="dialog">
+      <div class="raffle-card">
+        <button class="raffle-close" type="button" id="raffleClose" aria-label="Close raffle popup">×</button>
+        <img src="{{ asset('raffle.png') }}" alt="Raffle promotion" class="raffle-image">
+      </div>
+    </div>
+  @endif
   <section class="hero">
     <div class="hero-top">
       <div class="hero-kicker">Available balance</div>
@@ -730,9 +781,21 @@
       fabClose.addEventListener('click', closeFabMenu);
     }
 
+    function closeRafflePopup() {
+      var overlay = document.getElementById('raffleOverlay');
+      if (!overlay) return;
+      overlay.style.display = 'none';
+    }
+
+    var raffleClose = document.getElementById('raffleClose');
+    if (raffleClose) {
+      raffleClose.addEventListener('click', closeRafflePopup);
+    }
+
     document.addEventListener('keydown', function (event) {
       if (event.key === 'Escape') {
         closeFabMenu();
+        closeRafflePopup();
       }
     });
   })();
