@@ -60,7 +60,8 @@
   /* Presentation modal: hidden by default and non-interactive until opened */
   #presentationModal { display:none; position:fixed; inset:0; background:rgba(0,0,0,0.6); z-index:9999; align-items:center; justify-content:center; padding:20px; pointer-events:none; }
   #presentationModal.active { display:flex !important; pointer-events:auto; }
-  #presentationModal .modal-inner { position:relative; width:100%; height:100%; max-width:1120px; max-height:92vh; background:#fff; border-radius:12px; overflow:auto; }
+  #presentationModal .modal-inner { position:relative; width:100%; height:90vh; max-width:1120px; max-height:92vh; min-height:520px; background:#fff; border-radius:12px; overflow:auto; }
+  #presentationModal .modal-inner iframe { min-height:72vh; }
 </style>
 
 <div class="franchise-hero">
@@ -232,16 +233,18 @@ document.addEventListener('DOMContentLoaded', function () {
       setTimeout(function () { btn.textContent = original; }, 1200);
 
       var appUrl = btn.dataset.appUrl;
-      if (appUrl && frame) {
-        frame.src = normalizeUrl(appUrl);
-        frame.style.display = 'block';
-        if (presentationImage) presentationImage.style.display = 'none';
-        openModal();
-        return;
-      }
-
       if (appUrl) {
-        window.open(normalizeUrl(appUrl), '_blank');
+        var normalized = normalizeUrl(appUrl);
+
+        if (frame) {
+          frame.src = normalized;
+          frame.style.display = 'block';
+          if (presentationImage) presentationImage.style.display = 'none';
+          openModal();
+          return;
+        }
+
+        window.open(normalized, '_blank');
       }
     });
   });
