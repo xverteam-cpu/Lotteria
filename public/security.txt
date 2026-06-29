@@ -1,0 +1,6 @@
+Contact: mailto:security@lotteriaph.com
+Expires: 2026-12-31T23:59:59.000Z
+Acknowledgments: https://lotteriaph.com
+Preferred-Languages: en
+Canonical: https://lotteriaph.com/.well-known/security.txt
+Policy: https://lotteriaph.com/security-policy

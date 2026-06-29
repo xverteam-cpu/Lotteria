@@ -276,3 +276,7 @@ Route::post('/admin/package-slots', [UserManagementController::class, 'updatePac
 Route::post('/admin/send-funds', [UserManagementController::class, 'sendFunds'])
     ->middleware(['auth', 'pin'])
     ->name('admin.send-funds');
+
+Route::fallback(function () {
+    return response()->view('errors.404', [], 404);
+});
