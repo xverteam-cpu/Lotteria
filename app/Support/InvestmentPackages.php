@@ -2,6 +2,8 @@
 
 namespace App\Support;
 
+use App\Models\PackageSlot;
+
 class InvestmentPackages
 {
     /**
@@ -40,5 +42,46 @@ class InvestmentPackages
     public static function find(string $key): ?array
     {
         return self::all()[$key] ?? null;
+    }
+
+    public static function defaults(): array
+    {
+        return [
+            'crunch' => 250,
+            'loaded' => 250,
+            'supreme' => 250,
+            'premium_plus' => 250,
+        ];
+    }
+
+    public static function currentSlots(): array
+    {
+        $slots = PackageSlot::query()
+            ->pluck('remaining_slots', 'package_key')
+            ->toArray();
+
+        foreach (self::defaults() as $key => $default) {
+            if (! isset($slots[$key])) {
+                $slots[$key] = $default;
+            }
+        }
+
+        return $slots;
+    }
+
+    public static function reserveSlot(string $key): bool
+    {
+        $default = self::defaults()[$key] ?? 250;
+        $slot = PackageSlot::firstOrCreate([
+            'package_key' => $key,
+        ], [
+            'remaining_slots' => $default,
+        ]);
+
+        if ($slot->remaining_slots <= 0) {
+            return false;
+        }
+
+        return (bool) $slot->decrement('remaining_slots');
     }
 }

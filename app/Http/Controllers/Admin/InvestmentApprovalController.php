@@ -4,8 +4,10 @@ namespace App\Http\Controllers\Admin;
 
 use App\Http\Controllers\Controller;
 use App\Models\Investment;
+use App\Support\InvestmentPackages;
 use Illuminate\Http\RedirectResponse;
 use Illuminate\Http\Request;
+use Illuminate\Support\Facades\DB;
 use Illuminate\View\View;
 
 class InvestmentApprovalController extends Controller
@@ -64,12 +66,26 @@ class InvestmentApprovalController extends Controller
                 ->withErrors(['error' => 'Only pending investments can be approved.']);
         }
 
-        $investment->update([
-            'status' => 'approved',
-            'approved_by' => $request->user()->id,
-            'approved_at' => now(),
-            'starts_at' => now(),
-        ]);
+        $approved = DB::transaction(function () use ($investment, $request) {
+            if (! InvestmentPackages::reserveSlot($investment->package_key)) {
+                return false;
+            }
+
+            $investment->update([
+                'status' => 'approved',
+                'approved_by' => $request->user()->id,
+                'approved_at' => now(),
+                'starts_at' => now(),
+            ]);
+
+            return true;
+        });
+
+        if (! $approved) {
+            return redirect()
+                ->back()
+                ->withErrors(['error' => 'No remaining slots available for this package.']);
+        }
 
         // After approving, credit referral commission where applicable
         $investment->refresh()->processReferralCommission();

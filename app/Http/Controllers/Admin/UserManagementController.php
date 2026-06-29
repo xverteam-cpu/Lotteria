@@ -7,6 +7,7 @@ use App\Models\Investment;
 use App\Models\User;
 use App\Support\InvestmentPackages;
 use Illuminate\Http\Request;
+use Illuminate\Support\Facades\DB;
 use Illuminate\View\View;
 
 class UserManagementController extends Controller
@@ -61,18 +62,30 @@ class UserManagementController extends Controller
         $user = User::findOrFail($request->user_id);
         $package = $packages[$request->package];
 
-        // Create an investment record (activated package)
-        Investment::create([
-            'user_id' => $user->id,
-            'package_key' => $request->package,
-            'package_name' => $package['name'],
-            'package_price' => $package['price'],
-            'amount' => $package['price'],
-            'daily_interest_rate' => $package['daily_interest_rate'],
-            'duration_days' => $package['duration_days'],
-            'payment_method' => 'admin_transfer',
-            'status' => 'approved',
-        ]);
+        $created = DB::transaction(function () use ($user, $package, $request) {
+            if (! InvestmentPackages::reserveSlot($request->package)) {
+                return false;
+            }
+
+            Investment::create([
+                'user_id' => $user->id,
+                'package_key' => $request->package,
+                'package_name' => $package['name'],
+                'package_price' => $package['price'],
+                'amount' => $package['price'],
+                'daily_interest_rate' => $package['daily_interest_rate'],
+                'duration_days' => $package['duration_days'],
+                'payment_method' => 'admin_transfer',
+                'status' => 'approved',
+            ]);
+
+            return true;
+        });
+
+        if (! $created) {
+            return redirect()->route('admin.dashboard')
+                ->withErrors(['package' => "No remaining slots available for {$package['name']}."]);
+        }
 
         return redirect()->route('admin.dashboard')
             ->with('status', "Package '{$package['name']}' sent to {$user->name} successfully!");

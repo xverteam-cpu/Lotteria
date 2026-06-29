@@ -75,29 +75,49 @@
   </section>
 
   <section class="form-card">
-    <label class="label">Amount to Withdraw</label>
-    <div class="input-row">
-      <span class="currency">$</span>
-      <input class="input-box amount-input" type="number" placeholder="0.00" />
-    </div>
+    @if (session('status'))
+      <div style="margin-bottom:12px; padding:12px; border-radius:12px; background:#e8f8ee; color:#137547; font-weight:700;">{{ session('status') }}</div>
+    @endif
 
-    <div class="quick-row">
-      <button>$10</button>
-      <button>$25</button>
-      <button>$50</button>
-      <button>$100</button>
-    </div>
+    @if ($errors->any())
+      <div style="margin-bottom:12px; padding:12px; border-radius:12px; background:#fff1f2; color:#b42318; font-weight:700;">
+        <ul style="margin:0; padding-left:18px;">
+          @foreach ($errors->all() as $error)
+            <li>{{ $error }}</li>
+          @endforeach
+        </ul>
+      </div>
+    @endif
 
-    <label class="label">Withdraw To</label>
-    <select class="input-box">
-      <option>Bank account ending •••• 1234</option>
-      <option>Visa •••• 4321</option>
-      <option>Add new bank account</option>
-    </select>
+    <form method="POST" action="{{ route('withdrawals.store') }}">
+      @csrf
 
-    <div class="note">Withdrawals are processed within 1–3 business days. Fees may apply depending on your payout method.</div>
+      <label class="label">Amount to Withdraw</label>
+      <div class="input-row">
+        <span class="currency">$</span>
+        <input class="input-box amount-input" type="number" name="amount" min="1" step="0.01" placeholder="0.00" required />
+      </div>
 
-    <button class="send-btn">Request Withdrawal</button>
+      <div class="quick-row">
+        <button type="button" onclick="document.querySelector('input[name=amount]').value='10'">$10</button>
+        <button type="button" onclick="document.querySelector('input[name=amount]').value='25'">$25</button>
+        <button type="button" onclick="document.querySelector('input[name=amount]').value='50'">$50</button>
+        <button type="button" onclick="document.querySelector('input[name=amount]').value='100'">$100</button>
+      </div>
+
+      <label class="label">Bank Name</label>
+      <input class="input-box" type="text" name="bank_name" value="{{ old('bank_name', auth()->user()->bank_name) }}" placeholder="e.g. BDO, BPI, Metrobank" required />
+
+      <label class="label">Bank Account Number</label>
+      <input class="input-box" type="text" name="account_number" value="{{ old('account_number', auth()->user()->bank_account_number) }}" placeholder="Enter account number" required />
+
+      <label class="label">Account Holder Name</label>
+      <input class="input-box" type="text" name="account_holder" value="{{ old('account_holder', auth()->user()->bank_account_holder) }}" placeholder="Enter account holder name" required />
+
+      <div class="note">Please provide your bank details before requesting a withdrawal. Withdrawals are processed within 1–3 business days.</div>
+
+      <button class="send-btn" type="submit">Request Withdrawal</button>
+    </form>
   </section>
 
   <section class="recent">

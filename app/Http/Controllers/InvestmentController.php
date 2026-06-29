@@ -5,6 +5,7 @@ namespace App\Http\Controllers;
 use App\Support\InvestmentPackages;
 use Illuminate\Http\RedirectResponse;
 use Illuminate\Http\Request;
+use Illuminate\Support\Facades\DB;
 use Illuminate\Validation\ValidationException;
 
 class InvestmentController extends Controller
@@ -39,23 +40,33 @@ class InvestmentController extends Controller
 
         $isPending = $data['payment_method'] === 'bank_transfer';
 
-        $investment = $request->user()->investments()->create([
-            'package_key' => $data['package'],
-            'package_name' => $package['name'],
-            'package_price' => $package['price'],
-            'amount' => $data['amount'],
-            'payment_method' => $data['payment_method'],
-            'daily_interest_rate' => $package['daily_interest_rate'],
-            'duration_days' => $package['duration_days'],
-            'starts_at' => $isPending ? null : now(),
-            'status' => $isPending ? 'pending' : 'approved',
-        ]);
+        $investment = DB::transaction(function () use ($request, $data, $package, $isPending) {
+            if (! $isPending && ! InvestmentPackages::reserveSlot($data['package'])) {
+                throw ValidationException::withMessages([
+                    'package' => 'This package is currently sold out.',
+                ]);
+            }
 
-        if ($data['payment_method'] === 'account_balance') {
-            $user = $request->user();
-            $user->balance = max(0, ($user->balance ?? 0) - (float) $data['amount']);
-            $user->save();
-        }
+            $investment = $request->user()->investments()->create([
+                'package_key' => $data['package'],
+                'package_name' => $package['name'],
+                'package_price' => $package['price'],
+                'amount' => $data['amount'],
+                'payment_method' => $data['payment_method'],
+                'daily_interest_rate' => $package['daily_interest_rate'],
+                'duration_days' => $package['duration_days'],
+                'starts_at' => $isPending ? null : now(),
+                'status' => $isPending ? 'pending' : 'approved',
+            ]);
+
+            if ($data['payment_method'] === 'account_balance') {
+                $user = $request->user();
+                $user->balance = max(0, ($user->balance ?? 0) - (float) $data['amount']);
+                $user->save();
+            }
+
+            return $investment;
+        });
 
         // If investment is immediately approved, process referral commission
         if ($investment->status === 'approved') {

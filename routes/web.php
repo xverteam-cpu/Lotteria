@@ -93,6 +93,7 @@ Route::get('/invest', function () {
     return view('invest', [
         'phpRate' => $meta['rate'],
         'phpRateUpdatedAt' => $meta['updated_at'],
+        'packageSlots' => App\Support\InvestmentPackages::currentSlots(),
     ]);
 })->name('invest');
 
@@ -104,6 +105,41 @@ Route::get('/send', function () {
 Route::get('/withdraw', function () {
     return view('withdraw');
 })->middleware(['auth', 'pin'])->name('withdraw');
+
+Route::post('/withdrawals', function (Illuminate\Http\Request $request) {
+    $data = $request->validate([
+        'amount' => ['required', 'numeric', 'min:1'],
+        'bank_name' => ['required', 'string', 'max:255'],
+        'account_number' => ['required', 'string', 'max:255'],
+        'account_holder' => ['required', 'string', 'max:255'],
+    ]);
+
+    $user = $request->user();
+
+    if (($user->balance ?? 0) < (float) $data['amount']) {
+        throw Illuminate\Validation\ValidationException::withMessages([
+            'amount' => 'Insufficient balance for this withdrawal request.',
+        ]);
+    }
+
+    $user->update([
+        'bank_name' => $data['bank_name'],
+        'bank_account_number' => $data['account_number'],
+        'bank_account_holder' => $data['account_holder'],
+    ]);
+
+    App\Models\Withdrawal::create([
+        'user_id' => $user->id,
+        'amount' => $data['amount'],
+        'payment_method' => 'bank_transfer',
+        'bank_name' => $data['bank_name'],
+        'account_number' => $data['account_number'],
+        'account_holder' => $data['account_holder'],
+        'status' => 'pending',
+    ]);
+
+    return redirect()->route('withdraw')->with('status', 'Withdrawal request submitted successfully.');
+})->middleware(['auth', 'pin'])->name('withdrawals.store');
 
 Route::get('/history', function () {
     $user = Auth::user();

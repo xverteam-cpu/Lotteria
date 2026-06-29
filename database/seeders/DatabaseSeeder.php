@@ -18,35 +18,30 @@ class DatabaseSeeder extends Seeder
     {
         // User::factory(10)->create();
 
-
         // Default test users
-        User::factory()->create([
+        $this->ensureUser('testuser', [
             'name' => 'Test User',
-            'username' => 'testuser',
             'email' => 'test@example.com',
         ]);
 
         // Admin account
-        User::factory()->create([
+        $this->ensureUser('admin', [
             'name' => 'Admin',
-            'username' => 'admin',
             'email' => 'admin@lotteria.test',
             'password' => 'adminpassword',
             'is_admin' => true,
         ]);
 
         // Bello account (can login with email/password)
-        $bello = User::factory()->create([
+        $bello = $this->ensureUser('bello', [
             'name' => 'Bello',
-            'username' => 'bello',
             'email' => 'bello@example.com',
             'password' => 'bello1234',
         ]);
 
         // A sample referral created by Bello
-        $referred = User::factory()->create([
+        $referred = $this->ensureUser('refuser', [
             'name' => 'Referred User',
-            'username' => 'refuser',
             'email' => 'refuser@example.com',
             'referred_by' => $bello->id,
         ]);
@@ -93,5 +88,16 @@ class DatabaseSeeder extends Seeder
             // credit commission to referrer for seeded investment
             $inv->processReferralCommission();
         }
+    }
+
+    private function ensureUser(string $username, array $attributes): User
+    {
+        return User::updateOrCreate(
+            ['username' => $username],
+            array_merge([
+                'email_verified_at' => now(),
+                'password' => 'password',
+            ], $attributes)
+        );
     }
 }

@@ -17,7 +17,7 @@
   .swipe-hint { margin:0 0 10px; color:#d91b0b; font-size:12px; line-height:16px; font-weight:900; letter-spacing:.08em; text-transform:uppercase; }
   .package-track { display:flex; gap:18px; overflow-x:auto; overscroll-behavior-x:contain; scroll-snap-type:x mandatory; padding:0 8px 20px 0; margin-right:-16px; -webkit-overflow-scrolling:touch; }
   .package-track::-webkit-scrollbar { display:none; }
-  .package-card { position:relative; z-index:0; flex:0 0 88%; min-height:286px; scroll-snap-align:center; border-radius:28px; background:#fff; border:1px solid rgba(224,30,10,.08); box-shadow:0 14px 28px rgba(45,24,10,.14); overflow:hidden; cursor:pointer; touch-action:manipulation; -webkit-tap-highlight-color: rgba(0,0,0,0.08); user-select:none; transition:transform .2s ease, box-shadow .2s ease, border-color .2s ease; pointer-events:auto !important; }
+  .package-card { position:relative; z-index:0; flex:0 0 88%; min-height:286px; scroll-snap-align:center; border-radius:44px; background:#fff; border:1px solid rgba(224,30,10,.08); box-shadow:0 14px 28px rgba(45,24,10,.14); overflow:hidden; cursor:pointer; touch-action:manipulation; -webkit-tap-highlight-color: rgba(0,0,0,0.08); user-select:none; transition:transform .2s ease, box-shadow .2s ease, border-color .2s ease; pointer-events:auto !important; }
   .package-card:hover { transform:translateY(-4px); box-shadow:0 18px 36px rgba(45,24,10,.18); border-color:rgba(224,30,10,.16); }
   .package-card:active { transform:translateY(-2px); box-shadow:0 14px 28px rgba(45,24,10,.16); }
   .package-card:focus-visible { outline:3px solid #f5a400; outline-offset:4px; }
@@ -39,8 +39,36 @@
   .dot.is-active { width:22px; border-radius:999px; background:#e12610; }
   .package-modal { position:fixed; inset:0; z-index:50; display:none; align-items:center; justify-content:center; padding:20px; background:rgba(10,10,10,.62); }
   .package-modal.is-open { display:flex; }
-  .modal-card { width:min(100%, 480px); max-height:92vh; overflow:auto; border-radius:28px; background:#fff; padding:32px 28px; box-shadow:0 32px 80px rgba(0,0,0,.15); }
+  .modal-card { width:min(100%, 480px); max-height:92vh; overflow:auto; border-radius:44px; background:#fff; padding:32px 28px; box-shadow:0 32px 80px rgba(0,0,0,.15); }
   .modal-image { display:block; width:100%; height:auto; border-radius:20px; background:#fff8e8; }
+
+  /* Circular badge showing remaining slots (top-right) */
+  .slots-circle {
+    position: absolute;
+    z-index: 3;
+    top: 12px;
+    right: 12px;
+    width: 56px;
+    height: 56px;
+    background: linear-gradient(90deg,#d61505,#e12a10);
+    color: #fff;
+    border-radius: 50%;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    font-weight: 900;
+    font-size: 11px;
+    line-height: 1.05;
+    text-align: center;
+    padding: 6px;
+    box-shadow: 0 8px 20px rgba(0,0,0,0.2);
+    pointer-events: none;
+    text-transform: none;
+    letter-spacing: 0;
+    white-space: normal;
+  }
+
+  .modal-image-wrap { position: relative; }
   .modal-actions { display:grid; grid-template-columns:1fr 1fr; gap:12px; margin-top:28px; }
   .modal-button { display:inline-flex; align-items:center; justify-content:center; min-height:52px; border-radius:12px; border:0; font-size:14px; line-height:18px; font-weight:900; letter-spacing:.04em; text-transform:uppercase; text-decoration:none; cursor:pointer; transition:all 0.2s ease; }
   .modal-button.confirm { background:#d91b0b; color:#fff; box-shadow:0 8px 24px rgba(217,27,11,.25); }
@@ -171,7 +199,10 @@
 
 <div class="package-modal" id="packageModal" aria-hidden="true">
   <div class="modal-card" role="dialog" aria-modal="true" aria-label="Package details">
-    <img class="modal-image" id="packageModalImage" src="" alt="">
+    <div class="modal-image-wrap">
+      <img class="modal-image" id="packageModalImage" src="" alt="">
+      <div class="slots-circle" id="packageSlotBadge" aria-hidden="true">250 slots</div>
+    </div>
     <div class="modal-actions">
       <button class="modal-button confirm" type="button" id="packageModalConfirm">Confirm</button>
       <button class="modal-button cancel" type="button" id="packageModalCancel">Cancel</button>
@@ -413,9 +444,18 @@
         rate: card.dataset.packageRate,
         days: card.dataset.packageDays
       };
+      updateSlotBadge();
       modal.classList.add('is-open');
       modal.setAttribute('aria-hidden', 'false');
       if (modalCancel) modalCancel.focus();
+    }
+
+    function updateSlotBadge() {
+      var badge = document.getElementById('packageSlotBadge');
+      if (!badge || !selectedPackage) return;
+      var slots = @json($packageSlots ?? []);
+      var count = slots[selectedPackage.key] ?? 250;
+      badge.textContent = count + ' slots';
     }
 
     function moveFocusOut(modalElement, shouldReturnFocus) {
