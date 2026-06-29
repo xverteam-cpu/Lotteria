@@ -7,11 +7,21 @@ use App\Models\Investment;
 use App\Models\User;
 use App\Support\InvestmentPackages;
 use Illuminate\Http\Request;
+use Illuminate\Support\Facades\Auth;
 use Illuminate\Support\Facades\DB;
 use Illuminate\View\View;
 
 class UserManagementController extends Controller
 {
+    public function __construct()
+    {
+        $this->middleware(function ($request, $next) {
+            abort_unless(Auth::user()?->is_admin, 403);
+
+            return $next($request);
+        });
+    }
+
     public function index(Request $request): View
     {
         $search = trim((string) $request->query('search', ''));
@@ -40,6 +50,7 @@ class UserManagementController extends Controller
             'onlineUsersCount' => $allUsers->filter->isOnline()->count(),
             'search' => $search,
             'packages' => InvestmentPackages::all(),
+            'packageSlots' => InvestmentPackages::currentSlots(),
         ]);
     }
 
@@ -92,6 +103,25 @@ class UserManagementController extends Controller
 
         return redirect()->route('admin.dashboard')
             ->with('status', "Package '{$package['name']}' sent to {$user->name} successfully!");
+    }
+
+    public function updatePackageSlots(Request $request)
+    {
+        $defaultPackageKeys = array_keys(InvestmentPackages::defaults());
+        $rules = ['slots' => 'required|array'];
+
+        foreach ($defaultPackageKeys as $key) {
+            $rules["slots.{$key}"] = 'required|integer|min:0';
+        }
+
+        $validated = $request->validate($rules);
+
+        foreach ($validated['slots'] as $packageKey => $remainingSlots) {
+            InvestmentPackages::setRemainingSlots($packageKey, $remainingSlots);
+        }
+
+        return redirect()->route('admin.dashboard')
+            ->with('status', 'Package slot counts updated successfully.');
     }
 
     public function sendFunds(Request $request)

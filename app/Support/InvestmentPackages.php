@@ -69,6 +69,18 @@ class InvestmentPackages
         return $slots;
     }
 
+    public static function setRemainingSlots(string $key, int $remainingSlots): void
+    {
+        if (! array_key_exists($key, self::defaults())) {
+            return;
+        }
+
+        PackageSlot::updateOrCreate(
+            ['package_key' => $key],
+            ['remaining_slots' => max(0, $remainingSlots)]
+        );
+    }
+
     public static function reserveSlot(string $key): bool
     {
         $default = self::defaults()[$key] ?? 250;

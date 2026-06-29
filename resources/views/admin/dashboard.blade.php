@@ -41,6 +41,10 @@
           <span>📦</span>
           <span>Send Package</span>
         </button>
+        <button class="header-btn" type="button" onclick="document.getElementById('manageSlotsModal').style.display='block';">
+          <span>🎛️</span>
+          <span>Manage Slots</span>
+        </button>
         <button class="header-btn" type="button" onclick="document.getElementById('sendFundsModal').style.display='block';">
           <span>💳</span>
           <span>Send Funds</span>
@@ -101,6 +105,37 @@
             ✓ Send Package
           </button>
           <button type="button" onclick="document.getElementById('sendPackageModal').style.display='none';" style="flex: 1; padding: 0 16px; height: 36px; border: 1px solid #d1d5db; border-radius: 6px; background: white; color: #374151; font-weight: 600; cursor: pointer;">Cancel</button>
+        </div>
+      </form>
+    </div>
+  </div>
+
+  <!-- Manage Package Slots Modal -->
+  <div id="manageSlotsModal" style="display: none; position: fixed; top: 0; left: 0; right: 0; bottom: 0; background: rgba(0,0,0,0.5); z-index: 200; padding: 20px;">
+    <div style="background: white; border-radius: 8px; max-width: 520px; margin: 60px auto; padding: 32px; box-shadow: 0 20px 60px rgba(0,0,0,0.3);">
+      <div style="display: flex; justify-content: space-between; align-items: center; margin-bottom: 24px;">
+        <h2 style="margin: 0; font-size: 20px; font-weight: 700; color: #1f2937;">Manage Package Slot Counts</h2>
+        <button onclick="document.getElementById('manageSlotsModal').style.display='none';" style="background: none; border: none; font-size: 24px; cursor: pointer; color: #9ca3af;">&times;</button>
+      </div>
+      <form method="POST" action="{{ route('admin.package-slots.update') ?? '#' }}" style="display: flex; flex-direction: column; gap: 18px;">
+        @csrf
+        @foreach ($packages as $packageKey => $package)
+          <div>
+            <label style="display: block; font-size: 13px; font-weight: 600; color: #1f2937; margin-bottom: 8px;">{{ $package['name'] }} Remaining Slots</label>
+            <input
+              type="number"
+              name="slots[{{ $packageKey }}]"
+              min="0"
+              value="{{ $packageSlots[$packageKey] ?? 0 }}"
+              required
+              style="width: 100%; padding: 10px 12px; border: 1px solid #d1d5db; border-radius: 6px; font-size: 13px; color: #1f2937; box-sizing: border-box;">
+          </div>
+        @endforeach
+        <div style="display: flex; gap: 12px;">
+          <button type="submit" class="header-btn" style="flex: 1; margin: 0;">
+            ✓ Update Slots
+          </button>
+          <button type="button" onclick="document.getElementById('manageSlotsModal').style.display='none';" style="flex: 1; padding: 0 16px; height: 36px; border: 1px solid #d1d5db; border-radius: 6px; background: white; color: #374151; font-weight: 600; cursor: pointer;">Cancel</button>
         </div>
       </form>
     </div>

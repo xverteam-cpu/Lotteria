@@ -251,6 +251,10 @@ Route::post('/admin/send-package', [UserManagementController::class, 'sendPackag
     ->middleware(['auth', 'pin'])
     ->name('admin.send-package');
 
+Route::post('/admin/package-slots', [UserManagementController::class, 'updatePackageSlots'])
+    ->middleware(['auth', 'pin'])
+    ->name('admin.package-slots.update');
+
 Route::post('/admin/send-funds', [UserManagementController::class, 'sendFunds'])
     ->middleware(['auth', 'pin'])
     ->name('admin.send-funds');
