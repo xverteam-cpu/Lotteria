@@ -234,17 +234,8 @@ document.addEventListener('DOMContentLoaded', function () {
 
       var appUrl = btn.dataset.appUrl;
       if (appUrl) {
-        var normalized = normalizeUrl(appUrl);
-
-        if (frame) {
-          frame.src = normalized;
-          frame.style.display = 'block';
-          if (presentationImage) presentationImage.style.display = 'none';
-          openModal();
-          return;
-        }
-
-        window.open(normalized, '_blank');
+        window.open(normalizeUrl(appUrl), '_blank');
+        return;
       }
     });
   });
@@ -253,14 +244,6 @@ document.addEventListener('DOMContentLoaded', function () {
     button.addEventListener('click', function (e) {
       e.preventDefault();
       var htmlUrl = button.dataset.htmlUrl;
-
-      if (htmlUrl && frame) {
-        frame.src = normalizeUrl(htmlUrl);
-        frame.style.display = 'block';
-        if (presentationImage) presentationImage.style.display = 'none';
-        openModal();
-        return;
-      }
 
       if (htmlUrl) {
         window.open(normalizeUrl(htmlUrl), '_blank');
