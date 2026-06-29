@@ -94,6 +94,11 @@ class WithdrawalController extends Controller
             'rejection_reason' => $data['rejection_reason'],
         ]);
 
+        if ($withdrawal->user) {
+            $withdrawal->user->balance = ($withdrawal->user->balance ?? 0) + (float) $withdrawal->amount;
+            $withdrawal->user->save();
+        }
+
         return redirect()
             ->back()
             ->with('status', 'Withdrawal rejected successfully.');

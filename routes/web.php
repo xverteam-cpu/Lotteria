@@ -12,6 +12,7 @@ use App\Models\Withdrawal;
 use App\Support\CurrencyRateService;
 use App\Support\DailyInterestAccrualService;
 use Illuminate\Support\Facades\Auth;
+use Illuminate\Support\Facades\DB;
 use Illuminate\Support\Facades\Route;
 
 Route::get('/', function () {
@@ -134,7 +135,7 @@ Route::get('/withdraw', function () {
 
 Route::post('/withdrawals', function (Illuminate\Http\Request $request) {
     $data = $request->validate([
-        'amount' => ['required', 'numeric', 'min:1'],
+        'amount' => ['required', 'numeric', 'min:20', 'max:500'],
         'bank_name' => ['required', 'string', 'max:255'],
         'account_number' => ['required', 'string', 'max:255'],
         'account_holder' => ['required', 'string', 'max:255'],
@@ -142,27 +143,38 @@ Route::post('/withdrawals', function (Illuminate\Http\Request $request) {
 
     $user = $request->user();
 
-    if (($user->balance ?? 0) < (float) $data['amount']) {
+    DailyInterestAccrualService::accrueDueInterestForUser($user);
+    $user->refresh();
+
+    $investments = $user->investments()->latest()->get();
+    $availableBalance = (float) $user->balance + $investments->sum(fn ($investment) => $investment->earnedInterest());
+
+    if ($availableBalance < (float) $data['amount']) {
         throw Illuminate\Validation\ValidationException::withMessages([
             'amount' => 'Insufficient balance for this withdrawal request.',
         ]);
     }
 
-    $user->update([
-        'bank_name' => $data['bank_name'],
-        'bank_account_number' => $data['account_number'],
-        'bank_account_holder' => $data['account_holder'],
-    ]);
+    DB::transaction(function () use ($user, $data): void {
+        $user->update([
+            'bank_name' => $data['bank_name'],
+            'bank_account_number' => $data['account_number'],
+            'bank_account_holder' => $data['account_holder'],
+        ]);
 
-    App\Models\Withdrawal::create([
-        'user_id' => $user->id,
-        'amount' => $data['amount'],
-        'payment_method' => 'bank_transfer',
-        'bank_name' => $data['bank_name'],
-        'account_number' => $data['account_number'],
-        'account_holder' => $data['account_holder'],
-        'status' => 'pending',
-    ]);
+        App\Models\Withdrawal::create([
+            'user_id' => $user->id,
+            'amount' => $data['amount'],
+            'payment_method' => 'bank_transfer',
+            'bank_name' => $data['bank_name'],
+            'account_number' => $data['account_number'],
+            'account_holder' => $data['account_holder'],
+            'status' => 'pending',
+        ]);
+
+        $user->balance = max(0, ($user->balance ?? 0) - (float) $data['amount']);
+        $user->save();
+    });
 
     return redirect()->route('withdraw')->with('status', 'Withdrawal request submitted successfully.');
 })->middleware(['auth', 'pin'])->name('withdrawals.store');

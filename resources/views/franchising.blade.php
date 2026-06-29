@@ -173,7 +173,6 @@
 <!-- Modal -->
 <div id="presentationModal" aria-hidden="true">
   <div class="modal-inner">
-    <a id="presentationDownload" href="#" download style="position:absolute;left:12px;top:12px;z-index:3;background:#fff;border:0;border-radius:8px;padding:8px 10px;cursor:pointer;box-shadow:0 4px 14px rgba(0,0,0,0.12);color:var(--lot-red);font-weight:800;display:none;text-decoration:none;">Download</a>
     <button id="presentationClose" aria-label="Close" style="position:absolute;right:12px;top:12px;z-index:3;background:#fff;border:0;border-radius:8px;padding:8px 10px;cursor:pointer;box-shadow:0 4px 14px rgba(0,0,0,0.12);">✕</button>
     <img id="presentationImage" style="width:100%;height:auto;display:block;" src="" alt="Presentation" />
     <iframe id="presentationFrame" style="width:100%;height:100%;display:none;border:0;"></iframe>
@@ -189,7 +188,6 @@ document.addEventListener('DOMContentLoaded', function () {
   var modal = document.getElementById('presentationModal');
   var modalClose = document.getElementById('presentationClose');
   var presentationImage = document.getElementById('presentationImage');
-  var downloadLink = document.getElementById('presentationDownload');
   var frame = document.getElementById('presentationFrame');
 
   function normalizeUrl(url) {
@@ -211,19 +209,24 @@ document.addEventListener('DOMContentLoaded', function () {
     modal.classList.remove('active');
     modal.setAttribute('aria-hidden', 'true');
     document.body.style.overflow = '';
-    if (frame) { frame.src = ''; frame.style.display = 'none'; }
-    if (presentationImage) presentationImage.src = '';
-    if (downloadLink) { downloadLink.style.display = 'none'; downloadLink.removeAttribute('download'); }
+    if (frame) {
+      frame.src = '';
+      frame.style.display = 'none';
+    }
+    if (presentationImage) {
+      presentationImage.src = '';
+      presentationImage.style.display = 'block';
+    }
   }
 
-  // Select package handler (opens application form for 40pyeong)
   selectButtons.forEach(function (btn) {
     btn.addEventListener('click', function () {
       var pkg = btn.dataset.package;
       selectedInput.value = pkg;
-      packageCards.forEach(function (c) { c.classList.remove('selected'); });
+      packageCards.forEach(function (card) { card.classList.remove('selected'); });
       var card = btn.closest('.package-card');
       if (card) card.classList.add('selected');
+
       var original = btn.textContent;
       btn.textContent = 'Selected';
       setTimeout(function () { btn.textContent = original; }, 1200);
@@ -233,82 +236,35 @@ document.addEventListener('DOMContentLoaded', function () {
         frame.src = normalizeUrl(appUrl);
         frame.style.display = 'block';
         if (presentationImage) presentationImage.style.display = 'none';
-        if (downloadLink) { downloadLink.style.display = 'none'; downloadLink.removeAttribute('download'); }
         openModal();
+        return;
+      }
+
+      if (appUrl) {
+        window.open(normalizeUrl(appUrl), '_blank');
       }
     });
   });
 
-  // View details handler
-  viewButtons.forEach(function (a) {
-    a.addEventListener('click', function (e) {
+  viewButtons.forEach(function (button) {
+    button.addEventListener('click', function (e) {
       e.preventDefault();
-      var pres = a.dataset.presentation;
-      var img = a.dataset.image;
-      var htmlUrl = a.dataset.htmlUrl;
+      var htmlUrl = button.dataset.htmlUrl;
 
-      if (downloadLink) {
-        var dl = pres || img || '';
-        if (dl) {
-          downloadLink.href = normalizeUrl(dl);
-          downloadLink.style.display = 'inline-block';
-          downloadLink.setAttribute('download', '');
-        } else {
-          downloadLink.style.display = 'none';
-          downloadLink.removeAttribute('download');
-        }
+      if (htmlUrl && frame) {
+        frame.src = normalizeUrl(htmlUrl);
+        frame.style.display = 'block';
+        if (presentationImage) presentationImage.style.display = 'none';
+        openModal();
+        return;
       }
 
       if (htmlUrl) {
-        var htmlSrc = normalizeUrl(htmlUrl);
-        if (frame) {
-          frame.src = htmlSrc;
-          frame.style.display = 'block';
-          if (presentationImage) presentationImage.style.display = 'none';
-          if (downloadLink) { downloadLink.href = htmlSrc; downloadLink.style.display = 'inline-block'; downloadLink.setAttribute('download', ''); }
-          frame.onload = function () {
-            if (frame.style.display !== 'block') {
-              frame.style.display = 'block';
-            }
-          };
-          frame.onerror = function () {
-            window.open(htmlSrc, '_blank');
-            closeModal();
-          };
-          openModal();
-          return;
-        }
-
-        window.open(htmlSrc, '_blank');
-        return;
-      }
-
-      if (pres && frame) {
-        var presUrl = normalizeUrl(pres);
-        var src = presUrl;
-        if (/\.pptx?$/i.test(presUrl)) {
-          src = 'https://view.officeapps.live.com/op/embed.aspx?src=' + encodeURIComponent(presUrl);
-        } else if (/\.pdf$/i.test(presUrl)) {
-          src = 'https://docs.google.com/gview?url=' + encodeURIComponent(presUrl) + '&embedded=true';
-        }
-        frame.src = src;
-        frame.style.display = 'block';
-        if (presentationImage) presentationImage.style.display = 'none';
-        if (downloadLink) { downloadLink.href = presUrl; downloadLink.style.display = 'inline-block'; downloadLink.setAttribute('download', ''); }
-        openModal();
-        return;
-      }
-
-      if (img && presentationImage) {
-        presentationImage.src = normalizeUrl(img);
-        presentationImage.style.display = 'block';
-        if (frame) frame.style.display = 'none';
-        openModal();
+        window.open(normalizeUrl(htmlUrl), '_blank');
       }
     });
   });
 
-  // Close handlers
   if (modalClose) modalClose.addEventListener('click', closeModal);
   if (modal) modal.addEventListener('click', function (e) { if (e.target === modal) closeModal(); });
   document.addEventListener('keydown', function (e) { if (e.key === 'Escape') closeModal(); });
