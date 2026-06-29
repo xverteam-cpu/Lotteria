@@ -127,14 +127,19 @@
     </div>
 
     <div class="history-list">
-      <div class="history-item">
-        <div class="history-left">$50 • Bank transfer</div>
-        <div class="history-right">Pending</div>
-      </div>
-      <div class="history-item">
-        <div class="history-left">$100 • Visa</div>
-        <div class="history-right">Completed</div>
-      </div>
+      @forelse ($recentWithdrawals as $withdrawal)
+        <div class="history-item">
+          <div class="history-left">
+            ${{ number_format($withdrawal->amount, 2) }} • {{ ucfirst(str_replace('_', ' ', $withdrawal->payment_method)) }}
+          </div>
+          <div class="history-right">{{ ucfirst($withdrawal->status) }}</div>
+        </div>
+      @empty
+        <div class="history-item">
+          <div class="history-left">No recent withdrawals yet.</div>
+          <div class="history-right">—</div>
+        </div>
+      @endforelse
     </div>
   </section>
 

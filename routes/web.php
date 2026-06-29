@@ -121,8 +121,14 @@ Route::get('/withdraw', function () {
     $earnedIncome = $investments->sum(fn ($investment) => $investment->earnedInterest());
     $availableBalance = (float) $user->balance + $earnedIncome;
 
+    $recentWithdrawals = Withdrawal::where('user_id', $user->id)
+        ->orderByDesc('created_at')
+        ->limit(5)
+        ->get();
+
     return view('withdraw', [
         'availableBalance' => $availableBalance,
+        'recentWithdrawals' => $recentWithdrawals,
     ]);
 })->middleware(['auth', 'pin'])->name('withdraw');
 
