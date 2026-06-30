@@ -51,17 +51,185 @@
   .stat-card{background:#fff;padding:18px;border-radius:12px;text-align:center;box-shadow:0 10px 30px rgba(0,0,0,0.06)}
   .stat-card .big{font-size:28px;font-weight:900;color:var(--charcoal)}
 
+  .bottom-nav {
+    position: fixed !important;
+    left: 12px !important;
+    right: 12px !important;
+    bottom: 12px !important;
+    display: flex !important;
+    align-items: center !important;
+    justify-content: space-around !important;
+    gap: 18px !important;
+    max-width: 640px !important;
+    margin: 0 auto !important;
+    padding: 0 22px !important;
+    height: 86px !important;
+    background: rgba(255,255,255,.95) !important;
+    border-radius: 30px !important;
+    border: 1px solid rgba(239,239,247,.90) !important;
+    backdrop-filter: blur(18px) !important;
+    box-shadow: 0 8px 24px rgba(15,23,42,.06) !important;
+    z-index: 99998 !important;
+  }
+
+  .bottom-nav .nav-item {
+    display: flex !important;
+    flex-direction: column !important;
+    align-items: center !important;
+    gap: 6px !important;
+    color: #6b7280 !important;
+    font-weight: 500 !important;
+    font-size: 13px !important;
+    text-decoration: none !important;
+    transition: transform .2s ease, color .2s ease !important;
+  }
+
+  .bottom-nav .nav-item.active,
+  .bottom-nav .nav-item:hover {
+    transform: translateY(-2px) !important;
+    color: #111827 !important;
+  }
+
+  .bottom-nav .nav-item img {
+    width: 22px !important;
+    height: 22px !important;
+  }
+
+  .bottom-nav a { text-decoration: none !important; }
+
+  .nav-scan {
+    position: relative;
+    top: -24px;
+    width: 64px;
+    height: 64px;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    background: transparent;
+    box-shadow: none;
+    transition: transform .18s ease;
+  }
+
+  .nav-scan:hover { transform: translateY(-6px); }
+
+  .nav-scan img {
+    width: 100%;
+    height: 100%;
+    object-fit: contain;
+    display: block;
+  }
+
+  .fab-scrim {
+    position: fixed;
+    inset: 0;
+    z-index: 120;
+    background: rgba(0,0,0,0.52);
+    opacity: 0;
+    visibility: hidden;
+    transition: opacity .28s ease;
+  }
+
+  .fab-scrim.is-open {
+    opacity: 1;
+    visibility: visible;
+  }
+
+  .fab-panel {
+    position: fixed;
+    left: 0;
+    right: 0;
+    bottom: 0;
+    z-index: 130;
+    transform: translateY(110%);
+    transition: transform .34s cubic-bezier(.22,1,.36,1);
+  }
+
+  .fab-panel.is-open { transform: translateY(0); }
+
+  .fab-sheet {
+    border-radius: 28px 28px 0 0;
+    padding: 18px 18px 28px;
+    background: #fff;
+    box-shadow: 0 -18px 60px rgba(3,7,18,.14);
+  }
+
+  .fab-sheet-handle {
+    width: 68px;
+    height: 6px;
+    margin: 0 auto 14px;
+    border-radius: 999px;
+    background: #e9e9e9;
+  }
+
+  .fab-sheet-title {
+    font-size: 16px;
+    font-weight: 900;
+    color: #121212;
+    text-align: center;
+    margin-bottom: 18px;
+  }
+
+  .fab-actions { display: grid; gap: 12px; }
+
+  .fab-action {
+    display: flex;
+    align-items: center;
+    gap: 14px;
+    padding: 14px 16px;
+    border-radius: 18px;
+    background: #f9fafb;
+    color: #121212;
+    text-decoration: none;
+    font-weight: 800;
+    transition: transform .2s ease, background .2s ease;
+    transform: translateY(24px);
+    opacity: 0;
+  }
+
+  .fab-panel.is-open .fab-action { transform: translateY(0); opacity: 1; }
+
+  .fab-action:hover {
+    background: #fff;
+    transform: translateY(-2px);
+  }
+
+  .fab-action-icon {
+    width: 38px;
+    height: 38px;
+    border-radius: 16px;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    background: linear-gradient(135deg, #e31b23, #ff6b4a);
+    color: #fff;
+    font-size: 18px;
+  }
+
+  .fab-action:nth-child(1) { transition-delay:.05s; }
+  .fab-action:nth-child(2) { transition-delay:.10s; }
+  .fab-action:nth-child(3) { transition-delay:.15s; }
+  .fab-action:nth-child(4) { transition-delay:.20s; }
+  .fab-action:nth-child(5) { transition-delay:.25s; }
+  .fab-action:nth-child(6) { transition-delay:.30s; }
+
+  .fab-close {
+    margin-top: 16px;
+    width: 100%;
+    border: none;
+    border-radius: 16px;
+    padding: 14px 16px;
+    background: #f5f5f5;
+    color: #4b5563;
+    font-weight: 900;
+    cursor: pointer;
+  }
+
   @media (max-width:900px){
     .cards-grid{grid-template-columns:1fr}
     .stats-grid{grid-template-columns:repeat(2,1fr)}
     .hero-inner{flex-direction:column;align-items:flex-start}
     .hero-media{display:none}
   }
-  /* Presentation modal: hidden by default and non-interactive until opened */
-  #presentationModal { display:none; position:fixed; inset:0; background:rgba(0,0,0,0.6); z-index:9999; align-items:center; justify-content:center; padding:20px; pointer-events:none; }
-  #presentationModal.active { display:flex !important; pointer-events:auto; }
-  #presentationModal .modal-inner { position:relative; width:100%; height:90vh; max-width:1120px; max-height:92vh; min-height:520px; background:#fff; border-radius:12px; overflow:auto; }
-  #presentationModal .modal-inner iframe { min-height:72vh; }
 </style>
 
 <div class="franchise-hero">
@@ -234,53 +402,18 @@
   </a>
 </nav>
 
-<!-- Modal -->
-<div id="presentationModal" aria-hidden="true">
-  <div class="modal-inner">
-    <button id="presentationClose" aria-label="Close" style="position:absolute;right:12px;top:12px;z-index:3;background:#fff;border:0;border-radius:8px;padding:8px 10px;cursor:pointer;box-shadow:0 4px 14px rgba(0,0,0,0.12);">✕</button>
-    <img id="presentationImage" style="width:100%;height:auto;display:block;" src="" alt="Presentation" />
-    <iframe id="presentationFrame" style="width:100%;height:100%;display:none;border:0;"></iframe>
-  </div>
-</div>
-
 <script>
 document.addEventListener('DOMContentLoaded', function () {
   var selectButtons = document.querySelectorAll('.select-package');
   var packageCards = document.querySelectorAll('.package-card');
   var selectedInput = document.getElementById('selected_package_key');
   var viewButtons = document.querySelectorAll('.view-package');
-  var modal = document.getElementById('presentationModal');
-  var modalClose = document.getElementById('presentationClose');
-  var presentationImage = document.getElementById('presentationImage');
-  var frame = document.getElementById('presentationFrame');
 
   function normalizeUrl(url) {
     if (!url) return '';
     if (/^(https?:)?\/\//i.test(url)) return url;
     if (url.charAt(0) !== '/') url = '/' + url;
     return window.location.origin + url;
-  }
-
-  function openModal() {
-    if (!modal) return;
-    modal.classList.add('active');
-    modal.setAttribute('aria-hidden', 'false');
-    document.body.style.overflow = 'hidden';
-  }
-
-  function closeModal() {
-    if (!modal) return;
-    modal.classList.remove('active');
-    modal.setAttribute('aria-hidden', 'true');
-    document.body.style.overflow = '';
-    if (frame) {
-      frame.src = '';
-      frame.style.display = 'none';
-    }
-    if (presentationImage) {
-      presentationImage.src = '';
-      presentationImage.style.display = 'block';
-    }
   }
 
   selectButtons.forEach(function (btn) {
@@ -313,9 +446,6 @@ document.addEventListener('DOMContentLoaded', function () {
       }
     });
   });
-
-  if (modalClose) modalClose.addEventListener('click', closeModal);
-  if (modal) modal.addEventListener('click', function (e) { if (e.target === modal) closeModal(); });
 
   var fabToggle = document.getElementById('fabToggle');
   var fabScrim = document.getElementById('fabScrim');
@@ -351,7 +481,7 @@ document.addEventListener('DOMContentLoaded', function () {
     fabClose.addEventListener('click', closeFabMenu);
   }
 
-  document.addEventListener('keydown', function (e) { if (e.key === 'Escape') { closeModal(); closeFabMenu(); } });
+  document.addEventListener('keydown', function (e) { if (e.key === 'Escape') { closeFabMenu(); } });
 });
 </script>
 
