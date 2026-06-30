@@ -100,11 +100,141 @@
     pointer-events: none;
   }
 
-  .hero .hero-cta.mail {
+  .hero .hero-cta.mail,
+  .hero .hero-cta.buy {
+    position: relative;
     padding: 14px 16px;
+    justify-content: center;
+    display: inline-flex;
+    align-items: center;
+    z-index: 1;
+  }
+
+  .hero .hero-cta.mail::before,
+  .hero .hero-cta.buy::before {
+    content: '';
+    position: absolute;
+    inset: auto auto auto auto;
+    top: 50%;
+    left: 50%;
+    width: 62px;
+    height: 62px;
+    transform: translate(-50%, -50%);
+    border-radius: 50%;
+    background: radial-gradient(circle at 30% 30%, rgba(255,235,59,.95), rgba(255,235,59,.35) 35%, rgba(255,235,59,0) 65%);
+    filter: blur(7px);
+    z-index: -1;
+  }
+
+  .hero .hero-cta.mail {
     width: 52px;
     min-width: 52px;
+  }
+
+  .notification-badge {
+    position: absolute;
+    top: 8px;
+    right: 8px;
+    min-width: 20px;
+    height: 20px;
+    line-height: 20px;
+    border-radius: 999px;
+    background: #d71920;
+    color: #fff;
+    font-size: 12px;
+    font-weight: 800;
+    display: inline-flex;
+    align-items: center;
     justify-content: center;
+    padding: 0 6px;
+    box-shadow: 0 4px 12px rgba(0,0,0,.16);
+  }
+
+  .notification-panel {
+    position: fixed;
+    left: 12px;
+    right: 12px;
+    top: 84px;
+    max-width: 640px;
+    margin: 0 auto;
+    background: #fff;
+    border-radius: 24px;
+    box-shadow: 0 32px 80px rgba(0,0,0,.12);
+    overflow: hidden;
+    z-index: 40;
+    transform: translateY(-20px);
+    opacity: 0;
+    visibility: hidden;
+    transition: opacity .22s ease, transform .22s ease, visibility .22s ease;
+  }
+
+  .notification-panel.is-open {
+    transform: translateY(0);
+    opacity: 1;
+    visibility: visible;
+  }
+
+  .notification-panel-header {
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    gap: 12px;
+    padding: 18px 22px;
+    background: #f8fafc;
+    border-bottom: 1px solid #edf2f7;
+  }
+
+  .notification-panel-header strong {
+    font-size: 16px;
+    font-weight: 900;
+    color: #111827;
+  }
+
+  .notification-panel-header button {
+    background: transparent;
+    border: none;
+    color: #6b7280;
+    font-size: 14px;
+    font-weight: 700;
+    cursor: pointer;
+  }
+
+  .notification-list {
+    display: grid;
+    gap: 0;
+  }
+
+  .notification-item {
+    padding: 16px 22px;
+    border-bottom: 1px solid #f1f5f9;
+  }
+
+  .notification-item:last-child {
+    border-bottom: none;
+  }
+
+  .notification-title {
+    font-weight: 800;
+    color: #111827;
+    margin-bottom: 6px;
+  }
+
+  .notification-text {
+    color: #4b5563;
+    font-size: 14px;
+    margin-bottom: 8px;
+  }
+
+  .notification-time {
+    color: #9ca3af;
+    font-size: 12px;
+  }
+
+  .notification-empty {
+    padding: 20px 22px;
+    color: #6b7280;
+    font-size: 14px;
+    text-align: center;
   }
 
   .sr-only {
@@ -635,21 +765,40 @@
   <section class="hero">
     <div class="hero-top">
       <div class="hero-kicker">Available balance</div>
-      <a class="hero-cta mail" href="{{ route('unavailable') }}" aria-label="View Details">
+      <a class="hero-cta mail" href="#" id="notificationToggle" aria-label="View notifications" aria-expanded="false">
         <svg width="20" height="16" viewBox="0 0 20 16" fill="none" xmlns="http://www.w3.org/2000/svg" aria-hidden="true">
           <path d="M1 2.5C1 1.673 1.673 1 2.5 1h15c.827 0 1.5.673 1.5 1.5v11c0 .827-.673 1.5-1.5 1.5h-15A1.5 1.5 0 0 1 1 13.5v-11Z" stroke="currentColor" stroke-width="1.5"/>
           <path d="M1.5 3.5 10 8.75l8.5-5.25" stroke="currentColor" stroke-width="1.5" stroke-linecap="round"/>
         </svg>
-        <span class="sr-only">View Details</span>
+        <span class="notification-badge" id="notificationBadge">{{ $notifications->count() }}</span>
+        <span class="sr-only">View notifications</span>
       </a>
     </div>
     <div class="hero-balance">
       <div>
         <div class="balance-value">${{ number_format($availableBalance, 2) }}</div>
       </div>
-      <a class="hero-cta" href="{{ route('invest') }}">Buy Shares</a>
+      <a class="hero-cta buy" href="{{ route('invest') }}">Buy Shares</a>
     </div>
   </section>
+
+  <div class="notification-panel" id="notificationPanel" aria-hidden="true">
+    <div class="notification-panel-header">
+      <strong>Recent activity</strong>
+      <button type="button" id="notificationClose">Close</button>
+    </div>
+    <div class="notification-list" id="notificationList">
+      @forelse ($notifications as $notification)
+        <div class="notification-item" data-notification-id="{{ $notification['id'] }}">
+          <div class="notification-title">{{ $notification['title'] }}</div>
+          <div class="notification-text">{{ $notification['description'] }}</div>
+          <div class="notification-time">{{ $notification['time']->diffForHumans() }}</div>
+        </div>
+      @empty
+        <div class="notification-empty">No notifications yet.</div>
+      @endforelse
+    </div>
+  </div>
 
   <div class="card balance-card">
     <div>
@@ -837,6 +986,68 @@
       }
     });
   })();
-</script>
 
-@endsection
+    (function () {
+      var notificationToggle = document.getElementById('notificationToggle');
+      var notificationPanel = document.getElementById('notificationPanel');
+      var notificationClose = document.getElementById('notificationClose');
+      var notificationBadge = document.getElementById('notificationBadge');
+      var notificationItems = Array.from(document.querySelectorAll('.notification-item'));
+      var storageKey = 'dashboard-notifications-read-{{ $user->id }}';
+
+      function getReadNotifications() {
+        try {
+          return new Set(JSON.parse(localStorage.getItem(storageKey) || '[]'));
+        } catch (e) {
+          return new Set();
+        }
+      }
+
+      function updateBadge() {
+        var read = getReadNotifications();
+        var unreadCount = notificationItems.filter(function (item) {
+          return !read.has(item.dataset.notificationId);
+        }).length;
+
+        if (!notificationBadge) return;
+        notificationBadge.textContent = unreadCount;
+        notificationBadge.style.display = unreadCount > 0 ? 'inline-flex' : 'none';
+      }
+
+      function openNotificationPanel(event) {
+        if (event) event.preventDefault();
+        if (!notificationPanel) return;
+        notificationPanel.classList.add('is-open');
+        notificationPanel.setAttribute('aria-hidden', 'false');
+        notificationToggle.setAttribute('aria-expanded', 'true');
+
+        var read = getReadNotifications();
+        notificationItems.forEach(function (item) {
+          read.add(item.dataset.notificationId);
+        });
+        localStorage.setItem(storageKey, JSON.stringify(Array.from(read)));
+        updateBadge();
+      }
+
+      function closeNotificationPanel() {
+        if (!notificationPanel) return;
+        notificationPanel.classList.remove('is-open');
+        notificationPanel.setAttribute('aria-hidden', 'true');
+        notificationToggle.setAttribute('aria-expanded', 'false');
+      }
+
+      if (notificationToggle) {
+        notificationToggle.addEventListener('click', openNotificationPanel);
+      }
+      if (notificationClose) {
+        notificationClose.addEventListener('click', closeNotificationPanel);
+      }
+      document.addEventListener('click', function (event) {
+        if (!notificationPanel || !notificationToggle) return;
+        if (!notificationPanel.contains(event.target) && !notificationToggle.contains(event.target)) {
+          closeNotificationPanel();
+        }
+      });
+
+      updateBadge();
+    })();

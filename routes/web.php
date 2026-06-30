@@ -86,11 +86,61 @@ Route::get('/dashboard', function () {
         $showRafflePopup = true;
     }
 
-    $user->refresh();
+    $recentInvestments = Investment::where('user_id', $user->id)
+        ->orderByDesc('created_at')
+        ->limit(5)
+        ->get();
+
+    $recentWithdrawals = Withdrawal::where('user_id', $user->id)
+        ->orderByDesc('created_at')
+        ->limit(5)
+        ->get();
+
+    $notifications = collect();
+
+    if ($dailyInterest > 0) {
+        $notifications->push([
+            'id' => 'daily-interest',
+            'title' => 'Daily interest credited',
+            'description' => '$'.number_format($dailyInterest, 2).' added to available balance.',
+            'time' => now(),
+        ]);
+    }
+
+    foreach ($recentInvestments as $investment) {
+        $description = match ($investment->payment_method) {
+            'admin_transfer' => 'Package sent by admin: '.$investment->package_name.'.',
+            'account_balance' => 'Investment purchased from your balance: '.$investment->package_name.'.',
+            'bank_transfer' => 'Investment submitted and pending approval: '.$investment->package_name.'.',
+            default => 'Investment activity: '.$investment->package_name.'.',
+        };
+
+        $notifications->push([
+            'id' => 'investment-'.$investment->id,
+            'title' => 'Investment update',
+            'description' => $description,
+            'time' => $investment->created_at,
+        ]);
+    }
+
+    foreach ($recentWithdrawals as $withdrawal) {
+        $notifications->push([
+            'id' => 'withdrawal-'.$withdrawal->id,
+            'title' => 'Withdrawal request',
+            'description' => '₱'.number_format($withdrawal->amount, 2).' '.$withdrawal->status.'.',
+            'time' => $withdrawal->created_at,
+        ]);
+    }
+
+    $notifications = $notifications
+        ->sortByDesc('time')
+        ->values()
+        ->take(5);
 
     return view('dashboard_user', [
         'user' => $user,
         'showRafflePopup' => $showRafflePopup,
+        'notifications' => $notifications,
     ]);
 })->middleware(['auth', 'pin'])->name('dashboard');
 
