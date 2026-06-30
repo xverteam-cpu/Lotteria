@@ -174,25 +174,35 @@
   .bank-logo-item span { color:#1a1a1a; font-size:14px; line-height:18px; font-weight:800; }
   .bank-logo-item:hover, .bank-logo-item:focus { border-color:#d91b0b; background:#fff; box-shadow:0 6px 20px rgba(217,27,11,.12); outline:none; }
   @media (max-width:430px) {
-    .packages-page { padding-inline:10px; }
-    .packages-shell { padding:0 12px; }
+    /* Mobile-first fixes */
+    html, body { overflow-x: hidden; }
+    * { box-sizing: border-box; }
+    /* Use small safe paddings so content sits close to screen edges */
+    .packages-page { padding-inline:12px; padding-top:12px; padding-bottom:18px; }
+    .packages-shell { padding:0; width:100%; max-width:100%; }
     .hero-title .black { font-size:40px; line-height:39px; }
     .hero-title .red { font-size:47px; line-height:46px; }
     .hero-copy { font-size:20px; line-height:26px; }
-    .package-track { padding:8px 16px 20px 16px; gap:16px; scroll-padding:0 16px; }
-    .package-card { flex:0 0 92vw; max-width:92vw; min-height:320px; padding:14px; }
-    /* Prevent decorative pseudo-elements from causing horizontal overflow */
-    .packages-page::before, .packages-page::after { display:none !important; }
-    /* Ensure package cards fit inside viewport without being cut */
-    .package-card { flex:0 0 calc(100vw - 32px); max-width: calc(100vw - 32px); margin-left:auto; margin-right:auto; box-sizing:border-box; }
-    .payment-card { justify-content:space-between; padding:12px 14px; gap:10px; }
+
+    /* Make track use full width and avoid extra inner padding */
+    .package-track { padding:8px 0 16px 0; gap:12px; scroll-padding:12px; padding-inline-start:12px; padding-inline-end:12px; overflow-x:auto; }
+
+    /* Ensure package cards fully fit inside the viewport without clipping */
+    .package-card { flex:0 0 100%; width:100%; max-width:calc(100% - 24px); margin:0 auto; box-sizing:border-box; min-height:auto; padding:12px; border-radius:18px; }
+    .package-content { padding:14px 12px; }
+
+    /* Hide decorative pseudo-elements that can cause overflow */
+    .packages-page::before, .packages-page::after, .package-visual { display:none !important; }
+
+    /* Compact payment area */
+    .payment-card { justify-content:space-between; padding:12px 12px; gap:10px; }
     .payment-copy { flex:1 1 100%; min-width:0; margin-bottom:8px; }
     .payment-logos { flex:1 1 100%; justify-content:flex-start; gap:10px; }
     .payment-logos svg { height:18px; }
-    .package-content { padding:28px 20px 24px; max-width:100%; }
+
     .package-name { font-size:28px; line-height:32px; }
-    .price { font-size:27px; padding-inline:13px; }
-    .package-terms { font-size:13px; padding-inline:11px; }
+    .price { font-size:27px; padding-inline:8px; }
+    .package-terms { font-size:13px; padding-inline:8px; }
   }
   @media (min-width:760px) {
     .packages-page { padding:34px 22px 42px; }
