@@ -367,6 +367,7 @@
     display: grid;
     grid-template-columns: repeat(4, 1fr);
     gap: 20px;
+    justify-items: center;
   }
 
   .action {
@@ -379,6 +380,8 @@
     font-weight: 500;
     font-size: 15px;
     text-decoration: none;
+    width: 100%;
+    max-width: 160px;
   }
 
   .action .icon {
@@ -805,7 +808,7 @@
     object-fit: cover;
   }
 
-  @media (max-width: 640px) {
+  @media (max-width: 760px) {
     .wallet-shell {
       margin: 8px auto 110px;
       padding: 0 12px;
@@ -885,6 +888,7 @@
       font-size: 14px;
     }
     .actions-grid {
+      grid-template-columns: repeat(2, minmax(0, 1fr));
       gap: 10px;
     }
     .action .icon {
