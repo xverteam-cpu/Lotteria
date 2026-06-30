@@ -753,6 +753,103 @@
     object-fit: cover;
   }
 
+  @media (max-width: 640px) {
+    .wallet-shell {
+      margin: 8px auto 110px;
+      padding: 0 12px;
+    }
+    .hero {
+      padding: 22px 16px;
+    }
+    .hero-top {
+      flex-direction: column;
+      align-items: flex-start;
+      gap: 12px;
+    }
+    .hero-balance {
+      flex-direction: column;
+      align-items: flex-start;
+      gap: 14px;
+    }
+    .hero .balance-value {
+      font-size: 34px;
+    }
+    .balance-card {
+      flex-direction: column;
+      align-items: flex-start;
+      gap: 16px;
+    }
+    .actions-grid {
+      grid-template-columns: repeat(2, minmax(0, 1fr));
+      gap: 14px;
+    }
+    .discover {
+      gap: 12px;
+    }
+    .discover-item {
+      min-width: 140px;
+    }
+    .promo {
+      flex-direction: column;
+      align-items: stretch;
+    }
+    .promo .cta {
+      width: 100%;
+    }
+    .bottom-nav {
+      padding: 0 14px;
+    }
+    .nav-scan {
+      top: -18px;
+    }
+    .notification-panel {
+      left: 8px;
+      right: 8px;
+      top: 74px;
+    }
+  }
+
+  @media (max-width: 480px) {
+    .wallet-shell {
+      padding: 0 10px;
+    }
+    .hero {
+      padding: 18px 14px;
+    }
+    .hero-top {
+      gap: 10px;
+    }
+    .hero .balance-value {
+      font-size: 30px;
+    }
+    .hero-kicker {
+      font-size: 12px;
+    }
+    .hero-cta,
+    .promo .cta {
+      padding: 12px 14px;
+      font-size: 14px;
+    }
+    .actions-grid {
+      gap: 10px;
+    }
+    .action .icon {
+      width: 56px;
+      height: 56px;
+    }
+    .discover-item {
+      min-width: 128px;
+      padding: 14px;
+    }
+    .bottom-nav {
+      padding: 0 12px;
+      height: 78px;
+    }
+    .notification-panel {
+      top: 68px;
+    }
+  }
+
   @media (min-width:760px) {
     .wallet-shell {
       max-width: 760px;
