@@ -170,6 +170,19 @@
     .amount { font-size: 24px; color: var(--lotteria-red); font-weight: 900; letter-spacing: -0.03em; }
     .white-card p, .white-card li { color: var(--muted); }
 
+    .section-image {
+      width: 100%;
+      border-radius: 28px;
+      overflow: hidden;
+      margin: 24px 0 20px;
+      box-shadow: 0 24px 58px rgba(64,39,0,.12);
+    }
+    .section-image img {
+      display: block;
+      width: 100%;
+      height: auto;
+    }
+
     .split { display: grid; grid-template-columns: 1fr 1fr; gap: 18px; align-items: stretch; }
     .dark-panel {
       background: linear-gradient(135deg, #2b1919, #171717);
@@ -178,6 +191,183 @@
       padding: 28px;
       box-shadow: 0 24px 65px rgba(64,39,0,.16);
       border-top: 5px solid var(--lotteria-yellow);
+    }
+
+    .bottom-nav {
+      position: fixed;
+      left: 12px;
+      right: 12px;
+      bottom: 12px;
+      display: flex;
+      align-items: center;
+      justify-content: space-around;
+      gap: 18px;
+      max-width: 640px;
+      margin: 0 auto;
+      padding: 0 22px;
+      height: 86px;
+      background: rgba(255,255,255,.95);
+      border-radius: 30px;
+      border: 1px solid rgba(239,239,247,.90);
+      backdrop-filter: blur(18px);
+      box-shadow: 0 8px 24px rgba(15,23,42,.06);
+      z-index: 15;
+    }
+
+    .nav-item {
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+      gap: 6px;
+      color: var(--muted);
+      font-weight: 500;
+      font-size: 13px;
+      text-decoration: none;
+      transition: transform .2s ease, color .2s ease;
+    }
+
+    .nav-item:hover {
+      transform: translateY(-2px);
+      color: var(--ink);
+    }
+
+    .nav-item img {
+      width: 22px;
+      height: 22px;
+    }
+
+    .bottom-nav a {
+      text-decoration: none;
+    }
+
+    .nav-scan {
+      position: relative;
+      top: -24px;
+      width: 64px;
+      height: 64px;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      background: transparent;
+      box-shadow: none;
+      transition: transform .18s ease;
+    }
+
+    .nav-scan:hover {
+      transform: translateY(-6px);
+    }
+
+    .nav-scan img {
+      width: 100%;
+      height: 100%;
+      object-fit: contain;
+      display: block;
+    }
+
+    .fab-scrim {
+      position: fixed;
+      inset: 0;
+      z-index: 120;
+      background: rgba(0,0,0,0.52);
+      opacity: 0;
+      visibility: hidden;
+      transition: opacity .28s ease;
+    }
+
+    .fab-scrim.is-open {
+      opacity: 1;
+      visibility: visible;
+    }
+
+    .fab-panel {
+      position: fixed;
+      left: 0;
+      right: 0;
+      bottom: 0;
+      z-index: 130;
+      transform: translateY(110%);
+      transition: transform .34s cubic-bezier(.22,1,.36,1);
+    }
+
+    .fab-panel.is-open {
+      transform: translateY(0);
+    }
+
+    .fab-sheet {
+      border-radius: 28px 28px 0 0;
+      padding: 18px 18px 28px;
+      background: #fff;
+      box-shadow: 0 -18px 60px rgba(3,7,18,0.14);
+    }
+
+    .fab-sheet-handle {
+      width: 68px;
+      height: 6px;
+      margin: 0 auto 14px;
+      border-radius: 999px;
+      background: #e9e9e9;
+    }
+
+    .fab-sheet-title {
+      font-size: 16px;
+      font-weight: 900;
+      color: #121212;
+      text-align: center;
+      margin-bottom: 18px;
+    }
+
+    .fab-actions {
+      display: grid;
+      gap: 12px;
+    }
+
+    .fab-action {
+      display: flex;
+      align-items: center;
+      gap: 14px;
+      padding: 14px 16px;
+      border-radius: 18px;
+      background: #f9fafb;
+      color: #121212;
+      text-decoration: none;
+      font-weight: 800;
+      transition: transform .2s ease, background .2s ease;
+      transform: translateY(24px);
+      opacity: 0;
+    }
+
+    .fab-panel.is-open .fab-action {
+      transform: translateY(0);
+      opacity: 1;
+    }
+
+    .fab-action:hover {
+      background: #fff;
+      transform: translateY(-2px);
+    }
+
+    .fab-action-icon {
+      width: 38px;
+      height: 38px;
+      border-radius: 16px;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      background: linear-gradient(135deg, #e31b23, #ff6b4a);
+      color: #fff;
+      font-size: 18px;
+    }
+
+    .fab-close {
+      margin-top: 16px;
+      width: 100%;
+      border: none;
+      border-radius: 16px;
+      padding: 14px 16px;
+      background: #f5f5f5;
+      color: #4b5563;
+      font-weight: 900;
+      cursor: pointer;
     }
     .dark-panel h2 { color: #fff; }
     .dark-panel p, .dark-panel li { color: rgba(255,255,255,.78); }
@@ -253,6 +443,9 @@
       <div class="shell">
         <h2>Executive Investment Snapshot</h2>
         <p class="lead">The 60-pyeong package is built for more expansive operations, stronger customer capacity, and a more premium guest experience.</p>
+        <div class="section-image">
+          <img src="60pyeong1.png" alt="60 Pyeong franchise visualization">
+        </div>
         <div class="card-grid">
           <div class="white-card"><h3>Full-Service Layout</h3><p>More seating, dedicated service flow, and stronger operational capacity for peak-hour demand.</p></div>
           <div class="white-card"><h3>Major Cost Drivers</h3><p>Fit-out, premium kitchen systems, signage, and launch inventory drive the primary capital requirement.</p></div>
@@ -342,6 +535,90 @@
         observer.observe(item);
       });
     });
+  </script>
+
+  <div class="fab-scrim" id="fabScrim" aria-hidden="true"></div>
+  <div class="fab-panel" id="fabPanel" aria-hidden="true">
+    <div class="fab-sheet" role="dialog" aria-modal="true" aria-label="Quick actions menu">
+      <div class="fab-sheet-handle"></div>
+      <div class="fab-sheet-title">Quick actions</div>
+      <div class="fab-actions">
+        <a class="fab-action" href="franchise_40pyeong.html">
+          <span class="fab-action-icon">🏬</span>
+          <span>40-Pyeong</span>
+        </a>
+        <a class="fab-action" href="franchise_60pyeong.html">
+          <span class="fab-action-icon">🏬</span>
+          <span>60-Pyeong</span>
+        </a>
+        <a class="fab-action" href="franchise_40pyeong_application.html">
+          <span class="fab-action-icon">📝</span>
+          <span>Apply 40P</span>
+        </a>
+        <a class="fab-action" href="franchise_60pyeong_application.html">
+          <span class="fab-action-icon">📝</span>
+          <span>Apply 60P</span>
+        </a>
+      </div>
+      <button class="fab-close" type="button" id="fabClose">Close menu</button>
+    </div>
+  </div>
+
+  <nav class="bottom-nav" aria-hidden="false">
+    <a class="nav-item active" href="index.php">
+      <img src="home.png" alt="Home">
+      <div>Home</div>
+    </a>
+    <a class="nav-item" href="#">
+      <img src="history.png" alt="History">
+      <div>History</div>
+    </a>
+    <a class="nav-item" href="#" id="fabToggle">
+      <div class="nav-scan">
+        <img src="menu.png" alt="Menu">
+      </div>
+    </a>
+    <a class="nav-item" href="#">
+      <img src="reward.png" alt="Rewards">
+      <div>Rewards</div>
+    </a>
+    <a class="nav-item" href="#">
+      <img src="profile.png" alt="Profile">
+      <div>Profile</div>
+    </a>
+  </nav>
+
+  <script>
+    (function () {
+      var fabToggle = document.getElementById('fabToggle');
+      var fabScrim = document.getElementById('fabScrim');
+      var fabPanel = document.getElementById('fabPanel');
+      var fabClose = document.getElementById('fabClose');
+
+      function openFabMenu(event) {
+        if (event) event.preventDefault();
+        if (!fabScrim || !fabPanel) return;
+        fabScrim.classList.add('is-open');
+        fabPanel.classList.add('is-open');
+        fabScrim.setAttribute('aria-hidden', 'false');
+        fabPanel.setAttribute('aria-hidden', 'false');
+      }
+
+      function closeFabMenu() {
+        if (!fabScrim || !fabPanel) return;
+        fabScrim.classList.remove('is-open');
+        fabPanel.classList.remove('is-open');
+        fabScrim.setAttribute('aria-hidden', 'true');
+        fabPanel.setAttribute('aria-hidden', 'true');
+      }
+
+      if (fabToggle) fabToggle.addEventListener('click', openFabMenu);
+      if (fabScrim) fabScrim.addEventListener('click', closeFabMenu);
+      if (fabClose) fabClose.addEventListener('click', closeFabMenu);
+      document.addEventListener('keydown', function (event) {
+        if (event.key === 'Escape') closeFabMenu();
+      });
+    })();
   </script>
 </body>
 </html>

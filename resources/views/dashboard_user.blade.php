@@ -87,6 +87,38 @@
     pointer-events: none;
   }
 
+  .hero::after {
+    content: '';
+    position: absolute;
+    top: 12px;
+    right: 20px;
+    width: 140px;
+    height: 140px;
+    border-radius: 50%;
+    background: radial-gradient(circle at 30% 30%, rgba(255,235,59,.95), rgba(255,235,59,.35) 35%, transparent 65%);
+    filter: blur(4px);
+    pointer-events: none;
+  }
+
+  .hero .hero-cta.mail {
+    padding: 14px 16px;
+    width: 52px;
+    min-width: 52px;
+    justify-content: center;
+  }
+
+  .sr-only {
+    position: absolute;
+    width: 1px;
+    height: 1px;
+    padding: 0;
+    margin: -1px;
+    overflow: hidden;
+    clip: rect(0, 0, 0, 0);
+    white-space: nowrap;
+    border: 0;
+  }
+
   .hero-top {
     display: flex;
     align-items: center;
@@ -603,7 +635,13 @@
   <section class="hero">
     <div class="hero-top">
       <div class="hero-kicker">Available balance</div>
-      <a class="hero-cta" href="{{ route('unavailable') }}">View Details</a>
+      <a class="hero-cta mail" href="{{ route('unavailable') }}" aria-label="View Details">
+        <svg width="20" height="16" viewBox="0 0 20 16" fill="none" xmlns="http://www.w3.org/2000/svg" aria-hidden="true">
+          <path d="M1 2.5C1 1.673 1.673 1 2.5 1h15c.827 0 1.5.673 1.5 1.5v11c0 .827-.673 1.5-1.5 1.5h-15A1.5 1.5 0 0 1 1 13.5v-11Z" stroke="currentColor" stroke-width="1.5"/>
+          <path d="M1.5 3.5 10 8.75l8.5-5.25" stroke="currentColor" stroke-width="1.5" stroke-linecap="round"/>
+        </svg>
+        <span class="sr-only">View Details</span>
+      </a>
     </div>
     <div class="hero-balance">
       <div>
