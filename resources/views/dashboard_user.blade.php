@@ -107,7 +107,7 @@
     justify-content: center;
     display: inline-flex;
     align-items: center;
-    z-index: 2;
+    z-index: 5;
   }
 
   .hero .hero-cta.mail::before,
@@ -1106,3 +1106,5 @@
 
       updateBadge();
     })();
+</script>
+@endsection
