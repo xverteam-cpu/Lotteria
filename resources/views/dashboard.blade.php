@@ -9,7 +9,7 @@
   .account-hero::after { content:''; position:absolute; inset:0; background:linear-gradient(90deg, rgba(176,0,0,.92), rgba(227,27,35,.68), rgba(245,164,0,.32)); }
   .hero-inner { position:relative; z-index:1; padding:28px 16px 20px; }
   .hero-kicker { margin:0 0 8px; color:#ffe0a3; font-size:12px; line-height:16px; font-weight:800; letter-spacing:.18em; text-transform:uppercase; }
-  .balance-label { color:#ffe0a3; font-size:14px; line-height:19px; font-weight:700; }
+  .balance-label { color:#ffffff !important; font-size:14px; line-height:19px; font-weight:700; text-shadow:0 1px 0 rgba(0,0,0,.25); }
   .balance-value { margin-top:4px; color:#fff; font-size:32px; line-height:38px; font-weight:800; }
   .hero-actions { display:flex; flex-wrap:wrap; gap:6px; margin-top:12px; }
   .hero-action { display:inline-flex; align-items:center; justify-content:center; min-height:32px; padding:0 11px; border-radius:7px; border:1px solid rgba(255,255,255,.35); background:transparent; color:#fff; font-size:10px; line-height:13px; font-weight:800; letter-spacing:.08em; text-transform:uppercase; text-decoration:none; cursor:pointer; }
