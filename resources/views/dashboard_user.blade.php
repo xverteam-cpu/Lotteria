@@ -462,6 +462,30 @@
     box-shadow: 0 2px 6px rgba(15,23,42,.04), 0 10px 35px rgba(15,23,42,.05);
   }
 
+  .discover-banner {
+    margin-top: 18px;
+  }
+
+  .discover-banner a {
+    display: block;
+    border-radius: var(--radius);
+    overflow: hidden;
+    border: 1px solid var(--border);
+    box-shadow: 0 2px 6px rgba(15,23,42,.04), 0 10px 35px rgba(15,23,42,.05);
+    transition: transform .18s ease, box-shadow .18s ease;
+  }
+
+  .discover-banner a:hover {
+    transform: translateY(-2px);
+    box-shadow: 0 4px 14px rgba(15,23,42,.08), 0 12px 40px rgba(15,23,42,.06);
+  }
+
+  .discover-banner img {
+    display: block;
+    width: 100%;
+    height: auto;
+  }
+
   .promo-copy {
     flex: 1;
   }
@@ -856,6 +880,12 @@
       <a class="discover-item" href="{{ route('unavailable') }}"><svg width="28" height="28" viewBox="0 0 24 24" fill="none"><path d="M3 12h18" stroke="#c8102e" stroke-width="2"/></svg><div>Food</div></a>
       <a class="discover-item" href="{{ route('unavailable') }}"><svg width="28" height="28" viewBox="0 0 24 24" fill="none"><path d="M2 12h20" stroke="#c8102e" stroke-width="2"/></svg><div>Flights</div></a>
     </div>
+  </div>
+
+  <div class="discover-banner">
+    <a href="{{ route('franchising') }}" aria-label="Go to franchise page">
+      <img src="{{ asset('leebyung.png') }}" alt="Franchise opportunity">
+    </a>
   </div>
 
   <div class="promo">
