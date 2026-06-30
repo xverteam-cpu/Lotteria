@@ -80,6 +80,8 @@
   }
 
   .bottom-nav .nav-item {
+    position: relative !important;
+    z-index: 2 !important;
     display: flex !important;
     flex-direction: column !important;
     align-items: center !important;
@@ -100,6 +102,10 @@
   .bottom-nav .nav-item img {
     width: 22px !important;
     height: 22px !important;
+  }
+
+  .nav-scan {
+    z-index: 1 !important;
   }
 
   .bottom-nav a { text-decoration: none !important; }

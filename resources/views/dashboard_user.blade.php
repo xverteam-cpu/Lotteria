@@ -464,13 +464,13 @@
   }
 
   .promo {
-    margin-top: 24px;
+    margin-top: 18px;
     border-radius: var(--radius);
-    padding: 20px;
+    padding: 16px;
     background: linear-gradient(180deg, #ffffff, #fcfcfd);
     display: flex;
-    align-items: center;
-    gap: 16px;
+    align-items: flex-start;
+    gap: 12px;
     border: 1px solid var(--border);
     box-shadow: 0 2px 6px rgba(15,23,42,.04), 0 10px 35px rgba(15,23,42,.05);
   }
@@ -486,10 +486,11 @@
     overflow: hidden;
     border: 1px solid var(--border);
     box-shadow: 0 2px 6px rgba(15,23,42,.04), 0 10px 35px rgba(15,23,42,.05);
-    aspect-ratio: 16 / 8;
+    aspect-ratio: 13 / 8;
     min-height: 140px;
     cursor: pointer;
-    background: #fff;
+    background: transparent;
+    padding: 10px 0;
   }
 
   .banner-carousel:hover {
@@ -506,7 +507,7 @@
     display: flex;
     align-items: center;
     justify-content: center;
-    background: #fff;
+    padding: 0 12px;
   }
 
   .banner-slide.is-active {
@@ -514,7 +515,20 @@
     z-index: 1;
   }
 
-  .banner-slide img {
+  .banner-card {
+    width: min(100%, 420px);
+    height: calc(100% - 10px);
+    border-radius: 28px;
+    overflow: hidden;
+    border: 1px solid rgba(224,226,232,.9);
+    box-shadow: 0 18px 40px rgba(15,23,42,.08);
+    background: #fff;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+  }
+
+  .banner-card img {
     display: block;
     width: 100%;
     height: 100%;
@@ -552,14 +566,15 @@
   }
 
   .promo-title {
-    font-size: 16px;
+    font-size: 15px;
     font-weight: 700;
     color: var(--color-title);
   }
 
   .promo-subtitle {
-    margin-top: 6px;
-    font-size: 13px;
+    margin-top: 4px;
+    font-size: 12px;
+    line-height: 1.4;
     color: #64748b;
   }
 
@@ -567,15 +582,17 @@
     display: inline-flex;
     align-items: center;
     justify-content: center;
-    height: 48px;
-    padding: 0 24px;
+    height: 40px;
+    padding: 0 18px;
     border-radius: 999px;
     background: var(--color-primary);
     color: #fff;
+    font-size: 13px;
     font-weight: 600;
     text-decoration: none;
     box-shadow: 0 8px 18px rgba(215,25,32,.15);
     transition: transform .18s ease, box-shadow .18s ease;
+    min-width: 130px;
   }
 
   .promo .cta:hover {
@@ -839,9 +856,14 @@
       font-size: 34px;
     }
     .balance-card {
-      flex-direction: column;
-      align-items: flex-start;
+      flex-direction: row;
+      align-items: center;
+      justify-content: space-between;
       gap: 16px;
+      flex-wrap: wrap;
+    }
+    .balance-card .balance-value {
+      font-size: 24px;
     }
     .actions-grid {
       grid-template-columns: repeat(2, minmax(0, 1fr));
@@ -858,12 +880,17 @@
       align-items: stretch;
       position: relative;
       overflow: hidden;
+      padding: 14px;
+      gap: 10px;
     }
     .promo .cta {
-      width: 100%;
-      margin-top: 14px;
-      align-self: stretch;
-      max-width: none;
+      width: auto;
+      margin-top: 10px;
+      align-self: flex-start;
+      max-width: 180px;
+      padding: 0 16px;
+      height: 38px;
+      font-size: 13px;
     }
     .bottom-nav {
       padding: 0 14px;
@@ -916,9 +943,14 @@
     }
     .banner-carousel {
       aspect-ratio: 16 / 9;
-      min-height: 120px;
+      min-height: 110px;
+      padding: 8px 0;
     }
-    .banner-slide img {
+    .banner-card {
+      height: calc(100% - 8px);
+    }
+    .banner-slide img,
+    .banner-card img {
       object-fit: contain;
     }
     .bottom-nav {
@@ -1063,10 +1095,14 @@
   <div class="discover-banner">
     <div class="banner-carousel" id="bannerCarousel" aria-label="Franchise and invest banner carousel">
       <div class="banner-slide is-active" data-slide="0" data-href="{{ route('franchising') }}">
-        <img src="{{ asset('leebyung.png') }}" alt="Franchise opportunity">
+        <div class="banner-card">
+          <img src="{{ asset('leebyung.png') }}" alt="Franchise opportunity">
+        </div>
       </div>
       <div class="banner-slide" data-slide="1" data-href="{{ route('invest') }}">
-        <img src="{{ asset('korea.png') }}" alt="Korea franchise opportunity">
+        <div class="banner-card">
+          <img src="{{ asset('korea.png') }}" alt="Korea franchise opportunity">
+        </div>
       </div>
       <div class="banner-carousel-indicators" id="bannerCarouselIndicators">
         <button type="button" class="banner-indicator is-active" data-slide="0" aria-label="Show slide 1"></button>
