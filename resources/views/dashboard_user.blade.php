@@ -382,6 +382,7 @@
     text-decoration: none;
     width: 100%;
     max-width: 160px;
+    min-width: 0;
   }
 
   .action .icon {
@@ -849,9 +850,14 @@
     .promo {
       flex-direction: column;
       align-items: stretch;
+      position: relative;
+      overflow: hidden;
     }
     .promo .cta {
       width: 100%;
+      margin-top: 14px;
+      align-self: stretch;
+      max-width: none;
     }
     .bottom-nav {
       padding: 0 14px;
@@ -888,8 +894,11 @@
       font-size: 14px;
     }
     .actions-grid {
-      grid-template-columns: repeat(2, minmax(0, 1fr));
+      grid-template-columns: repeat(3, minmax(0, 1fr));
       gap: 10px;
+    }
+    .action {
+      max-width: none;
     }
     .action .icon {
       width: 56px;
