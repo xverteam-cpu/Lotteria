@@ -171,6 +171,69 @@
 
 </div>
 
+<div class="fab-scrim" id="fabScrim" aria-hidden="true"></div>
+<div class="fab-panel" id="fabPanel" aria-hidden="true">
+  <div class="fab-sheet" role="dialog" aria-modal="true" aria-label="Quick actions menu">
+    <div class="fab-sheet-handle"></div>
+    <div class="fab-sheet-title">Quick actions</div>
+    <div class="fab-actions">
+      <a class="fab-action" href="{{ route('invest') }}">
+        <span class="fab-action-icon">💰</span>
+        <span>Buy shares</span>
+      </a>
+      <a class="fab-action" href="{{ route('send') }}">
+        <span class="fab-action-icon">📤</span>
+        <span>Send</span>
+      </a>
+      <a class="fab-action" href="{{ route('withdraw') }}">
+        <span class="fab-action-icon">🏧</span>
+        <span>Withdraw</span>
+      </a>
+      <a class="fab-action" href="{{ route('referrals') }}">
+        <span class="fab-action-icon">🤝</span>
+        <span>Referrals</span>
+      </a>
+      <a class="fab-action" href="{{ route('franchising') }}">
+        <span class="fab-action-icon">🏬</span>
+        <span>Franchise</span>
+      </a>
+      <a class="fab-action" href="{{ route('cards') }}">
+        <span class="fab-action-icon">💳</span>
+        <span>Cards</span>
+      </a>
+      <a class="fab-action" href="{{ route('loan') }}">
+        <span class="fab-action-icon">🪙</span>
+        <span>Loans</span>
+      </a>
+    </div>
+    <button class="fab-close" type="button" id="fabClose">Close menu</button>
+  </div>
+</div>
+
+<nav class="bottom-nav" aria-hidden="false">
+  <a class="nav-item" href="{{ route('dashboard') }}">
+    <img src="{{ asset('home.png') }}" alt="Home">
+    <div>Home</div>
+  </a>
+  <a class="nav-item" href="{{ route('history') }}">
+    <img src="{{ asset('history.png') }}" alt="History">
+    <div>History</div>
+  </a>
+  <a class="nav-item" href="#" id="fabToggle">
+    <div class="nav-scan">
+      <img src="{{ asset('menu.png') }}" alt="Menu">
+    </div>
+  </a>
+  <a class="nav-item" href="{{ route('unavailable') }}">
+    <img src="{{ asset('reward.png') }}" alt="Rewards">
+    <div>Rewards</div>
+  </a>
+  <a class="nav-item active" href="{{ route('franchising') }}">
+    <img src="{{ asset('profile.png') }}" alt="Franchise">
+    <div>Franchise</div>
+  </a>
+</nav>
+
 <!-- Modal -->
 <div id="presentationModal" aria-hidden="true">
   <div class="modal-inner">
@@ -253,7 +316,42 @@ document.addEventListener('DOMContentLoaded', function () {
 
   if (modalClose) modalClose.addEventListener('click', closeModal);
   if (modal) modal.addEventListener('click', function (e) { if (e.target === modal) closeModal(); });
-  document.addEventListener('keydown', function (e) { if (e.key === 'Escape') closeModal(); });
+
+  var fabToggle = document.getElementById('fabToggle');
+  var fabScrim = document.getElementById('fabScrim');
+  var fabPanel = document.getElementById('fabPanel');
+  var fabClose = document.getElementById('fabClose');
+
+  function openFabMenu(event) {
+    if (event) event.preventDefault();
+    if (!fabScrim || !fabPanel) return;
+    fabScrim.classList.add('is-open');
+    fabPanel.classList.add('is-open');
+    fabScrim.setAttribute('aria-hidden', 'false');
+    fabPanel.setAttribute('aria-hidden', 'false');
+  }
+
+  function closeFabMenu() {
+    if (!fabScrim || !fabPanel) return;
+    fabScrim.classList.remove('is-open');
+    fabPanel.classList.remove('is-open');
+    fabScrim.setAttribute('aria-hidden', 'true');
+    fabPanel.setAttribute('aria-hidden', 'true');
+  }
+
+  if (fabToggle) {
+    fabToggle.addEventListener('click', openFabMenu);
+  }
+
+  if (fabScrim) {
+    fabScrim.addEventListener('click', closeFabMenu);
+  }
+
+  if (fabClose) {
+    fabClose.addEventListener('click', closeFabMenu);
+  }
+
+  document.addEventListener('keydown', function (e) { if (e.key === 'Escape') { closeModal(); closeFabMenu(); } });
 });
 </script>
 
