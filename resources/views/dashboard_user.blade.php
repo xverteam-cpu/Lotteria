@@ -29,7 +29,7 @@
 
   .wallet-shell {
     max-width: 430px;
-    margin: 8px auto 92px;
+    margin: 8px auto 140px;
     padding: 0 16px;
   }
 
@@ -491,18 +491,18 @@
     transform: translateY(-1px);
   }
 
-  .banner-slide {
-    position: absolute;
-    inset: 0;
-    width: 100%;
+  .banner-track {
+    display: flex;
+    width: 200%;
     height: 100%;
-    opacity: 0;
-    transition: opacity .45s ease;
+    transition: transform .36s ease;
   }
 
-  .banner-slide.is-active {
-    opacity: 1;
-    z-index: 1;
+  .banner-slide {
+    position: relative;
+    flex: 0 0 50%;
+    min-width: 50%;
+    height: 100%;
   }
 
   .banner-slide img {
@@ -510,58 +510,6 @@
     width: 100%;
     height: 100%;
     object-fit: cover;
-  }
-
-  .slide-label {
-    position: absolute;
-    left: 16px;
-    bottom: 16px;
-    right: 16px;
-    display: flex;
-    flex-direction: column;
-    gap: 8px;
-    padding: 14px 16px;
-    background: rgba(0, 0, 0, 0.42);
-    color: #fff;
-    border-radius: 20px;
-    font-weight: 700;
-    box-shadow: 0 16px 40px rgba(0, 0, 0, 0.24);
-    pointer-events: none;
-  }
-
-  .slide-label small {
-    display: block;
-    font-size: 12px;
-    font-weight: 500;
-    color: rgba(255,255,255,.84);
-  }
-
-  .slide-label .slide-cta {
-    display: inline-flex;
-    align-items: center;
-    justify-content: center;
-    width: fit-content;
-    padding: 8px 16px;
-    background: #fff;
-    color: #c8102e;
-    border-radius: 999px;
-    font-size: 13px;
-    font-weight: 800;
-    box-shadow: 0 10px 24px rgba(0,0,0,.16);
-  }
-
-  .banner-slide .slide-label {
-    position: absolute;
-    left: 16px;
-    bottom: 16px;
-    padding: 10px 14px;
-    background: rgba(0, 0, 0, 0.48);
-    color: #fff;
-    font-size: 14px;
-    font-weight: 700;
-    border-radius: 999px;
-    max-width: calc(100% - 32px);
-    box-shadow: 0 10px 30px rgba(0, 0, 0, 0.18);
   }
 
   .banner-carousel-indicators {
@@ -643,6 +591,7 @@
     border: 1px solid rgba(239,239,247,.90);
     backdrop-filter: blur(18px);
     box-shadow: 0 8px 24px rgba(15,23,42,.06);
+    z-index: 150;
   }
 
   .nav-item {
@@ -1087,13 +1036,13 @@
 
   <div class="discover-banner">
     <a href="{{ route('franchising') }}" aria-label="Go to franchise page" class="banner-carousel" id="bannerCarousel">
-      <div class="banner-slide is-active" data-slide="0">
-        <img src="{{ asset('leebyung.png') }}" alt="Franchise opportunity">
-        <div class="slide-label">Lotteria Franchise Now</div>
-      </div>
-      <div class="banner-slide" data-slide="1">
-        <img src="{{ asset('korea.png') }}" alt="Korea franchise opportunity">
-        <div class="slide-label">Korea Franchise Opportunity</div>
+      <div class="banner-track">
+        <div class="banner-slide" data-slide="0">
+          <img src="{{ asset('leebyung.png') }}" alt="Franchise opportunity">
+        </div>
+        <div class="banner-slide" data-slide="1">
+          <img src="{{ asset('korea.png') }}" alt="Korea franchise opportunity">
+        </div>
       </div>
       <div class="banner-carousel-indicators" id="bannerCarouselIndicators">
         <button type="button" class="banner-indicator is-active" data-slide="0" aria-label="Show slide 1"></button>
@@ -1253,9 +1202,37 @@
     var currentBannerIndex = 0;
     var bannerAutoTimer = null;
     var bannerCarousel = document.getElementById('bannerCarousel');
+    var bannerTrack = document.querySelector('.banner-track');
     var bannerIndicators = document.querySelectorAll('.banner-indicator');
     var touchStartX = null;
     var touchDeltaX = 0;
+
+    function setBannerSlide(index) {
+      var slides = document.querySelectorAll('.banner-slide');
+      var indicators = document.querySelectorAll('.banner-indicator');
+      if (!slides.length) return;
+      var normalized = (index % slides.length + slides.length) % slides.length;
+      if (bannerTrack) {
+        bannerTrack.style.transform = 'translateX(-' + (normalized * 100) + '%)';
+      }
+      indicators.forEach(function (indicator, indicatorIndex) {
+        indicator.classList.toggle('is-active', indicatorIndex === normalized);
+      });
+      currentBannerIndex = normalized;
+    }
+
+    function startBannerAutoRotate() {
+      if (bannerAutoTimer) return;
+      bannerAutoTimer = setInterval(function () {
+        setBannerSlide(currentBannerIndex + 1);
+      }, 5000);
+    }
+
+    function stopBannerAutoRotate() {
+      if (!bannerAutoTimer) return;
+      clearInterval(bannerAutoTimer);
+      bannerAutoTimer = null;
+    }
 
     if (bannerCarousel) {
       bannerIndicators.forEach(function (indicator) {
