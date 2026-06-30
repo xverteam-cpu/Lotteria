@@ -103,10 +103,11 @@
   .hero .hero-cta.mail,
   .hero .hero-cta.buy {
     position: relative;
-    padding: 14px 16px;
+    padding: 14px 18px;
     justify-content: center;
     display: inline-flex;
     align-items: center;
+    gap: 10px;
     z-index: 5;
   }
 
@@ -121,8 +122,16 @@
     cursor: pointer;
   }
 
-  .hero .hero-cta.mail svg {
-    pointer-events: none;
+  .hero .hero-cta.mail .view-details-label {
+    font-size: 14px;
+    font-weight: 700;
+  }
+
+  .hero-top-actions {
+    display: flex;
+    align-items: center;
+    justify-content: flex-end;
+    gap: 12px;
   }
 
   .notification-badge {
@@ -475,6 +484,7 @@
     box-shadow: 0 2px 6px rgba(15,23,42,.04), 0 10px 35px rgba(15,23,42,.05);
     aspect-ratio: 16 / 7;
     min-height: 160px;
+    cursor: pointer;
   }
 
   .banner-carousel:hover {
@@ -500,6 +510,44 @@
     width: 100%;
     height: 100%;
     object-fit: cover;
+  }
+
+  .slide-label {
+    position: absolute;
+    left: 16px;
+    bottom: 16px;
+    right: 16px;
+    display: flex;
+    flex-direction: column;
+    gap: 8px;
+    padding: 14px 16px;
+    background: rgba(0, 0, 0, 0.42);
+    color: #fff;
+    border-radius: 20px;
+    font-weight: 700;
+    box-shadow: 0 16px 40px rgba(0, 0, 0, 0.24);
+    pointer-events: none;
+  }
+
+  .slide-label small {
+    display: block;
+    font-size: 12px;
+    font-weight: 500;
+    color: rgba(255,255,255,.84);
+  }
+
+  .slide-label .slide-cta {
+    display: inline-flex;
+    align-items: center;
+    justify-content: center;
+    width: fit-content;
+    padding: 8px 16px;
+    background: #fff;
+    color: #c8102e;
+    border-radius: 999px;
+    font-size: 13px;
+    font-weight: 800;
+    box-shadow: 0 10px 24px rgba(0,0,0,.16);
   }
 
   .banner-slide .slide-label {
@@ -817,14 +865,16 @@
       padding: 22px 16px;
     }
     .hero-top {
-      flex-direction: column;
-      align-items: flex-start;
+      flex-direction: row;
+      align-items: center;
+      justify-content: space-between;
       gap: 12px;
     }
     .hero-balance {
-      flex-direction: column;
-      align-items: flex-start;
-      gap: 14px;
+      align-items: center;
+      gap: 16px;
+      justify-content: space-between;
+      flex-wrap: wrap;
     }
     .hero .balance-value {
       font-size: 34px;
@@ -939,15 +989,16 @@
   @endif
   <section class="hero">
     <div class="hero-top">
-      <div class="hero-kicker">Available balance</div>
-      <a class="hero-cta mail" href="#" id="notificationToggle" aria-label="View notifications" aria-expanded="false">
-        <svg width="20" height="16" viewBox="0 0 20 16" fill="none" xmlns="http://www.w3.org/2000/svg" aria-hidden="true">
-          <path d="M1 2.5C1 1.673 1.673 1 2.5 1h15c.827 0 1.5.673 1.5 1.5v11c0 .827-.673 1.5-1.5 1.5h-15A1.5 1.5 0 0 1 1 13.5v-11Z" stroke="currentColor" stroke-width="1.5"/>
-          <path d="M1.5 3.5 10 8.75l8.5-5.25" stroke="currentColor" stroke-width="1.5" stroke-linecap="round"/>
-        </svg>
-        <span class="notification-badge" id="notificationBadge" style="{{ $unreadCount > 0 ? '' : 'display:none;' }}">{{ $unreadCount }}</span>
-        <span class="sr-only">View notifications</span>
-      </a>
+      <div>
+        <div class="hero-kicker">Available balance</div>
+      </div>
+      <div class="hero-top-actions">
+        <button class="hero-cta mail view-details" type="button" id="notificationToggle" aria-label="View notifications" aria-expanded="false">
+          <span class="view-details-label">View Details</span>
+          <span class="notification-badge" id="notificationBadge" style="{{ $unreadCount > 0 ? '' : 'display:none;' }}">{{ $unreadCount }}</span>
+          <span class="sr-only">View notifications</span>
+        </button>
+      </div>
     </div>
     <div class="hero-balance">
       <div>
@@ -1328,10 +1379,16 @@
       }
 
       if (notificationToggle) {
-        notificationToggle.addEventListener('click', openNotificationPanel);
+        notificationToggle.addEventListener('click', function (event) {
+          event.stopPropagation();
+          openNotificationPanel(event);
+        });
       }
       if (notificationClose) {
-        notificationClose.addEventListener('click', closeNotificationPanel);
+        notificationClose.addEventListener('click', function (event) {
+          event.stopPropagation();
+          closeNotificationPanel();
+        });
       }
       document.addEventListener('click', function (event) {
         if (!notificationPanel || !notificationToggle) return;
