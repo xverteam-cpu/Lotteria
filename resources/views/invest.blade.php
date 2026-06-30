@@ -200,6 +200,39 @@
     .package-card { flex-basis:520px; }
     .package-card { flex:1 1 100%; max-width:100%; }
   }
+
+  /* Additional mobile adjustments for small phones */
+  @media (max-width:480px) {
+    .packages-page { padding:12px 12px 20px; }
+    .packages-shell { padding:0 8px; }
+    .hero-title .black { font-size:34px; line-height:36px; }
+    .hero-title .red { font-size:40px; line-height:42px; }
+    .hero-copy { font-size:18px; line-height:24px; }
+    .investment-summary-card { border-radius:16px; margin:18px 0 20px; }
+    .investment-summary-card-inner { padding:18px 16px; gap:14px; }
+    .summary-value { font-size:28px; }
+    .summary-actions { grid-template-columns:repeat(3, 1fr); gap:10px; }
+    .summary-action { min-height:92px; border-radius:14px; }
+    .package-track { padding:8px 12px 18px 12px; gap:12px; }
+    .package-card { flex:0 0 92vw; max-width:92vw; border-radius:20px; min-height:300px; padding:12px; }
+    .package-content { padding:18px 14px 18px; gap:14px; }
+    .package-card-title { font-size:18px; }
+    .package-card-copy { font-size:13px; }
+    .package-card-features { grid-template-columns:repeat(3, 1fr); gap:8px; }
+    .package-feature { padding:12px 10px; border-radius:12px; }
+    .package-feature-value { font-size:14px; }
+    .package-card-action { min-height:48px; font-size:14px; border-radius:16px; }
+    .price { font-size:24px; }
+    .package-terms { font-size:12px; }
+    .dot-row { display:flex; }
+    .dot { width:6px; height:6px; }
+    .dot.is-active { width:18px; }
+    .slots-circle { top:10px; right:10px; width:44px; height:44px; font-size:10px; padding:4px; }
+    .modal-card { width:min(100%, 92vw); border-radius:20px; padding:20px; }
+    .modal-image { border-radius:12px; }
+    .payment-card { padding:10px 12px; gap:8px; }
+    .bank-logo-item { flex:1 1 48%; padding:12px; }
+  }
 </style>
 
 <main class="packages-page">

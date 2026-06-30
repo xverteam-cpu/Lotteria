@@ -125,6 +125,25 @@
     .activity-card { padding:24px; }
     .activity-head, .activity-item { display:flex; align-items:center; justify-content:space-between; }
   }
+  /* Mobile tweaks */
+  @media (max-width: 480px) {
+    .dashboard-shell { max-width:100%; margin:12px 10px 20px; padding:0 10px; }
+    .account-hero { border-radius:14px; }
+    .hero-inner { padding:18px 12px 16px; }
+    .balance-value { font-size:28px; line-height:34px; }
+    .balance-label { font-size:13px; }
+    .hero-actions { gap:8px; }
+    .hero-action { font-size:11px; padding:0 10px; min-height:30px; }
+    .swipe-invest { padding:6px; min-height:44px; border-radius:12px; }
+    .swipe-knob { width:44px; height:44px; font-size:22px; }
+    .summary-grid { grid-template-columns:1fr; gap:12px; }
+    .summary-card { padding:14px; border-radius:14px; }
+    .summary-value { font-size:20px; }
+    .notice { max-width:100%; }
+    .activity-card { padding:14px; }
+    .activity-item { padding:12px; }
+    body, html { -webkit-text-size-adjust:100%; }
+  }
 </style>
 
 @php
