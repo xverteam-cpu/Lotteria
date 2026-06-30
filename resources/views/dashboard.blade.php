@@ -137,8 +137,14 @@
     .swipe-invest { padding:6px; min-height:44px; border-radius:12px; }
     .swipe-knob { width:44px; height:44px; font-size:22px; }
     .summary-grid { grid-template-columns:1fr; gap:12px; }
-    .summary-card { padding:14px; border-radius:14px; }
-    .summary-value { font-size:20px; }
+    .summary-card { padding:10px; border-radius:12px; min-height:unset; }
+    .summary-card > div:first-child { display:flex; align-items:center; justify-content:space-between; gap:8px; }
+    .summary-card.featured { padding:8px 10px; }
+    .summary-card.featured > div:first-child { align-items:center; }
+    .summary-card.featured .summary-value { font-size:22px; margin:0; line-height:1; }
+    .summary-value { font-size:20px; margin-top:0; }
+    .summary-label { font-size:11px; }
+    .summary-help { margin-top:6px; font-size:12px; }
     .notice { max-width:100%; }
     .activity-card { padding:14px; }
     .activity-item { padding:12px; }
