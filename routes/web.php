@@ -176,10 +176,14 @@ Route::get('/deposit', function () {
 
 Route::get('/invest', function () {
     $meta = CurrencyRateService::latestUsdToPhpWithMeta();
+    $user = Auth::user();
+    $totalInvestment = $user ? (float) $user->investments()->sum('amount') : 0;
+
     return view('invest', [
         'phpRate' => $meta['rate'],
         'phpRateUpdatedAt' => $meta['updated_at'],
         'packageSlots' => App\Support\InvestmentPackages::currentSlots(),
+        'totalInvestment' => $totalInvestment,
     ]);
 })->name('invest');
 

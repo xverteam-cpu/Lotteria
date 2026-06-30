@@ -309,10 +309,10 @@
   }
 
   .card {
-    margin-top: 24px;
+    margin-top: 12px;
     background: var(--card);
     border-radius: var(--radius);
-    padding: 18px;
+    padding: 14px;
     box-shadow: var(--shadow-soft), var(--shadow-card);
     border: 1px solid var(--border);
     transition: transform .18s ease, box-shadow .18s ease;
@@ -327,7 +327,7 @@
     display: flex;
     align-items: center;
     justify-content: space-between;
-    gap: 16px;
+    gap: 8px;
   }
 
   .balance-meta {
@@ -344,8 +344,8 @@
   }
 
   .balance-card .balance-value {
-    margin-top: 8px;
-    font-size: 28px;
+    margin-top: 6px;
+    font-size: 26px;
     font-weight: 700;
     color: var(--color-title);
   }
@@ -354,25 +354,25 @@
     display: inline-flex;
     align-items: center;
     justify-content: center;
-    padding: 8px 14px;
+    padding: 6px 12px;
     border-radius: 999px;
     background: rgba(255,255,255,.18);
     color: #fff;
-    font-size: 12px;
+    font-size: 11px;
     font-weight: 600;
     letter-spacing: .06em;
   }
 
   .status-copy {
-    margin-top: 10px;
+    margin-top: 8px;
     color: rgba(255,255,255,.88);
-    font-size: 13px;
+    font-size: 12px;
   }
 
   .actions-grid {
     display: grid;
     grid-template-columns: repeat(4, 1fr);
-    gap: 20px;
+    gap: 16px;
     justify-items: center;
   }
 
@@ -473,11 +473,12 @@
   .promo {
     margin-top: 18px;
     border-radius: var(--radius);
-    padding: 16px;
+    padding: 14px 16px;
+    min-height: 72px;
     background: linear-gradient(180deg, #ffffff, #fcfcfd);
     display: flex;
-    align-items: flex-start;
-    gap: 12px;
+    align-items: center;
+    gap: 14px;
     border: 1px solid var(--border);
     box-shadow: 0 2px 6px rgba(15,23,42,.04), 0 10px 35px rgba(15,23,42,.05);
   }
@@ -493,11 +494,11 @@
     overflow: hidden;
     border: 1px solid var(--border);
     box-shadow: 0 2px 6px rgba(15,23,42,.04), 0 10px 35px rgba(15,23,42,.05);
-    aspect-ratio: 13 / 8;
-    min-height: 140px;
+    aspect-ratio: 18 / 7;
+    min-height: 92px;
     cursor: pointer;
     background: transparent;
-    padding: 10px 0;
+    padding: 0;
   }
 
   .banner-carousel:hover {
@@ -524,7 +525,7 @@
 
   .banner-card {
     width: min(100%, 420px);
-    height: calc(100% - 10px);
+    height: 100%;
     border-radius: 28px;
     overflow: hidden;
     border: 1px solid rgba(224,226,232,.9);
@@ -883,20 +884,26 @@
       min-width: 140px;
     }
     .promo {
-      flex-direction: column;
-      align-items: stretch;
+      flex-direction: row;
+      align-items: center;
+      justify-content: space-between;
       position: relative;
       overflow: hidden;
-      padding: 14px;
-      gap: 10px;
+      padding: 12px 14px;
+      gap: 12px;
+      min-height: 66px;
+    }
+    .promo-copy {
+      min-width: 0;
+      flex: 1;
     }
     .promo .cta {
       width: auto;
-      margin-top: 10px;
-      align-self: flex-start;
-      max-width: 180px;
-      padding: 0 16px;
-      height: 38px;
+      margin-top: 0;
+      align-self: center;
+      max-width: 140px;
+      padding: 0 14px;
+      height: 36px;
       font-size: 13px;
     }
     .bottom-nav {
@@ -932,6 +939,7 @@
     .promo .cta {
       padding: 12px 14px;
       font-size: 14px;
+      height: 36px;
     }
     .actions-grid {
       grid-template-columns: repeat(3, minmax(0, 1fr));
@@ -949,12 +957,12 @@
       padding: 14px;
     }
     .banner-carousel {
-      aspect-ratio: 16 / 9;
-      min-height: 110px;
-      padding: 8px 0;
+      aspect-ratio: 18 / 7;
+      min-height: 88px;
+      padding: 0;
     }
     .banner-card {
-      height: calc(100% - 8px);
+      height: 100%;
     }
     .banner-slide img,
     .banner-card img {

@@ -2,38 +2,107 @@
 
 @section('content')
 <style>
-  body { background:#fffaf3 !important; }
-  .packages-page { position:relative; min-height:100vh; overflow:hidden; padding:20px 16px 28px; color:#252525; }
+  body { background:#fffaf3 !important; font-family: Inter, 'Plus Jakarta Sans', 'SF Pro Display', system-ui, -apple-system, BlinkMacSystemFont, 'Segoe UI', sans-serif; }
+  .packages-page { position:relative; min-height:100vh; overflow-x:visible; overflow-y:visible; padding:20px 16px 28px; color:#252525; }
   .packages-page::before { content:''; position:absolute; top:-38px; right:-74px; width:180px; height:320px; border-radius:54px 0 0 54px; background:linear-gradient(180deg, #f03512, #d91505); transform:skewX(-8deg); z-index:0; }
   .packages-page::after { content:''; position:absolute; top:162px; right:76px; width:56px; height:130px; background:radial-gradient(circle, rgba(245,164,0,.9) 1.4px, transparent 1.5px); background-size:9px 9px; opacity:.75; z-index:0; }
-  .packages-shell { position:relative; z-index:1; max-width:940px; margin:0 auto; }
+  .packages-shell { position:relative; z-index:1; max-width:940px; margin:0 auto; padding:0 20px; }
   .top-row { display:flex; align-items:center; justify-content:space-between; gap:12px; margin-bottom:28px; }
   .back-link { display:inline-flex; align-items:center; justify-content:center; width:42px; height:42px; border-radius:50%; background:#fff; color:#d91b0b; font-size:25px; line-height:1; font-weight:900; text-decoration:none; box-shadow:0 8px 22px rgba(30,20,10,.12); }
   .brand-text { color:#d91b0b; font-size:12px; line-height:16px; font-weight:900; letter-spacing:.14em; text-transform:uppercase; }
   .hero-title { margin:0; max-width:620px; }
-  .hero-title .black { display:block; color:#101010; font-size:48px; line-height:46px; font-weight:900; font-style:italic; letter-spacing:.02em; text-transform:uppercase; }
-  .hero-title .red { display:block; margin-top:4px; color:#e12610; font-size:56px; line-height:54px; font-weight:900; font-style:italic; letter-spacing:.02em; text-transform:uppercase; }
+  .hero-title .black { display:block; color:#101010; font-size:48px; line-height:46px; font-weight:900; letter-spacing:.02em; text-transform:uppercase; }
+  .hero-title .red { display:block; margin-top:4px; color:#e12610; font-size:56px; line-height:54px; font-weight:900; letter-spacing:.02em; text-transform:uppercase; }
   .hero-copy { margin:18px 0 0; color:#2b2b2b; font-size:23px; line-height:29px; font-weight:800; }
-  .swipe-hint { margin:0 0 10px; color:#d91b0b; font-size:12px; line-height:16px; font-weight:900; letter-spacing:.08em; text-transform:uppercase; }
-  .package-track { display:flex; gap:18px; overflow-x:auto; overscroll-behavior-x:contain; scroll-snap-type:x mandatory; padding:0 8px 20px 0; margin-right:-16px; -webkit-overflow-scrolling:touch; }
+  .investment-summary-card { position:relative; overflow:hidden; border-radius:32px; margin:26px 0 28px; background:#fff; box-shadow:0 26px 80px rgba(0,0,0,.08); }
+  .investment-summary-card::before { content:''; position:absolute; inset:0; background:radial-gradient(circle at top right, rgba(225,35,16,.14), transparent 30%), linear-gradient(180deg, rgba(255,255,255,.9), rgba(255,255,255,.72)); pointer-events:none; }
+  .investment-summary-card-inner { position:relative; z-index:2; display:grid; gap:24px; padding:30px 28px 26px; }
+  .summary-top { display:flex; align-items:flex-start; justify-content:space-between; gap:20px; }
+  .summary-label { display:block; color:#566370; font-size:12px; letter-spacing:.24em; text-transform:uppercase; font-weight:900; }
+  .summary-value { margin-top:8px; color:#101010; font-size:46px; line-height:1; font-weight:900; letter-spacing:-.02em; }
+  .summary-copy { margin:10px 0 0; color:#566370; font-size:14px; line-height:22px; max-width:460px; }
+  .summary-actions { display:grid; grid-template-columns:repeat(3, minmax(0, 1fr)); gap:14px; }
+  .summary-action { display:flex; flex-direction:column; align-items:center; justify-content:center; gap:10px; min-height:112px; border-radius:24px; border:1px solid rgba(217,27,11,.12); background:#fff; color:#101010; font-size:14px; font-weight:900; transition:transform .2s ease, box-shadow .2s ease, border-color .2s ease; cursor:pointer; }
+  .summary-action:hover, .summary-action:focus { transform:translateY(-2px); border-color:#d91b0b; box-shadow:0 18px 32px rgba(217,27,11,.12); outline:none; }
+  .summary-action-icon { display:inline-flex; align-items:center; justify-content:center; width:44px; height:44px; border-radius:16px; background:rgba(225,35,16,.08); color:#d91b0b; font-size:20px; }
+  .summary-action span { display:block; }
+  .package-track { display:flex; flex-wrap:nowrap; align-items:flex-start; justify-content:flex-start; gap:20px; overflow-x:auto; overflow-y:visible; overscroll-behavior-x:contain; scroll-snap-type:x mandatory; padding:8px 20px 20px 20px; margin-right:0; -webkit-overflow-scrolling:touch; scroll-padding:0 20px; }
   .package-track::-webkit-scrollbar { display:none; }
-  .package-card { position:relative; z-index:0; flex:0 0 88%; min-height:286px; scroll-snap-align:center; border-radius:44px; background:#fff; border:1px solid rgba(224,30,10,.08); box-shadow:0 14px 28px rgba(45,24,10,.14); overflow:hidden; cursor:pointer; touch-action:manipulation; -webkit-tap-highlight-color: rgba(0,0,0,0.08); user-select:none; transition:transform .2s ease, box-shadow .2s ease, border-color .2s ease; pointer-events:auto !important; }
-  .package-card:hover { transform:translateY(-4px); box-shadow:0 18px 36px rgba(45,24,10,.18); border-color:rgba(224,30,10,.16); }
-  .package-card:active { transform:translateY(-2px); box-shadow:0 14px 28px rgba(45,24,10,.16); }
+  .dot-row { display:none; }
+  .package-status { margin:20px 0 28px; }
+  .status-card { padding:24px; border-radius:28px; background:#fff; box-shadow:0 18px 48px rgba(0,0,0,.06); border:1px solid rgba(217,27,11,.08); }
+  .status-top { display:flex; align-items:center; justify-content:space-between; gap:14px; margin-bottom:18px; }
+  .status-title { margin:0; color:#111827; font-size:18px; line-height:1.2; font-weight:900; }
+  .status-copy { margin:6px 0 0; color:#6b7280; font-size:14px; line-height:20px; }
+  .status-badge { display:inline-flex; align-items:center; justify-content:center; min-width:82px; padding:10px 14px; border-radius:999px; background:#f8f2ef; color:#d91b0b; font-size:12px; font-weight:900; text-transform:uppercase; letter-spacing:.08em; }
+  .status-meter { height:16px; border-radius:999px; background:#f1f5f9; overflow:hidden; }
+  .status-progress { width:0%; height:100%; background:linear-gradient(90deg, #f59e0b, #f97316); border-radius:999px; transition:width .35s ease; }
+  .status-meta { display:flex; align-items:center; justify-content:space-between; gap:12px; margin-top:14px; color:#334155; font-size:14px; font-weight:700; }
+  .status-copy-label { display:block; margin:20px 0 14px; color:#111827; font-size:18px; line-height:1.2; font-weight:900; letter-spacing:.02em; text-transform:none; }
+  .status-steps { display:grid; gap:16px; }
+  .status-step { display:grid; grid-template-columns:auto 1fr; gap:14px; align-items:flex-start; padding:16px 16px 16px 18px; border-radius:22px; background:#f9f7f4; border:1px solid rgba(217,27,11,.1); }
+  .status-step-number { display:inline-flex; align-items:center; justify-content:center; width:34px; height:34px; border-radius:50%; background:#fff0ee; color:#d91b0b; font-size:14px; font-weight:900; box-shadow:0 8px 16px rgba(217,27,11,.08); }
+  .status-step-title { margin:0; color:#111827; font-size:15px; font-weight:900; line-height:1.2; }
+  .status-step-copy { margin:6px 0 0; color:#6b7280; font-size:13px; line-height:19px; }
+  .package-card { position:relative; z-index:0; flex:0 0 min(88vw, 460px); max-width:460px; min-height:auto; scroll-snap-align:center; border-radius:32px; background:#fff; border:1px solid rgba(217,27,11,.12); box-shadow:0 24px 70px rgba(14,25,30,.08); overflow:hidden; cursor:pointer; touch-action:manipulation; -webkit-tap-highlight-color: rgba(0,0,0,0.08); user-select:none; transform-origin:top center; transition:transform .25s ease, box-shadow .25s ease, border-color .25s ease, opacity .25s ease; transform:translateY(0) scale(0.95); opacity:.72; }
+  .package-card:hover { transform:translateY(-2px) scale(0.96); box-shadow:0 32px 70px rgba(14,25,30,.12); border-color:rgba(217,27,11,.18); }
+  .package-card:active { transform:translateY(-1px) scale(0.96); box-shadow:0 26px 60px rgba(14,25,30,.1); }
+  .package-card.is-active { z-index:2; transform:translateY(-4px) scale(1.05); opacity:1; box-shadow:0 36px 88px rgba(14,25,30,.16); border-color:rgba(217,27,11,.16); }
   .package-card:focus-visible { outline:3px solid #f5a400; outline-offset:4px; }
-  .package-card::after { content:''; position:absolute; right:-40px; top:108px; width:62%; height:96px; background:linear-gradient(90deg, #e12a10, #d61505); box-shadow:0 8px 20px rgba(165,24,9,.22); z-index:1; pointer-events:none; }
+  .package-card::after { display:none; }
   .package-card * { pointer-events:auto !important; }
-  .package-content { position:relative; z-index:2; padding:30px 24px 26px; max-width:58%; }
-  .package-name { margin:0; color:#e12610; font-size:32px; line-height:36px; font-weight:900; font-style:italic; letter-spacing:.04em; text-transform:uppercase; }
-  .package-number { color:#f5a400; margin-right:8px; }
-  .package-desc { margin:16px 0 0; color:#232323; font-size:16px; line-height:21px; font-weight:500; }
+  .package-content { position:relative; z-index:2; padding:28px 24px 24px; max-width:100%; display:grid; gap:22px; }
+  .package-card-top { display:grid; gap:10px; }
+  .package-card-head { display:flex; align-items:center; justify-content:space-between; gap:12px; }
+  .package-card-title { margin:0; color:#101010; font-size:22px; line-height:1.15; font-weight:900; }
+  .package-card-pill { display:inline-flex; align-items:center; justify-content:center; padding:8px 14px; border-radius:999px; background:#fff3ef; color:#d91b0b; font-size:12px; font-weight:900; letter-spacing:.06em; text-transform:uppercase; border:1px solid rgba(217,27,11,.12); }
+  .package-card-copy { margin:0; color:#6d6d6d; font-size:14px; line-height:20px; }
+  .package-card-features { display:grid; grid-template-columns:repeat(3, minmax(0, 1fr)); gap:12px; }
+  .package-feature { padding:16px 14px; border-radius:18px; background:#f9f8f7; border:1px solid rgba(227,34,19,.08); }
+  .package-feature-label { display:block; color:#778291; font-size:11px; font-weight:700; letter-spacing:.12em; text-transform:uppercase; margin-bottom:8px; }
+  .package-feature-value { color:#101010; font-size:16px; font-weight:900; line-height:1.2; }
+  .package-card-action { width:100%; min-height:52px; border:none; border-radius:20px; background:#d91b0b; color:#fff; font-size:15px; font-weight:900; letter-spacing:.02em; cursor:pointer; transition:background .2s ease, transform .2s ease; }
+  .package-card-action:hover, .package-card-action:focus { background:#b71813; transform:translateY(-1px); outline:none; }
+  .package-card-action:active { transform:translateY(0); }
+  .package-card.supreme { background: linear-gradient(180deg, #141b2f 0%, #24325c 100%); border-color: rgba(255,255,255,.14); }
+  .package-card.premium-plus { background: #0a0a0a; border-color: rgba(255,255,255,.14); }
+  .package-card.supreme .package-card-title,
+  .package-card.supreme .package-card-copy,
+  .package-card.supreme .package-feature-value,
+  .package-card.supreme .package-card-pill,
+  .package-card.premium-plus .package-card-title,
+  .package-card.premium-plus .package-card-copy,
+  .package-card.premium-plus .package-feature-value,
+  .package-card.premium-plus .package-card-pill { color:#fff; }
+  .package-card.supreme .package-card-pill,
+  .package-card.premium-plus .package-card-pill { background: rgba(255,255,255,.08); border-color: rgba(255,255,255,.16); }
+  .package-card.supreme .package-feature,
+  .package-card.premium-plus .package-feature { background: rgba(255,255,255,.06); border-color: rgba(255,255,255,.12); }
+  .package-card.supreme .package-feature-label,
+  .package-card.premium-plus .package-feature-label { color: rgba(255,255,255,.7); }
+  .package-card.supreme .package-card-action { background: linear-gradient(135deg, #f2b23a, #e28f18); color:#111; }
+  .package-card.premium-plus .package-card-action { background: linear-gradient(135deg, #ffd25b, #f18b2d); color:#111; }
+  .package-card.supreme .package-card-action:hover,
+  .package-card.premium-plus .package-card-action:hover { background: linear-gradient(135deg, #d49b19, #c67c0f); }
+  .package-card.premium-plus .package-card-action { background: linear-gradient(135deg, #ffd25b, #f18b2d); color:#111; }
+  .package-visual { display:none; }
+  .package-visual::before { content:''; position:absolute; inset:0; background-image:var(--package-image); background-size:cover; background-position:center; background-repeat:no-repeat; filter:blur(14px); transform:scale(1.1); opacity:.88; }
+  .package-visual::after { content:''; position:absolute; inset:0; background:linear-gradient(180deg, rgba(255,255,255,.22), rgba(255,255,255,.06)); pointer-events:none; }
+  .package-visual svg { position:relative; z-index:1; width:58px; height:58px; color:#fff; opacity:.88; }
+  .package-visual path, .package-visual circle { stroke:currentColor; fill:none; }
+  .package-visual circle { fill:currentColor; opacity:.7; }
   .price-row { display:flex; align-items:center; gap:10px; margin-top:18px; }
   .price { display:inline-flex; align-items:center; min-height:48px; padding:0 16px; border-radius:12px; background:linear-gradient(180deg, #ef3518, #d91705); color:#fff; font-size:31px; line-height:34px; font-weight:900; }
   .package-terms { display:inline-flex; align-items:center; min-height:38px; margin-top:10px; padding:0 13px; border-radius:12px; background:#f8f2ef; color:#d91b0b; font-size:14px; line-height:18px; font-weight:900; white-space:nowrap; }
-  .product-label { position:absolute; z-index:2; right:22px; top:134px; color:#fff; font-size:34px; line-height:36px; font-weight:900; font-style:italic; letter-spacing:.07em; text-transform:uppercase; }
-  .payment-card { display:flex; align-items:center; justify-content:space-between; gap:12px; margin:8px auto 0; padding:17px 18px; max-width:790px; border-radius:18px; background:#fff; box-shadow:0 8px 24px rgba(30,20,10,.1); }
-  .payment-copy { color:#252525; font-size:13px; line-height:17px; font-weight:600; }
-  .payment-logos { display:flex; align-items:center; gap:10px; color:#174a9f; font-size:16px; line-height:18px; font-weight:900; white-space:nowrap; }
+  .package-breakdown { margin-top:22px; display:grid; gap:12px; }
+  .package-breakdown-item { display:flex; justify-content:space-between; align-items:center; gap:12px; padding:14px 16px; border-radius:18px; background:rgba(241,228,222,.9); border:1px solid rgba(217,27,11,.14); }
+  .package-breakdown-label { color:#6b1913; font-size:13px; font-weight:700; letter-spacing:.03em; text-transform:uppercase; }
+  .package-breakdown-value { color:#d91b0b; font-size:16px; font-weight:900; }
+  .payment-card { display:flex; align-items:center; justify-content:space-between; gap:12px; flex-wrap:wrap; margin:8px auto 0; padding:14px 16px; max-width:790px; border-radius:18px; background:#fff; box-shadow:0 8px 24px rgba(30,20,10,.08); }
+  .payment-copy { color:#252525; font-size:13px; line-height:17px; font-weight:600; flex:1 1 180px; min-width:160px; }
+  .payment-logos { display:flex; align-items:center; gap:12px; color:#64748B; white-space:nowrap; flex:1 1 280px; justify-content:flex-end; }
+  .payment-logos svg { display:block; width:auto; height:20px; }
+  .payment-logo { display:inline-flex; align-items:center; justify-content:center; min-width:24px; }
   .dot-row { display:flex; justify-content:center; gap:8px; margin:2px 0 16px; }
   .dot { width:7px; height:7px; border-radius:50%; background:#ffd2c9; }
   .dot.is-active { width:22px; border-radius:999px; background:#e12610; }
@@ -106,13 +175,18 @@
   .bank-logo-item:hover, .bank-logo-item:focus { border-color:#d91b0b; background:#fff; box-shadow:0 6px 20px rgba(217,27,11,.12); outline:none; }
   @media (max-width:430px) {
     .packages-page { padding-inline:13px; }
+    .packages-shell { padding:0 12px; }
     .hero-title .black { font-size:40px; line-height:39px; }
     .hero-title .red { font-size:47px; line-height:46px; }
     .hero-copy { font-size:20px; line-height:26px; }
-    .package-card { flex-basis:91%; min-height:320px; padding:14px; }
+    .package-track { padding:8px 16px 20px 16px; gap:16px; scroll-padding:0 16px; }
+    .package-card { flex:0 0 92vw; max-width:92vw; min-height:320px; padding:14px; }
+    .payment-card { justify-content:space-between; padding:12px 14px; gap:10px; }
+    .payment-copy { flex:1 1 100%; min-width:0; margin-bottom:8px; }
+    .payment-logos { flex:1 1 100%; justify-content:flex-start; gap:10px; }
+    .payment-logos svg { height:18px; }
     .package-content { padding:28px 20px 24px; max-width:100%; }
     .package-name { font-size:28px; line-height:32px; }
-    .product-label { right:13px; font-size:29px; line-height:32px; }
     .price { font-size:27px; padding-inline:13px; }
     .package-terms { font-size:13px; padding-inline:11px; }
   }
@@ -124,6 +198,7 @@
     .hero-copy { font-size:28px; line-height:34px; }
     .package-track { gap:22px; margin-right:0; }
     .package-card { flex-basis:520px; }
+    .package-card { flex:1 1 100%; max-width:100%; }
   }
 </style>
 
@@ -134,52 +209,126 @@
       <div class="brand-text">Lotteria Partner</div>
     </div>
 
-    <h1 class="hero-title">
-      <span class="black">Our</span>
-      <span class="red">Packages</span>
-    </h1>
-    <p class="hero-copy"></p>
-
-    <p class="swipe-hint">Swipe packages</p>
-    <section class="package-track" aria-label="Swipeable package list">
-      <article class="package-card crunch" role="button" tabindex="0" data-package-key="crunch" data-package-title="Basic" data-package-price="120" data-package-rate="0.6" data-package-days="180" data-package-image="{{ asset('basic.png') }}">
-        <div class="package-content">
-          <h2 class="package-name"><span class="package-number">01</span>Basic</h2>
-          <p class="package-desc">Basic share package for steady returns.</p>
-          <div class="price-row"><span class="price">$120</span></div>
-          <div class="package-terms">0.60% daily · 180 days</div>
+    <section class="investment-summary-card" aria-label="Total investment summary">
+      <div class="investment-summary-card-inner">
+        <div class="summary-top">
+          <div>
+            <span class="summary-label">Total investment</span>
+            <div class="summary-value">₱{{ number_format($totalInvestment ?? 0, 2) }}</div>
+            <p class="summary-copy">Your total invested capital is shown here so you can track your position instantly.</p>
+          </div>
+          <div class="summary-deco" aria-hidden="true"></div>
         </div>
-        <div class="product-label">Basic</div>
+      </div>
+    </section>
+
+    <section id="packageTrack" class="package-track" aria-label="Swipeable package list">
+      <article class="package-card crunch" role="button" tabindex="0" data-package-key="crunch" data-package-title="Basic" data-package-price="120" data-package-rate="0.6" data-package-days="180" data-package-remaining="{{ $packageSlots['crunch'] ?? 250 }}" data-package-image="{{ asset('basic.png') }}">
+        <div class="package-content">
+          <div class="package-card-top">
+            <div class="package-card-head">
+              <h3 class="package-card-title">Basic Package</h3>
+              <span class="package-card-pill">Starter</span>
+            </div>
+            <p class="package-card-copy">Ideal for first-time members</p>
+          </div>
+          <div class="package-card-features">
+            <div class="package-feature">
+              <span class="package-feature-label">Capital</span>
+              <span class="package-feature-value">$120</span>
+            </div>
+            <div class="package-feature">
+              <span class="package-feature-label">Rate</span>
+              <span class="package-feature-value">0.60%</span>
+            </div>
+            <div class="package-feature">
+              <span class="package-feature-label">Term</span>
+              <span class="package-feature-value">180D</span>
+            </div>
+          </div>
+          <button type="button" class="package-card-action">Choose Basic</button>
+        </div>
       </article>
 
-      <article class="package-card loaded" role="button" tabindex="0" data-package-key="loaded" data-package-title="Standard" data-package-price="800" data-package-rate="0.7" data-package-days="150" data-package-image="{{ asset('standard.png') }}">
+      <article class="package-card loaded" role="button" tabindex="0" data-package-key="loaded" data-package-title="Standard" data-package-price="800" data-package-rate="0.7" data-package-days="150" data-package-remaining="{{ $packageSlots['loaded'] ?? 250 }}" data-package-image="{{ asset('standard.png') }}">
         <div class="package-content">
-          <h2 class="package-name"><span class="package-number">02</span>Standard</h2>
-          <p class="package-desc">Standard share package for strong market growth.</p>
-          <div class="price-row"><span class="price">$800</span></div>
-          <div class="package-terms">0.70% daily · 150 days</div>
+          <div class="package-card-top">
+            <div class="package-card-head">
+              <h3 class="package-card-title">Standard Package</h3>
+              <span class="package-card-pill">Growth</span>
+            </div>
+            <p class="package-card-copy">Standard share package for strong market growth.</p>
+          </div>
+          <div class="package-card-features">
+            <div class="package-feature">
+              <span class="package-feature-label">Capital</span>
+              <span class="package-feature-value">$800</span>
+            </div>
+            <div class="package-feature">
+              <span class="package-feature-label">Rate</span>
+              <span class="package-feature-value">0.70%</span>
+            </div>
+            <div class="package-feature">
+              <span class="package-feature-label">Term</span>
+              <span class="package-feature-value">150D</span>
+            </div>
+          </div>
+          <button type="button" class="package-card-action">Choose Standard</button>
         </div>
-        <div class="product-label">Standard</div>
       </article>
 
-      <article class="package-card supreme" role="button" tabindex="0" data-package-key="supreme" data-package-title="Premium" data-package-price="4000" data-package-rate="0.75" data-package-days="120" data-package-image="{{ asset('premium.png') }}">
+      <article class="package-card supreme" role="button" tabindex="0" data-package-key="supreme" data-package-title="Premium" data-package-price="4000" data-package-rate="0.75" data-package-days="120" data-package-remaining="{{ $packageSlots['supreme'] ?? 250 }}" data-package-image="{{ asset('premium.png') }}">
         <div class="package-content">
-          <h2 class="package-name"><span class="package-number">03</span>Premium</h2>
-          <p class="package-desc">Premium package for higher return potential.</p>
-          <div class="price-row"><span class="price">$4,000</span></div>
-          <div class="package-terms">0.75% daily · 120 days</div>
+          <div class="package-card-top">
+            <div class="package-card-head">
+              <h3 class="package-card-title">Premium Package</h3>
+              <span class="package-card-pill">Premium</span>
+            </div>
+            <p class="package-card-copy">Premium package for higher return potential.</p>
+          </div>
+          <div class="package-card-features">
+            <div class="package-feature">
+              <span class="package-feature-label">Capital</span>
+              <span class="package-feature-value">$4,000</span>
+            </div>
+            <div class="package-feature">
+              <span class="package-feature-label">Rate</span>
+              <span class="package-feature-value">0.75%</span>
+            </div>
+            <div class="package-feature">
+              <span class="package-feature-label">Term</span>
+              <span class="package-feature-value">120D</span>
+            </div>
+          </div>
+          <button type="button" class="package-card-action">Choose Premium</button>
         </div>
-        <div class="product-label">Premium</div>
       </article>
 
-      <article class="package-card premium-plus" role="button" tabindex="0" data-package-key="premium_plus" data-package-title="Premium+" data-package-price="8000" data-package-rate="0.9" data-package-days="80" data-package-image="{{ asset('premium+.png') }}">
+      <article class="package-card premium-plus" role="button" tabindex="0" data-package-key="premium_plus" data-package-title="Premium+" data-package-price="8000" data-package-rate="0.9" data-package-days="80" data-package-remaining="{{ $packageSlots['premium_plus'] ?? 250 }}" data-package-image="{{ asset('premium+.png') }}">
         <div class="package-content">
-          <h2 class="package-name"><span class="package-number">04</span>Premium+</h2>
-          <p class="package-desc">Elite package for maximum returns.</p>
-          <div class="price-row"><span class="price">$8,000</span></div>
-          <div class="package-terms">0.90% daily · 80 days</div>
+          <div class="package-card-top">
+            <div class="package-card-head">
+              <h3 class="package-card-title">Premium+ Package</h3>
+              <span class="package-card-pill">Elite</span>
+            </div>
+            <p class="package-card-copy">Elite package for maximum returns.</p>
+          </div>
+          <div class="package-card-features">
+            <div class="package-feature">
+              <span class="package-feature-label">Capital</span>
+              <span class="package-feature-value">$8,000</span>
+            </div>
+            <div class="package-feature">
+              <span class="package-feature-label">Rate</span>
+              <span class="package-feature-value">0.90%</span>
+            </div>
+            <div class="package-feature">
+              <span class="package-feature-label">Term</span>
+              <span class="package-feature-value">80D</span>
+            </div>
+          </div>
+          <button type="button" class="package-card-action">Choose Premium+</button>
         </div>
-        <div class="product-label">Premium+</div>
       </article>
     </section>
 
@@ -190,9 +339,81 @@
       <span class="dot"></span>
     </div>
 
+    <section class="package-status" aria-label="Membership slots status">
+      <div class="status-card">
+        <div class="status-top">
+          <div>
+            <h2 class="status-title">Program Status</h2>
+            <p class="status-copy">Membership slots filled across all packages.</p>
+          </div>
+          <div class="status-badge" id="statusPackageLabel">All packages</div>
+        </div>
+        <div class="status-meter" aria-hidden="true">
+          <div class="status-progress" id="statusProgress"></div>
+        </div>
+        <div class="status-meta">
+          <span id="statusPercent">0%</span>
+          <span id="statusSlotsRemaining">1000 slots remaining</span>
+        </div>
+        <div class="status-copy-label">How to Join</div>
+        <div class="status-steps" aria-label="How to join steps">
+          <div class="status-step">
+            <span class="status-step-number">1</span>
+            <div>
+              <h3 class="status-step-title">Create Member Account</h3>
+              <p class="status-step-copy">Register using the official Lotteria Philippines application link.</p>
+            </div>
+          </div>
+          <div class="status-step">
+            <span class="status-step-number">2</span>
+            <div>
+              <h3 class="status-step-title">Choose Package</h3>
+              <p class="status-step-copy">Select your preferred participation package and capital amount.</p>
+            </div>
+          </div>
+          <div class="status-step">
+            <span class="status-step-number">3</span>
+            <div>
+              <h3 class="status-step-title">Submit Payment Proof</h3>
+              <p class="status-step-copy">Upload your transaction receipt through official payment channels only.</p>
+            </div>
+          </div>
+          <div class="status-step">
+            <span class="status-step-number">4</span>
+            <div>
+              <h3 class="status-step-title">Account Verification</h3>
+              <p class="status-step-copy">Your application will be reviewed before account activation.</p>
+            </div>
+          </div>
+        </div>
+      </div>
+    </section>
+
     <section class="payment-card" aria-label="Payment methods">
       <div class="payment-copy">Pay securely with your preferred payment method</div>
-      <div class="payment-logos">VISA MC UPI Paytm</div>
+      <div class="payment-logos" aria-label="Supported payment networks">
+        <span class="payment-logo" aria-label="Visa logo">
+          <svg viewBox="0 0 44 14" role="img" aria-hidden="true" xmlns="http://www.w3.org/2000/svg">
+            <text x="0" y="11" font-family="Inter, system-ui, sans-serif" font-size="12" font-weight="800" fill="currentColor">VISA</text>
+          </svg>
+        </span>
+        <span class="payment-logo" aria-label="Mastercard logo">
+          <svg viewBox="0 0 32 14" role="img" aria-hidden="true" xmlns="http://www.w3.org/2000/svg">
+            <circle cx="11" cy="7" r="6" fill="currentColor" opacity="0.7" />
+            <circle cx="21" cy="7" r="6" fill="currentColor" />
+          </svg>
+        </span>
+        <span class="payment-logo" aria-label="UPI logo">
+          <svg viewBox="0 0 40 14" role="img" aria-hidden="true" xmlns="http://www.w3.org/2000/svg">
+            <text x="0" y="11" font-family="Inter, system-ui, sans-serif" font-size="12" font-weight="700" fill="currentColor">UPI</text>
+          </svg>
+        </span>
+        <span class="payment-logo" aria-label="Paytm logo">
+          <svg viewBox="0 0 48 14" role="img" aria-hidden="true" xmlns="http://www.w3.org/2000/svg">
+            <text x="0" y="11" font-family="Inter, system-ui, sans-serif" font-size="12" font-weight="700" fill="currentColor">paytm</text>
+          </svg>
+        </span>
+      </div>
     </section>
   </div>
 </main>
@@ -410,7 +631,33 @@
     var selectedCurrency = 'USD';
     var phpRate = @json($phpRate ?? config('currency.usd_to_php', 61.31));
     var phpRateUpdatedAt = @json($phpRateUpdatedAt ?? null);
-    if (!track || !dots.length) return;
+    if (!track) return;
+
+    function formatDate(date) {
+      return new Intl.DateTimeFormat('en-US', { month: 'short', day: 'numeric', year: 'numeric' }).format(date);
+    }
+
+    function formatMoney(value) {
+      return '$' + Number(value).toLocaleString(undefined, {
+        minimumFractionDigits: 2,
+        maximumFractionDigits: 2
+      });
+    }
+
+    function updatePackageBreakdownCards() {
+      cards.forEach(function (card) {
+        var price = Number(card.dataset.packagePrice || 0);
+        var rate = Number(card.dataset.packageRate || 0) / 100;
+        var days = Number(card.dataset.packageDays || 0);
+        var total = price * rate * days;
+        var date = new Date();
+        date.setDate(date.getDate() + days);
+        var totalElem = card.querySelector('[data-breakdown-total]');
+        var dateElem = card.querySelector('[data-breakdown-date]');
+        if (totalElem) totalElem.textContent = formatMoney(total);
+        if (dateElem) dateElem.textContent = formatDate(date);
+      });
+    }
 
     function updateDots() {
       var cards = Array.prototype.slice.call(track.querySelectorAll('.package-card'));
@@ -422,15 +669,66 @@
           active = index;
         }
       });
+      cards.forEach(function (card, index) {
+        card.classList.toggle('is-active', index === active);
+      });
       dots.forEach(function (dot, index) {
         dot.classList.toggle('is-active', index === active);
       });
+      updateStatus(cards[active]);
     }
 
     track.addEventListener('scroll', function () {
       window.requestAnimationFrame(updateDots);
     }, { passive:true });
+    updatePackageBreakdownCards();
+    populatePackageVisuals();
     updateDots();
+
+    function populatePackageVisuals() {
+      cards.forEach(function (card) {
+        var visual = card.querySelector('.package-visual');
+        var image = card.dataset.packageImage;
+        if (visual && image) {
+          visual.style.setProperty('--package-image', 'url(' + image + ')');
+        }
+      });
+    }
+
+    function updateStatus(card) {
+      var defaults = {
+        crunch: 250,
+        loaded: 250,
+        supreme: 250,
+        premium_plus: 250,
+      };
+      var statusLabel = document.getElementById('statusPackageLabel');
+      var statusPercent = document.getElementById('statusPercent');
+      var statusSlots = document.getElementById('statusSlotsRemaining');
+      var statusProgress = document.getElementById('statusProgress');
+      if (!statusLabel || !statusPercent || !statusSlots || !statusProgress) return;
+      var totals = {
+        crunch: 250,
+        loaded: 250,
+        supreme: 250,
+        premium_plus: 250,
+      };
+      var remainingTotal = 0;
+      var capacityTotal = 0;
+      cards.forEach(function (cardItem) {
+        var key = cardItem.dataset.packageKey;
+        var remaining = Number(cardItem.dataset.packageRemaining || totals[key] || 250);
+        remainingTotal += remaining;
+        capacityTotal += totals[key] || 250;
+      });
+      var filledTotal = capacityTotal - remainingTotal;
+      var percent = capacityTotal > 0 ? Math.round((filledTotal / capacityTotal) * 100) : 0;
+      percent = Math.max(0, Math.min(percent, 100));
+      statusLabel.textContent = 'All packages';
+      statusPercent.textContent = percent + '%';
+      statusSlots.textContent = remainingTotal + ' slots remaining';
+      statusProgress.style.width = percent + '%';
+    }
 
     function openModal(card) {
       if (!modal || !modalImage) return;
@@ -560,22 +858,19 @@
       openModal(card);
     }
 
-    if (track) {
-      track.addEventListener('click', function (event) {
-        var card = event.target.closest('.package-card');
-        if (card) {
-          activatePackageCard(card);
-        }
-      });
-      track.addEventListener('pointerup', function (event) {
-        var card = event.target.closest('.package-card');
-        if (card) {
-          activatePackageCard(card);
-        }
-      });
-    }
+    if (!cards.length) return;
 
     cards.forEach(function (card) {
+      card.addEventListener('click', function () {
+        activatePackageCard(card);
+      });
+      var actionButton = card.querySelector('.package-card-action');
+      if (actionButton) {
+        actionButton.addEventListener('click', function (event) {
+          event.stopPropagation();
+          activatePackageCard(card);
+        });
+      }
       card.addEventListener('keydown', function (event) {
         if (event.key === 'Enter' || event.key === ' ') {
           activatePackageCard(card);
