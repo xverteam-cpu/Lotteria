@@ -272,7 +272,7 @@
     </section>
 
     <section id="packageTrack" class="package-track" aria-label="Swipeable package list">
-      <article class="package-card crunch" role="button" tabindex="0" data-package-key="crunch" data-package-title="Basic" data-package-price="120" data-package-rate="0.6" data-package-days="180" data-package-remaining="{{ $packageSlots['crunch'] ?? 250 }}" data-package-image="{{ asset('basic.png') }}">
+      <article class="package-card crunch" role="button" tabindex="0" data-package-key="crunch" data-package-title="Basic" data-package-price="120" data-package-rate="0.6" data-package-days="180" data-package-min="120" data-package-max="799.99" data-package-remaining="{{ $packageSlots['crunch'] ?? 250 }}" data-package-image="{{ asset('basic.png') }}">
         <div class="package-content">
           <div class="package-card-top">
             <div class="package-card-head">
@@ -299,7 +299,7 @@
         </div>
       </article>
 
-      <article class="package-card loaded" role="button" tabindex="0" data-package-key="loaded" data-package-title="Standard" data-package-price="800" data-package-rate="0.7" data-package-days="150" data-package-remaining="{{ $packageSlots['loaded'] ?? 250 }}" data-package-image="{{ asset('standard.png') }}">
+      <article class="package-card loaded" role="button" tabindex="0" data-package-key="loaded" data-package-title="Standard" data-package-price="800" data-package-rate="0.7" data-package-days="150" data-package-min="800" data-package-max="3999.99" data-package-remaining="{{ $packageSlots['loaded'] ?? 250 }}" data-package-image="{{ asset('standard.png') }}">
         <div class="package-content">
           <div class="package-card-top">
             <div class="package-card-head">
@@ -326,7 +326,7 @@
         </div>
       </article>
 
-      <article class="package-card supreme" role="button" tabindex="0" data-package-key="supreme" data-package-title="Premium" data-package-price="4000" data-package-rate="0.75" data-package-days="120" data-package-remaining="{{ $packageSlots['supreme'] ?? 250 }}" data-package-image="{{ asset('premium.png') }}">
+      <article class="package-card supreme" role="button" tabindex="0" data-package-key="supreme" data-package-title="Premium" data-package-price="4000" data-package-rate="0.75" data-package-days="120" data-package-min="4000" data-package-max="7999.99" data-package-remaining="{{ $packageSlots['supreme'] ?? 250 }}" data-package-image="{{ asset('premium.png') }}">
         <div class="package-content">
           <div class="package-card-top">
             <div class="package-card-head">
@@ -353,7 +353,7 @@
         </div>
       </article>
 
-      <article class="package-card premium-plus" role="button" tabindex="0" data-package-key="premium_plus" data-package-title="Premium+" data-package-price="8000" data-package-rate="0.9" data-package-days="80" data-package-remaining="{{ $packageSlots['premium_plus'] ?? 250 }}" data-package-image="{{ asset('premium+.png') }}">
+      <article class="package-card premium-plus" role="button" tabindex="0" data-package-key="premium_plus" data-package-title="Premium+" data-package-price="8000" data-package-rate="0.9" data-package-days="80" data-package-min="8000" data-package-max="50000" data-package-remaining="{{ $packageSlots['premium_plus'] ?? 250 }}" data-package-image="{{ asset('premium+.png') }}">
         <div class="package-content">
           <div class="package-card-top">
             <div class="package-card-head">
@@ -493,6 +493,10 @@
     <label class="amount-field">
       <span>Amount in USD</span>
       <input type="number" name="amount" id="amountInput" min="1" step="0.01" value="{{ old('amount') }}" placeholder="Enter amount">
+      <div style="margin-top: 8px; color: #666; font-size: 12px; display: flex; justify-content: space-between;">
+        <span id="amountMinDisplay">Min: $120</span>
+        <span id="amountMaxDisplay">Max: $799.99</span>
+      </div>
     </label>
     <div class="currency-toggle" aria-label="Sample computation currency">
       <button class="currency-button is-active" type="button" data-currency="USD">USD</button>
@@ -789,7 +793,9 @@
         title: card.dataset.packageTitle,
         price: card.dataset.packagePrice,
         rate: card.dataset.packageRate,
-        days: card.dataset.packageDays
+        days: card.dataset.packageDays,
+        min: card.dataset.packageMin,
+        max: card.dataset.packageMax
       };
       updateSlotBadge();
       modal.classList.add('is-open');
@@ -828,10 +834,17 @@
       closeModal(false);
       amountPackageKey.value = selectedPackage.key;
       amountPackageTitle.textContent = selectedPackage.title;
-      amountPackageCopy.textContent = 'Minimum $' + Number(selectedPackage.price).toLocaleString() + ' with ' + selectedPackage.rate + '% daily interest for ' + selectedPackage.days + ' days.';
-      amountInput.min = selectedPackage.price;
-      amountInput.placeholder = 'Minimum $' + Number(selectedPackage.price).toLocaleString();
-      if (!amountInput.value) amountInput.value = selectedPackage.price;
+      var minAmount = Number(selectedPackage.min || selectedPackage.price);
+      var maxAmount = Number(selectedPackage.max || selectedPackage.price);
+      amountPackageCopy.textContent = 'Investment range: $' + Number(minAmount).toLocaleString() + ' to $' + Number(maxAmount).toLocaleString() + ' with ' + selectedPackage.rate + '% daily interest for ' + selectedPackage.days + ' days.';
+      amountInput.min = minAmount;
+      amountInput.max = maxAmount;
+      amountInput.placeholder = 'Minimum $' + Number(minAmount).toLocaleString() + ', Maximum $' + Number(maxAmount).toLocaleString();
+      var amountMinDisplay = document.getElementById('amountMinDisplay');
+      var amountMaxDisplay = document.getElementById('amountMaxDisplay');
+      if (amountMinDisplay) amountMinDisplay.textContent = 'Min: $' + Number(minAmount).toLocaleString();
+      if (amountMaxDisplay) amountMaxDisplay.textContent = 'Max: $' + Number(maxAmount).toLocaleString();
+      if (!amountInput.value) amountInput.value = minAmount;
       updateEstimate();
       amountModal.classList.add('is-open');
       amountModal.setAttribute('aria-hidden', 'false');

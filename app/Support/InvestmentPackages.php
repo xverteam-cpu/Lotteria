@@ -7,7 +7,7 @@ use App\Models\PackageSlot;
 class InvestmentPackages
 {
     /**
-     * @return array<string, array{name: string, price: float, daily_interest_rate: float, duration_days: int}>
+     * @return array<string, array{name: string, price: float, daily_interest_rate: float, duration_days: int, min_amount: float, max_amount: float}>
      */
     public static function all(): array
     {
@@ -17,24 +17,32 @@ class InvestmentPackages
                 'price' => 120.00,
                 'daily_interest_rate' => 0.60,
                 'duration_days' => 180,
+                'min_amount' => 120.00,
+                'max_amount' => 799.99,
             ],
             'loaded' => [
                 'name' => 'Standard',
                 'price' => 800.00,
                 'daily_interest_rate' => 0.70,
                 'duration_days' => 150,
+                'min_amount' => 800.00,
+                'max_amount' => 3999.99,
             ],
             'supreme' => [
                 'name' => 'Premium',
                 'price' => 4000.00,
                 'daily_interest_rate' => 0.75,
                 'duration_days' => 120,
+                'min_amount' => 4000.00,
+                'max_amount' => 7999.99,
             ],
             'premium_plus' => [
                 'name' => 'Premium+',
                 'price' => 8000.00,
                 'daily_interest_rate' => 0.90,
                 'duration_days' => 80,
+                'min_amount' => 8000.00,
+                'max_amount' => 50000.00,
             ],
         ];
     }

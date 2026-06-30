@@ -26,9 +26,15 @@ class InvestmentController extends Controller
             ]);
         }
 
-        if ((float) $data['amount'] < $package['price']) {
+        if ((float) $data['amount'] < $package['min_amount']) {
             throw ValidationException::withMessages([
-                'amount' => 'Minimum investment for '.$package['name'].' is $'.number_format($package['price'], 2).'.',
+                'amount' => 'Minimum investment for '.$package['name'].' is $'.number_format($package['min_amount'], 2).'.',
+            ]);
+        }
+
+        if ((float) $data['amount'] > $package['max_amount']) {
+            throw ValidationException::withMessages([
+                'amount' => 'Maximum investment for '.$package['name'].' is $'.number_format($package['max_amount'], 2).'.',
             ]);
         }
 
