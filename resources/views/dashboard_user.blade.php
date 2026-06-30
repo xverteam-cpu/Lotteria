@@ -1039,12 +1039,12 @@
   </div>
 
   <div class="discover-banner">
-    <a href="{{ route('franchising') }}" aria-label="Go to franchise page" class="banner-carousel" id="bannerCarousel">
+    <div class="banner-carousel" id="bannerCarousel" aria-label="Franchise and invest banner carousel">
       <div class="banner-track">
-        <div class="banner-slide" data-slide="0">
+        <div class="banner-slide" data-slide="0" data-href="{{ route('franchising') }}">
           <img src="{{ asset('leebyung.png') }}" alt="Franchise opportunity">
         </div>
-        <div class="banner-slide" data-slide="1">
+        <div class="banner-slide" data-slide="1" data-href="{{ route('invest') }}">
           <img src="{{ asset('korea.png') }}" alt="Korea franchise opportunity">
         </div>
       </div>
@@ -1052,7 +1052,7 @@
         <button type="button" class="banner-indicator is-active" data-slide="0" aria-label="Show slide 1"></button>
         <button type="button" class="banner-indicator" data-slide="1" aria-label="Show slide 2"></button>
       </div>
-    </a>
+    </div>
   </div>
 
   <div class="promo">
@@ -1251,6 +1251,13 @@
 
       bannerCarousel.addEventListener('mouseenter', stopBannerAutoRotate);
       bannerCarousel.addEventListener('mouseleave', startBannerAutoRotate);
+
+      bannerCarousel.addEventListener('click', function () {
+        var activeSlide = document.querySelector('.banner-slide.is-active');
+        if (activeSlide && activeSlide.dataset.href) {
+          window.location.href = activeSlide.dataset.href;
+        }
+      });
 
       bannerCarousel.addEventListener('touchstart', function (event) {
         touchStartX = event.touches[0].clientX;
