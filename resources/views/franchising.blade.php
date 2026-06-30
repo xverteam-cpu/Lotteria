@@ -70,6 +70,13 @@
     backdrop-filter: blur(18px) !important;
     box-shadow: 0 8px 24px rgba(15,23,42,.06) !important;
     z-index: 99998 !important;
+    transition: transform .25s ease, opacity .2s ease !important;
+  }
+
+  .bottom-nav.hidden {
+    transform: translateY(120%) !important;
+    opacity: 0 !important;
+    pointer-events: none !important;
   }
 
   .bottom-nav .nav-item {
@@ -480,6 +487,40 @@ document.addEventListener('DOMContentLoaded', function () {
   if (fabClose) {
     fabClose.addEventListener('click', closeFabMenu);
   }
+
+  var bottomNav = document.querySelector('.bottom-nav');
+  var lastScroll = window.pageYOffset || document.documentElement.scrollTop;
+  var touchStartY = 0;
+  var touchEndY = 0;
+
+  function updateNavVisibility(deltaY) {
+    if (!bottomNav) return;
+    if (deltaY > 10) {
+      bottomNav.classList.add('hidden');
+    } else if (deltaY < -10) {
+      bottomNav.classList.remove('hidden');
+    }
+  }
+
+  window.addEventListener('scroll', function () {
+    var currentScroll = window.pageYOffset || document.documentElement.scrollTop;
+    updateNavVisibility(currentScroll - lastScroll);
+    lastScroll = currentScroll;
+  }, { passive: true });
+
+  window.addEventListener('touchstart', function (event) {
+    touchStartY = event.touches[0].clientY;
+  }, { passive: true });
+
+  window.addEventListener('touchmove', function (event) {
+    touchEndY = event.touches[0].clientY;
+  }, { passive: true });
+
+  window.addEventListener('touchend', function () {
+    updateNavVisibility(touchStartY - touchEndY);
+    touchStartY = 0;
+    touchEndY = 0;
+  });
 
   document.addEventListener('keydown', function (e) { if (e.key === 'Escape') { closeFabMenu(); } });
 });
