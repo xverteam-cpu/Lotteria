@@ -96,6 +96,15 @@ Route::get('/dashboard', function () {
         ->limit(5)
         ->get();
 
+    $dailyInterest = $user->investments()
+        ->where('status', 'approved')
+        ->get()
+        ->sum(fn ($investment) => $investment->dailyInterestAmount());
+
+    if (! is_numeric($dailyInterest)) {
+        $dailyInterest = 0;
+    }
+
     $notifications = collect();
 
     if ($dailyInterest > 0) {
@@ -137,12 +146,28 @@ Route::get('/dashboard', function () {
         ->values()
         ->take(5);
 
+    $notificationsRead = $user->getNotificationsReadIds();
+    $unreadCount = $notifications->reject(fn ($notification) => in_array($notification['id'], $notificationsRead, true))->count();
+
     return view('dashboard_user', [
         'user' => $user,
         'showRafflePopup' => $showRafflePopup,
         'notifications' => $notifications,
+        'notificationsRead' => $notificationsRead,
+        'unreadCount' => $unreadCount,
     ]);
 })->middleware(['auth', 'pin'])->name('dashboard');
+
+Route::post('/notifications/read-all', function (Illuminate\Http\Request $request) {
+    $data = $request->validate([
+        'ids' => ['required', 'array'],
+        'ids.*' => ['string'],
+    ]);
+
+    $request->user()->markNotificationsRead($data['ids']);
+
+    return response()->json(['status' => 'success']);
+})->middleware(['auth', 'pin'])->name('notifications.read_all');
 
 // Deposit page for buying shares
 Route::get('/deposit', function () {

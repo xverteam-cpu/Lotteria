@@ -6,7 +6,8 @@
   <link rel="icon" type="image/png" href="https://www.lotteria.vn/grs-static/icons/logo_512.png">
   <link rel="shortcut icon" type="image/png" href="https://www.lotteria.vn/grs-static/icons/logo_512.png">
   <title>Lotteria Philippines</title>
-  
+  <meta name="csrf-token" content="{{ csrf_token() }}">
+
   <!-- Open Graph Meta Tags for Social Sharing -->
   <meta property="og:title" content="Lotteria Philippines">
   <meta property="og:description" content="Investment packages with daily returns. Start investing with Lotteria Philippines.">

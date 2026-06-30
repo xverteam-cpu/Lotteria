@@ -748,9 +748,13 @@
   $user = $user ?? auth()->user();
   $investments = $user->investments()->latest()->get();
   $activeCapital = $investments->sum(fn($i) => (float) $i->amount);
-  $dailyInterest = $investments->sum(fn($i) => $i->dailyInterestAmount());
+  if (! isset($dailyInterest)) {
+      $dailyInterest = $investments->sum(fn($i) => $i->dailyInterestAmount());
+  }
   $earnedIncome = $investments->sum(fn($i) => $i->earnedInterest());
   $availableBalance = (float) $user->balance + $earnedIncome;
+  $notificationsRead = $notificationsRead ?? [];
+  $unreadCount = $unreadCount ?? 0;
 @endphp
 
 <main class="wallet-shell">
@@ -770,7 +774,7 @@
           <path d="M1 2.5C1 1.673 1.673 1 2.5 1h15c.827 0 1.5.673 1.5 1.5v11c0 .827-.673 1.5-1.5 1.5h-15A1.5 1.5 0 0 1 1 13.5v-11Z" stroke="currentColor" stroke-width="1.5"/>
           <path d="M1.5 3.5 10 8.75l8.5-5.25" stroke="currentColor" stroke-width="1.5" stroke-linecap="round"/>
         </svg>
-        <span class="notification-badge" id="notificationBadge">{{ $notifications->count() }}</span>
+        <span class="notification-badge" id="notificationBadge" style="{{ $unreadCount > 0 ? '' : 'display:none;' }}">{{ $unreadCount }}</span>
         <span class="sr-only">View notifications</span>
       </a>
     </div>
@@ -993,23 +997,23 @@
       var notificationClose = document.getElementById('notificationClose');
       var notificationBadge = document.getElementById('notificationBadge');
       var notificationItems = Array.from(document.querySelectorAll('.notification-item'));
-      var storageKey = 'dashboard-notifications-read-{{ $user->id }}';
+      var csrfTokenMeta = document.querySelector('meta[name="csrf-token"]');
+      var notificationsRead = new Set(@json($notificationsRead ?? []));
 
-      function getReadNotifications() {
-        try {
-          return new Set(JSON.parse(localStorage.getItem(storageKey) || '[]'));
-        } catch (e) {
-          return new Set();
-        }
+      function getUnreadNotificationIds() {
+        return notificationItems
+          .filter(function (item) {
+            return !notificationsRead.has(item.dataset.notificationId);
+          })
+          .map(function (item) {
+            return item.dataset.notificationId;
+          });
       }
 
       function updateBadge() {
-        var read = getReadNotifications();
-        var unreadCount = notificationItems.filter(function (item) {
-          return !read.has(item.dataset.notificationId);
-        }).length;
-
         if (!notificationBadge) return;
+
+        var unreadCount = getUnreadNotificationIds().length;
         notificationBadge.textContent = unreadCount;
         notificationBadge.style.display = unreadCount > 0 ? 'inline-flex' : 'none';
       }
@@ -1021,12 +1025,38 @@
         notificationPanel.setAttribute('aria-hidden', 'false');
         notificationToggle.setAttribute('aria-expanded', 'true');
 
-        var read = getReadNotifications();
-        notificationItems.forEach(function (item) {
-          read.add(item.dataset.notificationId);
-        });
-        localStorage.setItem(storageKey, JSON.stringify(Array.from(read)));
-        updateBadge();
+        var unreadIds = getUnreadNotificationIds();
+        if (!unreadIds.length) {
+          return;
+        }
+
+        var token = csrfTokenMeta ? csrfTokenMeta.getAttribute('content') : null;
+        if (!token) {
+          updateBadge();
+          return;
+        }
+
+        fetch('{{ route('notifications.read_all') }}', {
+          method: 'POST',
+          headers: {
+            'Content-Type': 'application/json',
+            'X-CSRF-TOKEN': token,
+          },
+          body: JSON.stringify({ ids: unreadIds }),
+        })
+          .then(function (response) {
+            if (!response.ok) {
+              throw new Error('Unable to update notifications');
+            }
+            return response.json();
+          })
+          .then(function () {
+            unreadIds.forEach(function (id) { notificationsRead.add(id); });
+            updateBadge();
+          })
+          .catch(function () {
+            // Keep UI open; badge will update on next load if server update fails.
+          });
       }
 
       function closeNotificationPanel() {
