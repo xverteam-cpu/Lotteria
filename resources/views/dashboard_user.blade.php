@@ -494,18 +494,18 @@
     transform: translateY(-1px);
   }
 
-  .banner-track {
-    display: flex;
-    width: 200%;
+  .banner-slide {
+    position: absolute;
+    inset: 0;
+    width: 100%;
     height: 100%;
-    transition: transform .36s ease;
+    opacity: 0;
+    transition: opacity .36s ease;
   }
 
-  .banner-slide {
-    position: relative;
-    flex: 0 0 50%;
-    min-width: 50%;
-    height: 100%;
+  .banner-slide.is-active {
+    opacity: 1;
+    z-index: 1;
   }
 
   .banner-slide img {
@@ -1040,13 +1040,11 @@
 
   <div class="discover-banner">
     <div class="banner-carousel" id="bannerCarousel" aria-label="Franchise and invest banner carousel">
-      <div class="banner-track">
-        <div class="banner-slide" data-slide="0" data-href="{{ route('franchising') }}">
-          <img src="{{ asset('leebyung.png') }}" alt="Franchise opportunity">
-        </div>
-        <div class="banner-slide" data-slide="1" data-href="{{ route('invest') }}">
-          <img src="{{ asset('korea.png') }}" alt="Korea franchise opportunity">
-        </div>
+      <div class="banner-slide is-active" data-slide="0" data-href="{{ route('franchising') }}">
+        <img src="{{ asset('leebyung.png') }}" alt="Franchise opportunity">
+      </div>
+      <div class="banner-slide" data-slide="1" data-href="{{ route('invest') }}">
+        <img src="{{ asset('korea.png') }}" alt="Korea franchise opportunity">
       </div>
       <div class="banner-carousel-indicators" id="bannerCarouselIndicators">
         <button type="button" class="banner-indicator is-active" data-slide="0" aria-label="Show slide 1"></button>
@@ -1206,7 +1204,6 @@
     var currentBannerIndex = 0;
     var bannerAutoTimer = null;
     var bannerCarousel = document.getElementById('bannerCarousel');
-    var bannerTrack = document.querySelector('.banner-track');
     var bannerIndicators = document.querySelectorAll('.banner-indicator');
     var touchStartX = null;
     var touchDeltaX = 0;
@@ -1216,9 +1213,9 @@
       var indicators = document.querySelectorAll('.banner-indicator');
       if (!slides.length) return;
       var normalized = (index % slides.length + slides.length) % slides.length;
-      if (bannerTrack) {
-        bannerTrack.style.transform = 'translateX(-' + (normalized * 100) + '%)';
-      }
+      slides.forEach(function (slide, slideIndex) {
+        slide.classList.toggle('is-active', slideIndex === normalized);
+      });
       indicators.forEach(function (indicator, indicatorIndex) {
         indicator.classList.toggle('is-active', indicatorIndex === normalized);
       });
