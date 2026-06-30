@@ -486,9 +486,10 @@
     overflow: hidden;
     border: 1px solid var(--border);
     box-shadow: 0 2px 6px rgba(15,23,42,.04), 0 10px 35px rgba(15,23,42,.05);
-    aspect-ratio: 16 / 7;
-    min-height: 160px;
+    aspect-ratio: 16 / 8;
+    min-height: 140px;
     cursor: pointer;
+    background: #fff;
   }
 
   .banner-carousel:hover {
@@ -502,6 +503,10 @@
     height: 100%;
     opacity: 0;
     transition: opacity .36s ease;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    background: #fff;
   }
 
   .banner-slide.is-active {
@@ -513,7 +518,8 @@
     display: block;
     width: 100%;
     height: 100%;
-    object-fit: cover;
+    object-fit: contain;
+    object-position: center;
   }
 
   .banner-carousel-indicators {
@@ -907,6 +913,13 @@
     .discover-item {
       min-width: 128px;
       padding: 14px;
+    }
+    .banner-carousel {
+      aspect-ratio: 16 / 9;
+      min-height: 120px;
+    }
+    .banner-slide img {
+      object-fit: contain;
     }
     .bottom-nav {
       padding: 0 12px;
