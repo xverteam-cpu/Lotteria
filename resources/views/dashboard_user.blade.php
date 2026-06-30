@@ -466,24 +466,79 @@
     margin-top: 18px;
   }
 
-  .discover-banner a {
+  .banner-carousel {
+    position: relative;
     display: block;
     border-radius: var(--radius);
     overflow: hidden;
     border: 1px solid var(--border);
     box-shadow: 0 2px 6px rgba(15,23,42,.04), 0 10px 35px rgba(15,23,42,.05);
-    transition: transform .18s ease, box-shadow .18s ease;
+    aspect-ratio: 16 / 7;
+    min-height: 160px;
   }
 
-  .discover-banner a:hover {
-    transform: translateY(-2px);
-    box-shadow: 0 4px 14px rgba(15,23,42,.08), 0 12px 40px rgba(15,23,42,.06);
+  .banner-carousel:hover {
+    transform: translateY(-1px);
   }
 
-  .discover-banner img {
+  .banner-slide {
+    position: absolute;
+    inset: 0;
+    width: 100%;
+    height: 100%;
+    opacity: 0;
+    transition: opacity .45s ease;
+  }
+
+  .banner-slide.is-active {
+    opacity: 1;
+    z-index: 1;
+  }
+
+  .banner-slide img {
     display: block;
     width: 100%;
-    height: auto;
+    height: 100%;
+    object-fit: cover;
+  }
+
+  .banner-slide .slide-label {
+    position: absolute;
+    left: 16px;
+    bottom: 16px;
+    padding: 10px 14px;
+    background: rgba(0, 0, 0, 0.48);
+    color: #fff;
+    font-size: 14px;
+    font-weight: 700;
+    border-radius: 999px;
+    max-width: calc(100% - 32px);
+    box-shadow: 0 10px 30px rgba(0, 0, 0, 0.18);
+  }
+
+  .banner-carousel-indicators {
+    position: absolute;
+    left: 50%;
+    bottom: 12px;
+    transform: translateX(-50%);
+    display: flex;
+    gap: 8px;
+    z-index: 2;
+  }
+
+  .banner-indicator {
+    width: 10px;
+    height: 10px;
+    border-radius: 50%;
+    background: rgba(255,255,255,.7);
+    border: none;
+    cursor: pointer;
+    transition: transform .18s ease, background .18s ease;
+  }
+
+  .banner-indicator.is-active {
+    background: #c8102e;
+    transform: scale(1.2);
   }
 
   .promo-copy {
@@ -980,8 +1035,19 @@
   </div>
 
   <div class="discover-banner">
-    <a href="{{ route('franchising') }}" aria-label="Go to franchise page">
-      <img src="{{ asset('leebyung.png') }}" alt="Franchise opportunity">
+    <a href="{{ route('franchising') }}" aria-label="Go to franchise page" class="banner-carousel" id="bannerCarousel">
+      <div class="banner-slide is-active" data-slide="0">
+        <img src="{{ asset('leebyung.png') }}" alt="Franchise opportunity">
+        <div class="slide-label">Lotteria Franchise Now</div>
+      </div>
+      <div class="banner-slide" data-slide="1">
+        <img src="{{ asset('korea.png') }}" alt="Korea franchise opportunity">
+        <div class="slide-label">Korea Franchise Opportunity</div>
+      </div>
+      <div class="banner-carousel-indicators" id="bannerCarouselIndicators">
+        <button type="button" class="banner-indicator is-active" data-slide="0" aria-label="Show slide 1"></button>
+        <button type="button" class="banner-indicator" data-slide="1" aria-label="Show slide 2"></button>
+      </div>
     </a>
   </div>
 
@@ -1103,6 +1169,79 @@
     var raffleClose = document.getElementById('raffleClose');
     if (raffleClose) {
       raffleClose.addEventListener('click', closeRafflePopup);
+    }
+
+    function setBannerSlide(index) {
+      var slides = document.querySelectorAll('.banner-slide');
+      var indicators = document.querySelectorAll('.banner-indicator');
+      if (!slides.length) return;
+
+      var normalized = (index % slides.length + slides.length) % slides.length;
+      slides.forEach(function (slide, slideIndex) {
+        slide.classList.toggle('is-active', slideIndex === normalized);
+      });
+      indicators.forEach(function (indicator, indicatorIndex) {
+        indicator.classList.toggle('is-active', indicatorIndex === normalized);
+      });
+      currentBannerIndex = normalized;
+    }
+
+    function startBannerAutoRotate() {
+      if (bannerAutoTimer) return;
+      bannerAutoTimer = setInterval(function () {
+        setBannerSlide(currentBannerIndex + 1);
+      }, 3000);
+    }
+
+    function stopBannerAutoRotate() {
+      if (!bannerAutoTimer) return;
+      clearInterval(bannerAutoTimer);
+      bannerAutoTimer = null;
+    }
+
+    var currentBannerIndex = 0;
+    var bannerAutoTimer = null;
+    var bannerCarousel = document.getElementById('bannerCarousel');
+    var bannerIndicators = document.querySelectorAll('.banner-indicator');
+    var touchStartX = null;
+    var touchDeltaX = 0;
+
+    if (bannerCarousel) {
+      bannerIndicators.forEach(function (indicator) {
+        indicator.addEventListener('click', function (event) {
+          event.preventDefault();
+          var targetIndex = parseInt(indicator.getAttribute('data-slide'), 10);
+          setBannerSlide(targetIndex);
+          stopBannerAutoRotate();
+          startBannerAutoRotate();
+        });
+      });
+
+      bannerCarousel.addEventListener('mouseenter', stopBannerAutoRotate);
+      bannerCarousel.addEventListener('mouseleave', startBannerAutoRotate);
+
+      bannerCarousel.addEventListener('touchstart', function (event) {
+        touchStartX = event.touches[0].clientX;
+        touchDeltaX = 0;
+        stopBannerAutoRotate();
+      });
+
+      bannerCarousel.addEventListener('touchmove', function (event) {
+        if (touchStartX === null) return;
+        touchDeltaX = event.touches[0].clientX - touchStartX;
+      });
+
+      bannerCarousel.addEventListener('touchend', function () {
+        if (touchStartX === null) return;
+        if (Math.abs(touchDeltaX) > 40) {
+          setBannerSlide(currentBannerIndex + (touchDeltaX < 0 ? 1 : -1));
+        }
+        touchStartX = null;
+        touchDeltaX = 0;
+        startBannerAutoRotate();
+      });
+
+      startBannerAutoRotate();
     }
 
     document.addEventListener('keydown', function (event) {
