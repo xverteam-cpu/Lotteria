@@ -455,7 +455,7 @@ document.addEventListener('DOMContentLoaded', function () {
       var htmlUrl = button.dataset.htmlUrl;
 
       if (htmlUrl) {
-        window.open(normalizeUrl(htmlUrl), '_blank');
+        window.location.href = normalizeUrl(htmlUrl);
       }
     });
   });
