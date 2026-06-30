@@ -96,8 +96,7 @@
     width: 140px;
     height: 140px;
     border-radius: 50%;
-    background: radial-gradient(circle at 30% 30%, rgba(255,235,59,.95), rgba(255,235,59,.35) 35%, transparent 65%);
-    filter: blur(4px);
+    background: none;
     pointer-events: none;
   }
 
@@ -108,28 +107,22 @@
     justify-content: center;
     display: inline-flex;
     align-items: center;
-    z-index: 1;
+    z-index: 2;
   }
 
   .hero .hero-cta.mail::before,
   .hero .hero-cta.buy::before {
-    content: '';
-    position: absolute;
-    inset: auto auto auto auto;
-    top: 50%;
-    left: 50%;
-    width: 62px;
-    height: 62px;
-    transform: translate(-50%, -50%);
-    border-radius: 50%;
-    background: radial-gradient(circle at 30% 30%, rgba(255,235,59,.95), rgba(255,235,59,.35) 35%, rgba(255,235,59,0) 65%);
-    filter: blur(7px);
-    z-index: -1;
+    display: none;
   }
 
   .hero .hero-cta.mail {
-    width: 52px;
-    min-width: 52px;
+    width: auto;
+    min-width: auto;
+    cursor: pointer;
+  }
+
+  .hero .hero-cta.mail svg {
+    pointer-events: none;
   }
 
   .notification-badge {
@@ -149,6 +142,7 @@
     justify-content: center;
     padding: 0 6px;
     box-shadow: 0 4px 12px rgba(0,0,0,.16);
+    pointer-events: none;
   }
 
   .notification-panel {
