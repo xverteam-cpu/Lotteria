@@ -174,13 +174,17 @@
   .bank-logo-item span { color:#1a1a1a; font-size:14px; line-height:18px; font-weight:800; }
   .bank-logo-item:hover, .bank-logo-item:focus { border-color:#d91b0b; background:#fff; box-shadow:0 6px 20px rgba(217,27,11,.12); outline:none; }
   @media (max-width:430px) {
-    .packages-page { padding-inline:13px; }
+    .packages-page { padding-inline:10px; }
     .packages-shell { padding:0 12px; }
     .hero-title .black { font-size:40px; line-height:39px; }
     .hero-title .red { font-size:47px; line-height:46px; }
     .hero-copy { font-size:20px; line-height:26px; }
     .package-track { padding:8px 16px 20px 16px; gap:16px; scroll-padding:0 16px; }
     .package-card { flex:0 0 92vw; max-width:92vw; min-height:320px; padding:14px; }
+    /* Prevent decorative pseudo-elements from causing horizontal overflow */
+    .packages-page::before, .packages-page::after { display:none !important; }
+    /* Ensure package cards fit inside viewport without being cut */
+    .package-card { flex:0 0 calc(100vw - 32px); max-width: calc(100vw - 32px); margin-left:auto; margin-right:auto; box-sizing:border-box; }
     .payment-card { justify-content:space-between; padding:12px 14px; gap:10px; }
     .payment-copy { flex:1 1 100%; min-width:0; margin-bottom:8px; }
     .payment-logos { flex:1 1 100%; justify-content:flex-start; gap:10px; }
