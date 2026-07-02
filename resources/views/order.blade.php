@@ -131,8 +131,8 @@
       @endif
 
       <div class="login-field">
-        <label class="login-label" for="email">Email</label>
-        <input class="login-input" id="email" name="email" type="email" value="{{ old('email') }}" placeholder="Enter your email">
+        <label class="login-label" for="email">Username or Email</label>
+        <input class="login-input" id="email" name="email" type="text" value="{{ old('email') }}" placeholder="Enter your username or email">
       </div>
 
       <div class="login-field">

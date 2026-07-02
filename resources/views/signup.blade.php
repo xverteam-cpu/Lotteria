@@ -133,6 +133,11 @@
       </div>
 
       <div class="signup-field">
+        <label class="signup-label" for="email">Email Address</label>
+        <input class="signup-input" id="email" name="email" type="email" value="{{ old('email') }}" placeholder="Enter your email address" required>
+      </div>
+
+      <div class="signup-field">
         <label class="signup-label" for="referral">Referral</label>
         <input class="signup-input" id="referral" name="referral" type="text" value="{{ old('referral', $referral ?? '') }}" placeholder="Enter referral code or username">
       </div>
