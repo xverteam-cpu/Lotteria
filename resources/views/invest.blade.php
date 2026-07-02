@@ -185,10 +185,10 @@
     .hero-copy { font-size:20px; line-height:26px; }
 
     /* Make track use full width and avoid extra inner padding */
-    .package-track { padding:8px 0 16px 0; gap:12px; scroll-padding:12px; padding-inline-start:12px; padding-inline-end:12px; overflow-x:auto; }
+    .package-track { padding:8px 0 16px 0; gap:12px; scroll-padding:10px; padding-inline-start:10px; padding-inline-end:10px; overflow-x:auto; }
 
     /* Ensure package cards fully fit inside the viewport without clipping */
-    .package-card { flex:0 0 100%; width:100%; max-width:calc(100% - 24px); margin:0 auto; box-sizing:border-box; min-height:auto; padding:12px; border-radius:18px; }
+    .package-card { flex:0 0 100%; width:100%; max-width:calc(100% - 20px); margin:0 auto; box-sizing:border-box; min-height:auto; padding:12px; border-radius:18px; }
     .package-content { padding:14px 12px; }
 
     /* Hide decorative pseudo-elements that can cause overflow */
@@ -229,9 +229,9 @@
     .summary-copy { margin-top:6px; font-size:13px; }
     .summary-actions { grid-template-columns:repeat(3, 1fr); gap:8px; }
     .summary-action { min-height:84px; border-radius:12px; }
-    .package-track { padding:8px 12px 16px 12px; gap:12px; }
-    .package-card { flex:0 0 92vw; max-width:92vw; border-radius:18px; min-height:260px; padding:10px; }
-    .package-content { padding:14px 12px 14px; gap:12px; }
+    .package-track { padding:8px 10px 16px 10px; gap:10px; }
+    .package-card { flex:0 0 88vw; max-width:88vw; border-radius:18px; min-height:260px; padding:10px; }
+    .package-content { padding:12px 10px 14px; gap:10px; }
     .package-card-title { font-size:18px; }
     .package-card-copy { font-size:13px; }
     .package-card-features { grid-template-columns:repeat(3, 1fr); gap:8px; }
