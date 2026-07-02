@@ -937,7 +937,8 @@
       var days = Number(selectedPackage.days || 0);
       var daily = amountInUsd * rate;
       var weekly = daily * 7;
-      var total = daily * days;
+      var totalInterest = daily * days;
+      var total = amountInUsd + totalInterest;
 
       if (dailyEstimate) dailyEstimate.textContent = money(daily);
       if (weeklyEstimate) weeklyEstimate.textContent = money(weekly);
@@ -950,7 +951,7 @@
           convertedLabel = 'PHP estimate at ₱' + formattedRate + ' per $1' + updatedSuffix + '. ';
         }
 
-        estimateNote.textContent = convertedLabel + money(amountInUsd) + ' x ' + selectedPackage.rate + '% = ' + money(daily) + ' daily. Estimated total income for ' + days + ' days is ' + money(total) + '.';
+        estimateNote.textContent = convertedLabel + money(amountInUsd) + ' x ' + selectedPackage.rate + '% = ' + money(daily) + ' daily. Estimated total balance after ' + days + ' days is ' + money(total) + '.';
       }
     }
 
@@ -1051,7 +1052,8 @@
       var dailyRate = investmentData && investmentData.daily_interest_rate != null ? Number(investmentData.daily_interest_rate) : Number(selectedPackage ? selectedPackage.rate : 0);
       var durationDays = investmentData && investmentData.duration_days != null ? Number(investmentData.duration_days) : Number(selectedPackage ? selectedPackage.days : 0);
       var dailyIncome = amountValue * (dailyRate / 100);
-      var totalReturn = dailyIncome * durationDays;
+      var totalInterest = dailyIncome * durationDays;
+      var totalReturn = amountValue + totalInterest;
 
       if (receiptPackage) receiptPackage.textContent = packageName;
       if (receiptAmount) receiptAmount.textContent = money(amountValue);
