@@ -156,9 +156,9 @@
   .currency-button { min-height:44px; border-radius:10px; border:1.5px solid #e0e0e0; background:#f9f9f9; color:#666; font-size:14px; line-height:18px; font-weight:800; cursor:pointer; transition:all 0.2s ease; }
   .currency-button:hover { border-color:#d0d0d0; background:#f5f5f5; }
   .currency-button.is-active { background:#d91b0b; color:#fff; border-color:#d91b0b; box-shadow:0 6px 20px rgba(217,27,11,.2); }
-  .estimate-card { border-radius:14px; background:linear-gradient(135deg, #fafafa 0%, #f5f5f5 100%); border:1.5px solid #e8e8e8; padding:16px 14px; }
+  .estimate-card { display:flex; flex-direction:column; justify-content:center; min-height:90px; border-radius:14px; background:linear-gradient(135deg, #fafafa 0%, #f5f5f5 100%); border:1.5px solid #e8e8e8; padding:12px 10px; overflow:hidden; }
   .estimate-label { color:#888; font-size:11px; line-height:14px; font-weight:800; letter-spacing:.5px; text-transform:uppercase; }
-  .estimate-value { margin-top:8px; color:#d91b0b; font-size:18px; line-height:24px; font-weight:900; }
+  .estimate-value { margin-top:6px; color:#d91b0b; font-size:clamp(12px, 2.2vw, 18px); line-height:1.1; font-weight:900; overflow:hidden; text-overflow:ellipsis; white-space:nowrap; }
   .estimate-note { margin:18px 0 0; color:#999; font-size:13px; line-height:19px; font-weight:500; }
   .form-error { margin:0 0 20px; border-radius:12px; background:#ffebeb; border:1.5px solid #f5c2c2; padding:14px 16px; color:#c41e1e; font-size:13px; line-height:18px; font-weight:700; }
   .payment-options { display:grid; gap:12px; margin-top:20px; }
@@ -246,6 +246,10 @@
     .slots-circle { top:10px; right:10px; width:44px; height:44px; font-size:10px; padding:4px; }
     .modal-card { width:min(100%, 92vw); border-radius:18px; padding:16px; }
     .modal-image { border-radius:12px; }
+    .estimate-grid { gap:8px; }
+    .estimate-card { min-height:76px; padding:10px 8px; }
+    .estimate-label { font-size:10px; line-height:12px; }
+    .estimate-value { font-size:clamp(10px, 3.4vw, 14px); margin-top:4px; }
     .payment-card { padding:10px 12px; gap:8px; }
     .bank-logo-item { flex:1 1 48%; padding:10px; }
   }
