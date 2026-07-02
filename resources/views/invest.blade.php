@@ -3,7 +3,7 @@
 @section('content')
 <style>
   body { background:#fffaf3 !important; font-family: Inter, 'Plus Jakarta Sans', 'SF Pro Display', system-ui, -apple-system, BlinkMacSystemFont, 'Segoe UI', sans-serif; }
-  .packages-page { position:relative; min-height:100vh; overflow-x:visible; overflow-y:visible; padding:20px 16px 28px; color:#252525; }
+  .packages-page { position:relative; min-height:100vh; overflow-x:hidden; overflow-y:visible; padding:20px 16px 28px; color:#252525; }
   .packages-page::before { content:''; position:absolute; top:-38px; right:-74px; width:180px; height:320px; border-radius:54px 0 0 54px; background:linear-gradient(180deg, #f03512, #d91505); transform:skewX(-8deg); z-index:0; }
   .packages-page::after { content:''; position:absolute; top:162px; right:76px; width:56px; height:130px; background:radial-gradient(circle, rgba(245,164,0,.9) 1.4px, transparent 1.5px); background-size:9px 9px; opacity:.75; z-index:0; }
   .packages-shell { position:relative; z-index:1; max-width:940px; margin:0 auto; padding:0 20px; }
@@ -185,10 +185,11 @@
     .hero-copy { font-size:20px; line-height:26px; }
 
     /* Make track use full width and avoid extra inner padding */
-    .package-track { padding:8px 0 16px 0; gap:12px; scroll-padding:10px; padding-inline-start:10px; padding-inline-end:10px; overflow-x:auto; }
+    .package-track { padding:8px 0 16px 0; gap:10px; scroll-padding:10px; padding-inline:10px; overflow-x:auto; }
 
     /* Ensure package cards fully fit inside the viewport without clipping */
-    .package-card { flex:0 0 100%; width:100%; max-width:calc(100% - 20px); margin:0 auto; box-sizing:border-box; min-height:auto; padding:12px; border-radius:18px; }
+    .package-card { flex:0 0 calc(100vw - 24px); width:calc(100vw - 24px); max-width:calc(100vw - 24px); margin:0 auto; box-sizing:border-box; min-height:auto; padding:12px; border-radius:18px; transform:translateY(0) scale(1); }
+    .package-card:hover, .package-card:active, .package-card.is-active { transform:translateY(0) scale(1); }
     .package-content { padding:14px 12px; }
 
     /* Hide decorative pseudo-elements that can cause overflow */
@@ -218,7 +219,7 @@
   /* Additional mobile adjustments for small phones */
   @media (max-width:480px) {
     .packages-page { padding:12px 12px 16px; }
-    .packages-shell { padding:0 8px; }
+    .packages-shell { padding:0; }
     .hero-title .black { font-size:34px; line-height:36px; }
     .hero-title .red { font-size:40px; line-height:42px; }
     .hero-copy { font-size:18px; line-height:24px; }
