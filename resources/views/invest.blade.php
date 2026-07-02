@@ -188,7 +188,7 @@
     .package-track { padding:8px 0 16px 0; gap:10px; scroll-padding:10px; padding-inline:10px; overflow-x:auto; }
 
     /* Ensure package cards fully fit inside the viewport without clipping */
-    .package-card { flex:0 0 calc(100vw - 24px); width:calc(100vw - 24px); max-width:calc(100vw - 24px); margin:0 auto; box-sizing:border-box; min-height:auto; padding:12px; border-radius:18px; transform:translateY(0) scale(1); }
+    .package-card { flex:0 0 calc(100% - 20px); width:calc(100% - 20px); max-width:calc(100% - 20px); margin:0; box-sizing:border-box; min-height:auto; padding:12px; border-radius:18px; transform:translateY(0) scale(1); scroll-snap-align:start; }
     .package-card:hover, .package-card:active, .package-card.is-active { transform:translateY(0) scale(1); }
     .package-content { padding:14px 12px; }
 
