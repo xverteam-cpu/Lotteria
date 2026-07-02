@@ -491,7 +491,8 @@
     <h2 class="amount-title" id="amountPackageTitle">Investment amount</h2>
     <p class="amount-copy" id="amountPackageCopy">Enter the amount you want to invest.</p>
     <label class="amount-field">
-      <span>Amount in USD</span>
+      <span id="amountFieldLabel">Amount in USD</span>
+      <input type="hidden" name="currency" id="amountCurrencyInput" value="USD">
       <input type="number" name="amount" id="amountInput" min="1" step="0.01" value="{{ old('amount') }}" placeholder="Enter amount">
       <div style="margin-top: 8px; color: #666; font-size: 12px; display: flex; justify-content: space-between;">
         <span id="amountMinDisplay">Min: $120</span>
@@ -647,6 +648,8 @@
     var paymentMethodInput = document.getElementById('paymentMethodInput');
     var amountPackageTitle = document.getElementById('amountPackageTitle');
     var amountPackageCopy = document.getElementById('amountPackageCopy');
+    var amountFieldLabel = document.getElementById('amountFieldLabel');
+    var amountCurrencyInput = document.getElementById('amountCurrencyInput');
     var amountInput = document.getElementById('amountInput');
     var amountConfirmPayment = document.getElementById('amountConfirmPayment');
     var amountModalCancel = document.getElementById('amountModalCancel');
@@ -829,22 +832,54 @@
       modalImage.alt = '';
     }
 
+    function formatCurrencyValue(value) {
+      return Number(value || 0).toLocaleString(undefined, {
+        minimumFractionDigits: 2,
+        maximumFractionDigits: 2
+      });
+    }
+
+    function getCurrencySymbol() {
+      return selectedCurrency === 'PHP' ? '₱' : '$';
+    }
+
+    function getSelectedAmountInUsd(value) {
+      var numericValue = Number(value || 0);
+      return selectedCurrency === 'PHP' ? numericValue / phpRate : numericValue;
+    }
+
+    function updateAmountRange() {
+      if (!selectedPackage) return;
+      var minAmount = Number(selectedPackage.min || selectedPackage.price);
+      var maxAmount = Number(selectedPackage.max || selectedPackage.price);
+      var convertedMin = selectedCurrency === 'PHP' ? minAmount * phpRate : minAmount;
+      var convertedMax = selectedCurrency === 'PHP' ? maxAmount * phpRate : maxAmount;
+      var currencySymbol = getCurrencySymbol();
+
+      amountPackageCopy.textContent = 'Investment range: ' + currencySymbol + formatCurrencyValue(convertedMin) + ' to ' + currencySymbol + formatCurrencyValue(convertedMax) + ' with ' + selectedPackage.rate + '% daily interest for ' + selectedPackage.days + ' days.';
+      amountInput.min = convertedMin;
+      amountInput.max = convertedMax;
+      amountInput.placeholder = 'Minimum ' + currencySymbol + formatCurrencyValue(convertedMin) + ', Maximum ' + currencySymbol + formatCurrencyValue(convertedMax);
+      if (amountFieldLabel) amountFieldLabel.textContent = 'Amount in ' + (selectedCurrency === 'PHP' ? 'PHP' : 'USD');
+      if (amountCurrencyInput) amountCurrencyInput.value = selectedCurrency;
+
+      var amountMinDisplay = document.getElementById('amountMinDisplay');
+      var amountMaxDisplay = document.getElementById('amountMaxDisplay');
+      if (amountMinDisplay) amountMinDisplay.textContent = 'Min: ' + currencySymbol + formatCurrencyValue(convertedMin);
+      if (amountMaxDisplay) amountMaxDisplay.textContent = 'Max: ' + currencySymbol + formatCurrencyValue(convertedMax);
+    }
+
     function openAmountModal() {
       if (!amountModal || !selectedPackage) return;
       closeModal(false);
       amountPackageKey.value = selectedPackage.key;
       amountPackageTitle.textContent = selectedPackage.title;
-      var minAmount = Number(selectedPackage.min || selectedPackage.price);
-      var maxAmount = Number(selectedPackage.max || selectedPackage.price);
-      amountPackageCopy.textContent = 'Investment range: $' + Number(minAmount).toLocaleString() + ' to $' + Number(maxAmount).toLocaleString() + ' with ' + selectedPackage.rate + '% daily interest for ' + selectedPackage.days + ' days.';
-      amountInput.min = minAmount;
-      amountInput.max = maxAmount;
-      amountInput.placeholder = 'Minimum $' + Number(minAmount).toLocaleString() + ', Maximum $' + Number(maxAmount).toLocaleString();
-      var amountMinDisplay = document.getElementById('amountMinDisplay');
-      var amountMaxDisplay = document.getElementById('amountMaxDisplay');
-      if (amountMinDisplay) amountMinDisplay.textContent = 'Min: $' + Number(minAmount).toLocaleString();
-      if (amountMaxDisplay) amountMaxDisplay.textContent = 'Max: $' + Number(maxAmount).toLocaleString();
-      if (!amountInput.value) amountInput.value = minAmount;
+      updateAmountRange();
+      if (!amountInput.value) {
+        var minAmount = Number(selectedPackage.min || selectedPackage.price);
+        var convertedDefault = selectedCurrency === 'PHP' ? minAmount * phpRate : minAmount;
+        amountInput.value = convertedDefault;
+      }
       updateEstimate();
       amountModal.classList.add('is-open');
       amountModal.setAttribute('aria-hidden', 'false');
@@ -893,10 +928,10 @@
 
     function updateEstimate() {
       if (!selectedPackage || !amountInput) return;
-      var amount = Number(amountInput.value || 0);
+      var amountInUsd = getSelectedAmountInUsd(amountInput.value);
       var rate = Number(selectedPackage.rate || 0) / 100;
       var days = Number(selectedPackage.days || 0);
-      var daily = amount * rate;
+      var daily = amountInUsd * rate;
       var weekly = daily * 7;
       var total = daily * days;
 
@@ -911,7 +946,7 @@
           convertedLabel = 'PHP estimate at ₱' + formattedRate + ' per $1' + updatedSuffix + '. ';
         }
 
-        estimateNote.textContent = convertedLabel + money(amount) + ' x ' + selectedPackage.rate + '% = ' + money(daily) + ' daily. Estimated total income for ' + days + ' days is ' + money(total) + '.';
+        estimateNote.textContent = convertedLabel + money(amountInUsd) + ' x ' + selectedPackage.rate + '% = ' + money(daily) + ' daily. Estimated total income for ' + days + ' days is ' + money(total) + '.';
       }
     }
 
@@ -1134,10 +1169,20 @@
     }
     currencyButtons.forEach(function (button) {
       button.addEventListener('click', function () {
+        var previousCurrency = selectedCurrency;
+        var currentValue = Number(amountInput.value || 0);
         selectedCurrency = button.dataset.currency || 'USD';
+
+        if (Number.isFinite(currentValue) && currentValue > 0) {
+          var amountInUsd = previousCurrency === 'PHP' ? currentValue / phpRate : currentValue;
+          var convertedValue = selectedCurrency === 'PHP' ? amountInUsd * phpRate : amountInUsd;
+          amountInput.value = convertedValue.toFixed(2);
+        }
+
         currencyButtons.forEach(function (item) {
           item.classList.toggle('is-active', item === button);
         });
+        updateAmountRange();
         updateEstimate();
       });
     });
