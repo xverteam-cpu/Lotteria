@@ -1048,17 +1048,6 @@
     </div>
   </div>
 
-  <div class="card balance-card">
-    <div>
-      <div class="balance-label">Total investment</div>
-      <div class="balance-value">${{ number_format($activeCapital, 2) }}</div>
-    </div>
-    <div class="balance-meta">
-      <div class="small-pill">Active capital</div>
-      <div class="status-copy">Daily interest adds to available balance</div>
-    </div>
-  </div>
-
   <div class="card">
     <div class="actions-grid" role="list">
       <a class="action" href="{{ route('send') }}">
