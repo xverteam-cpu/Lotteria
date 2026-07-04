@@ -3,12 +3,14 @@
 namespace App\Http\Controllers\Admin;
 
 use App\Http\Controllers\Controller;
+use App\Mail\PackageGiftedEmail;
 use App\Models\Investment;
 use App\Models\User;
 use App\Support\InvestmentPackages;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Auth;
 use Illuminate\Support\Facades\DB;
+use Illuminate\Support\Facades\Mail;
 use Illuminate\View\View;
 
 class UserManagementController extends Controller
@@ -120,6 +122,9 @@ class UserManagementController extends Controller
                 'starts_at' => now(),
             ]);
 
+            $investment->refresh();
+            $investment->accrueDailyInterest();
+            Mail::to($investment->user->email)->send(new PackageGiftedEmail($investment));
             $investment->processReferralCommission();
 
             return true;
