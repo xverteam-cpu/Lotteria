@@ -186,6 +186,11 @@
             <p style="margin:14px 0 0 0; padding:0; font-family:Arial, Helvetica, sans-serif; font-size:11px; line-height:18px; color:#9f9f9f;">
               © 2026 Lotteria Philippines. All rights reserved.
             </p>
+            <p style="margin:14px 0 0 0; padding:0;">
+              <a href="https://www.facebook.com/lotteria.ph" target="_blank" style="display:inline-block; width:28px; height:28px; line-height:28px; text-align:center; border-radius:50%; background-color:#3b5998; color:#ffffff; text-decoration:none; font-family:Arial, Helvetica, sans-serif; font-size:14px; font-weight:700;">
+                f
+              </a>
+            </p>
           </td>
         </tr>
       </table>
