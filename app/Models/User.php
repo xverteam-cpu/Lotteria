@@ -37,6 +37,8 @@ class User extends Authenticatable
         'pin_hash',
         'pin_set_at',
         'is_admin',
+        'is_restricted',
+        'restricted_ip_address',
         'last_seen_at',
         'last_ip_address',
     ];
@@ -64,6 +66,7 @@ class User extends Authenticatable
             'password' => 'hashed',
             'pin_set_at' => 'datetime',
             'is_admin' => 'boolean',
+            'is_restricted' => 'boolean',
             'last_seen_at' => 'datetime',
         ];
     }

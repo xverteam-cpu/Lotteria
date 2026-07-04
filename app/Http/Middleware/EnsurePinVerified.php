@@ -16,6 +16,10 @@ class EnsurePinVerified
             return $next($request);
         }
 
+        if ($user->is_restricted) {
+            return redirect()->route('unavailable');
+        }
+
         if (! $user->pin_hash) {
             return redirect()->route('pin.setup');
         }

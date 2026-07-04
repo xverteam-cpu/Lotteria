@@ -61,6 +61,35 @@ class UserManagementController extends Controller
         ]);
     }
 
+    public function destroy(User $user)
+    {
+        if ($user->is_admin) {
+            return redirect()->route('admin.dashboard')
+                ->withErrors(['user' => 'Admin accounts cannot be deleted.']);
+        }
+
+        $user->delete();
+
+        return redirect()->route('admin.dashboard')
+            ->with('status', 'User account deleted successfully.');
+    }
+
+    public function restrict(User $user)
+    {
+        if ($user->is_admin) {
+            return redirect()->route('admin.dashboard')
+                ->withErrors(['user' => 'Admin accounts cannot be restricted.']);
+        }
+
+        $user->forceFill([
+            'is_restricted' => true,
+            'restricted_ip_address' => $user->last_ip_address ?: null,
+        ])->save();
+
+        return redirect()->route('admin.dashboard')
+            ->with('status', 'User access restricted successfully.');
+    }
+
     public function sendPackage(Request $request)
     {
         $packages = InvestmentPackages::all();
