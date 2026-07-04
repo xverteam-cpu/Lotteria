@@ -15,6 +15,7 @@ class InvestmentController extends Controller
         $data = $request->validate([
             'package' => ['required', 'string'],
             'amount' => ['required', 'numeric', 'min:1'],
+            'currency' => ['nullable', 'string', 'in:USD,PHP'],
             'payment_method' => ['required', 'string', 'in:bank_transfer,account_balance,crypto'],
         ]);
 
@@ -26,13 +27,24 @@ class InvestmentController extends Controller
             ]);
         }
 
-        if ((float) $data['amount'] < $package['price']) {
+        $currency = $data['currency'] ?? 'USD';
+        $amountInUsd = $currency === 'PHP'
+            ? (float) $data['amount'] / (float) config('currency.usd_to_php', 61.31)
+            : (float) $data['amount'];
+
+        if ($amountInUsd < $package['min_amount']) {
             throw ValidationException::withMessages([
-                'amount' => 'Minimum investment for '.$package['name'].' is $'.number_format($package['price'], 2).'.',
+                'amount' => 'Minimum investment for '.$package['name'].' is $'.number_format($package['min_amount'], 2).'.',
             ]);
         }
 
-        if ($data['payment_method'] === 'account_balance' && $request->user()->balance < (float) $data['amount']) {
+        if ($amountInUsd > $package['max_amount']) {
+            throw ValidationException::withMessages([
+                'amount' => 'Maximum investment for '.$package['name'].' is $'.number_format($package['max_amount'], 2).'.',
+            ]);
+        }
+
+        if ($data['payment_method'] === 'account_balance' && $request->user()->balance < $amountInUsd) {
             throw ValidationException::withMessages([
                 'amount' => 'Insufficient account balance for this purchase.',
             ]);
@@ -40,7 +52,7 @@ class InvestmentController extends Controller
 
         $isPending = $data['payment_method'] === 'bank_transfer';
 
-        $investment = DB::transaction(function () use ($request, $data, $package, $isPending) {
+        $investment = DB::transaction(function () use ($request, $data, $package, $isPending, $amountInUsd) {
             if (! $isPending && ! InvestmentPackages::reserveSlot($data['package'])) {
                 throw ValidationException::withMessages([
                     'package' => 'This package is currently sold out.',
@@ -51,7 +63,7 @@ class InvestmentController extends Controller
                 'package_key' => $data['package'],
                 'package_name' => $package['name'],
                 'package_price' => $package['price'],
-                'amount' => $data['amount'],
+                'amount' => round($amountInUsd, 2),
                 'payment_method' => $data['payment_method'],
                 'daily_interest_rate' => $package['daily_interest_rate'],
                 'duration_days' => $package['duration_days'],

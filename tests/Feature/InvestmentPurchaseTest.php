@@ -43,6 +43,33 @@ class InvestmentPurchaseTest extends TestCase
         ]);
     }
 
+    public function test_php_amount_is_converted_to_usd_before_investment_is_stored(): void
+    {
+        $user = User::factory()->create([
+            'pin_hash' => Hash::make('123456'),
+            'balance' => 5000,
+        ]);
+
+        $response = $this->actingAs($user)
+            ->withSession(['pin_verified' => true])
+            ->post('/investments', [
+                'package' => 'crunch',
+                'amount' => 7500,
+                'currency' => 'PHP',
+                'payment_method' => 'account_balance',
+            ]);
+
+        $response->assertRedirect('/dashboard');
+
+        $this->assertDatabaseHas('investments', [
+            'user_id' => $user->id,
+            'package_key' => 'crunch',
+            'amount' => 122.33,
+            'status' => 'approved',
+            'payment_method' => 'account_balance',
+        ]);
+    }
+
     public function test_account_balance_activation_reduces_package_slots(): void
     {
         $user = User::factory()->create([

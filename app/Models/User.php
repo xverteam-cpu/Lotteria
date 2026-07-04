@@ -68,7 +68,25 @@ class User extends Authenticatable
             'is_admin' => 'boolean',
             'is_restricted' => 'boolean',
             'last_seen_at' => 'datetime',
+            'notifications_read' => 'array',
         ];
+    }
+
+    public function getNotificationsReadIds(): array
+    {
+        return is_array($this->notifications_read) ? $this->notifications_read : [];
+    }
+
+    public function markNotificationsRead(array $ids): void
+    {
+        $updated = collect($this->getNotificationsReadIds())
+            ->merge($ids)
+            ->unique()
+            ->values()
+            ->all();
+
+        $this->notifications_read = $updated;
+        $this->save();
     }
 
     public function isOnline(): bool

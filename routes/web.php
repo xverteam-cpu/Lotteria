@@ -13,6 +13,7 @@ use App\Models\Withdrawal;
 use App\Support\CurrencyRateService;
 use App\Support\DailyInterestAccrualService;
 use Illuminate\Support\Facades\Auth;
+use Illuminate\Support\Facades\DB;
 use Illuminate\Support\Facades\Route;
 
 Route::get('/', function () {
@@ -86,13 +87,88 @@ Route::get('/dashboard', function () {
         $showRafflePopup = true;
     }
 
-    $user->refresh();
+    $recentInvestments = Investment::where('user_id', $user->id)
+        ->orderByDesc('created_at')
+        ->limit(5)
+        ->get();
+
+    $recentWithdrawals = Withdrawal::where('user_id', $user->id)
+        ->orderByDesc('created_at')
+        ->limit(5)
+        ->get();
+
+    $dailyInterest = $user->investments()
+        ->where('status', 'approved')
+        ->get()
+        ->sum(fn ($investment) => $investment->dailyInterestAmount());
+
+    if (! is_numeric($dailyInterest)) {
+        $dailyInterest = 0;
+    }
+
+    $notifications = collect();
+
+    if ($dailyInterest > 0) {
+        $notifications->push([
+            'id' => 'daily-interest',
+            'title' => 'Daily interest credited',
+            'description' => '$'.number_format($dailyInterest, 2).' added to available balance.',
+            'time' => now(),
+        ]);
+    }
+
+    foreach ($recentInvestments as $investment) {
+        $description = match ($investment->payment_method) {
+            'admin_transfer' => 'Package sent by admin: '.$investment->package_name.'.',
+            'account_balance' => 'Investment purchased from your balance: '.$investment->package_name.'.',
+            'bank_transfer' => 'Investment submitted and pending approval: '.$investment->package_name.'.',
+            default => 'Investment activity: '.$investment->package_name.'.',
+        };
+
+        $notifications->push([
+            'id' => 'investment-'.$investment->id,
+            'title' => 'Investment update',
+            'description' => $description,
+            'time' => $investment->created_at,
+        ]);
+    }
+
+    foreach ($recentWithdrawals as $withdrawal) {
+        $notifications->push([
+            'id' => 'withdrawal-'.$withdrawal->id,
+            'title' => 'Withdrawal request',
+            'description' => '₱'.number_format($withdrawal->amount, 2).' '.$withdrawal->status.'.',
+            'time' => $withdrawal->created_at,
+        ]);
+    }
+
+    $notifications = $notifications
+        ->sortByDesc('time')
+        ->values()
+        ->take(5);
+
+    $notificationsRead = $user->getNotificationsReadIds();
+    $unreadCount = $notifications->reject(fn ($notification) => in_array($notification['id'], $notificationsRead, true))->count();
 
     return view('dashboard_user', [
         'user' => $user,
         'showRafflePopup' => $showRafflePopup,
+        'notifications' => $notifications,
+        'notificationsRead' => $notificationsRead,
+        'unreadCount' => $unreadCount,
     ]);
 })->middleware(['auth', 'pin', RestrictUserAccess::class])->name('dashboard');
+
+Route::post('/notifications/read-all', function (Illuminate\Http\Request $request) {
+    $data = $request->validate([
+        'ids' => ['required', 'array'],
+        'ids.*' => ['string'],
+    ]);
+
+    $request->user()->markNotificationsRead($data['ids']);
+
+    return response()->json(['status' => 'success']);
+})->middleware(['auth', 'pin'])->name('notifications.read_all');
 
 // Deposit page for buying shares
 Route::get('/deposit', function () {
@@ -101,10 +177,14 @@ Route::get('/deposit', function () {
 
 Route::get('/invest', function () {
     $meta = CurrencyRateService::latestUsdToPhpWithMeta();
+    $user = Auth::user();
+    $totalInvestment = $user ? (float) $user->investments()->sum('amount') : 0;
+
     return view('invest', [
         'phpRate' => $meta['rate'],
         'phpRateUpdatedAt' => $meta['updated_at'],
         'packageSlots' => App\Support\InvestmentPackages::currentSlots(),
+        'totalInvestment' => $totalInvestment,
     ]);
 })->name('invest');
 
@@ -135,7 +215,7 @@ Route::get('/withdraw', function () {
 
 Route::post('/withdrawals', function (Illuminate\Http\Request $request) {
     $data = $request->validate([
-        'amount' => ['required', 'numeric', 'min:1'],
+        'amount' => ['required', 'numeric', 'min:20', 'max:500'],
         'bank_name' => ['required', 'string', 'max:255'],
         'account_number' => ['required', 'string', 'max:255'],
         'account_holder' => ['required', 'string', 'max:255'],
@@ -143,27 +223,38 @@ Route::post('/withdrawals', function (Illuminate\Http\Request $request) {
 
     $user = $request->user();
 
-    if (($user->balance ?? 0) < (float) $data['amount']) {
+    DailyInterestAccrualService::accrueDueInterestForUser($user);
+    $user->refresh();
+
+    $investments = $user->investments()->latest()->get();
+    $availableBalance = (float) $user->balance + $investments->sum(fn ($investment) => $investment->earnedInterest());
+
+    if ($availableBalance < (float) $data['amount']) {
         throw Illuminate\Validation\ValidationException::withMessages([
             'amount' => 'Insufficient balance for this withdrawal request.',
         ]);
     }
 
-    $user->update([
-        'bank_name' => $data['bank_name'],
-        'bank_account_number' => $data['account_number'],
-        'bank_account_holder' => $data['account_holder'],
-    ]);
+    DB::transaction(function () use ($user, $data): void {
+        $user->update([
+            'bank_name' => $data['bank_name'],
+            'bank_account_number' => $data['account_number'],
+            'bank_account_holder' => $data['account_holder'],
+        ]);
 
-    App\Models\Withdrawal::create([
-        'user_id' => $user->id,
-        'amount' => $data['amount'],
-        'payment_method' => 'bank_transfer',
-        'bank_name' => $data['bank_name'],
-        'account_number' => $data['account_number'],
-        'account_holder' => $data['account_holder'],
-        'status' => 'pending',
-    ]);
+        App\Models\Withdrawal::create([
+            'user_id' => $user->id,
+            'amount' => $data['amount'],
+            'payment_method' => 'bank_transfer',
+            'bank_name' => $data['bank_name'],
+            'account_number' => $data['account_number'],
+            'account_holder' => $data['account_holder'],
+            'status' => 'pending',
+        ]);
+
+        $user->balance = max(0, ($user->balance ?? 0) - (float) $data['amount']);
+        $user->save();
+    });
 
     return redirect()->route('withdraw')->with('status', 'Withdrawal request submitted successfully.');
 })->middleware(['auth', 'pin', RestrictUserAccess::class])->name('withdrawals.store');
@@ -273,3 +364,7 @@ Route::post('/admin/package-slots', [UserManagementController::class, 'updatePac
 Route::post('/admin/send-funds', [UserManagementController::class, 'sendFunds'])
     ->middleware(['auth', 'pin', RestrictUserAccess::class])
     ->name('admin.send-funds');
+
+Route::fallback(function () {
+    return response()->view('errors.404', [], 404);
+});

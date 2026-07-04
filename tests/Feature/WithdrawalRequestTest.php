@@ -60,5 +60,39 @@ class WithdrawalRequestTest extends TestCase
         $this->assertSame('Test Bank', $user->fresh()->bank_name);
         $this->assertSame('1234567890', $user->fresh()->bank_account_number);
         $this->assertSame('Test User', $user->fresh()->bank_account_holder);
+        $this->assertEquals(450.0, (float) $user->fresh()->balance);
+    }
+
+    public function test_user_cannot_withdraw_below_the_minimum_or_above_the_maximum(): void
+    {
+        $user = User::factory()->create([
+            'balance' => 1000,
+            'pin_hash' => Hash::make('1234'),
+        ]);
+
+        $this->actingAs($user);
+        $this->withSession(['pin_verified' => true]);
+
+        $response = $this->from('/withdraw')->post('/withdrawals', [
+            'amount' => 10,
+            'bank_name' => 'Test Bank',
+            'account_number' => '1234567890',
+            'account_holder' => 'Test User',
+        ]);
+
+        $response->assertSessionHasErrors('amount');
+        $this->assertDatabaseCount('withdrawals', 0);
+        $this->assertEquals(1000.0, (float) $user->fresh()->balance);
+
+        $response = $this->from('/withdraw')->post('/withdrawals', [
+            'amount' => 600,
+            'bank_name' => 'Test Bank',
+            'account_number' => '1234567890',
+            'account_holder' => 'Test User',
+        ]);
+
+        $response->assertSessionHasErrors('amount');
+        $this->assertDatabaseCount('withdrawals', 0);
+        $this->assertEquals(1000.0, (float) $user->fresh()->balance);
     }
 }

@@ -1,0 +1,20 @@
+{
+  "name": "Lotteria Philippines",
+  "short_name": "Lotteria",
+  "start_url": "/",
+  "display": "standalone",
+  "background_color": "#ffffff",
+  "theme_color": "#e31b23",
+  "icons": [
+    {
+      "src": "/lotterialogo.png",
+      "sizes": "192x192",
+      "type": "image/png"
+    },
+    {
+      "src": "/lotterialogo.png",
+      "sizes": "512x512",
+      "type": "image/png"
+    }
+  ]
+}

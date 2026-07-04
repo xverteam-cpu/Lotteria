@@ -15,11 +15,18 @@ class AuthController extends Controller
     public function login(Request $request): RedirectResponse
     {
         $credentials = $request->validate([
-            'email' => ['required', 'email'],
+            'email' => ['required', 'string'],
             'password' => ['required', 'string'],
         ]);
 
-        if (! Auth::attempt($credentials)) {
+        $loginField = trim((string) $credentials['email']);
+        $password = $credentials['password'];
+
+        $user = User::where('username', $loginField)
+            ->orWhere('email', $loginField)
+            ->first();
+
+        if (! $user || ! Auth::attempt(['email' => $user->email, 'password' => $password])) {
             return back()
                 ->withErrors(['email' => 'The provided login details are incorrect.'])
                 ->onlyInput('email');
@@ -37,6 +44,7 @@ class AuthController extends Controller
         $data = $request->validate([
             'fullname' => ['required', 'string', 'max:255'],
             'username' => ['required', 'string', 'max:255', 'unique:users,username'],
+            'email' => ['required', 'email', 'max:255', 'unique:users,email'],
             'referral' => ['nullable', 'string', 'max:255'],
             'password' => ['required', 'confirmed', Password::min(8)],
         ]);
@@ -52,7 +60,7 @@ class AuthController extends Controller
         $user = User::create([
             'name' => $data['fullname'],
             'username' => $data['username'],
-            'email' => $this->generateUniqueEmail($data['username']),
+            'email' => $data['email'],
             'phone' => null,
             'address' => '',
             'region' => 'ncr',

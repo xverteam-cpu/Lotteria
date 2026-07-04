@@ -3,10 +3,16 @@
 <head>
   <meta charset="utf-8" />
   <meta name="viewport" content="width=device-width, initial-scale=1" />
-  <link rel="icon" type="image/png" href="https://www.lotteria.vn/grs-static/icons/logo_512.png" />
-  <link rel="shortcut icon" type="image/png" href="https://www.lotteria.vn/grs-static/icons/logo_512.png" />
+  <meta name="theme-color" content="#e31b23">
+  <meta name="apple-mobile-web-app-capable" content="yes">
+  <meta name="apple-mobile-web-app-status-bar-style" content="default">
+  <meta name="apple-mobile-web-app-title" content="Lotteria">
+  <link rel="icon" type="image/png" href="{{ asset('lotterialogo.png') }}" />
+  <link rel="shortcut icon" type="image/png" href="{{ asset('lotterialogo.png') }}" />
+  <link rel="apple-touch-icon" href="{{ asset('lotterialogo.png') }}" />
+  <link rel="manifest" href="{{ asset('manifest.json') }}" />
   <title>Lotteria Philippines</title>
-  
+
   <!-- Open Graph Meta Tags for Social Sharing -->
   <meta property="og:title" content="Lotteria Philippines">
   <meta property="og:description" content="Investment packages with daily returns. Start investing with Lotteria Philippines.">

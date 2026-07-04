@@ -95,7 +95,7 @@
       <label class="label">Amount to Withdraw</label>
       <div class="input-row">
         <span class="currency">$</span>
-        <input class="input-box amount-input" type="number" name="amount" min="1" step="0.01" placeholder="0.00" required />
+        <input class="input-box amount-input" type="number" name="amount" min="20" max="500" step="0.01" placeholder="0.00" required />
       </div>
 
       <div class="quick-row">
@@ -114,7 +114,7 @@
       <label class="label">Account Holder Name</label>
       <input class="input-box" type="text" name="account_holder" value="{{ old('account_holder', auth()->user()->bank_account_holder) }}" placeholder="Enter account holder name" required />
 
-      <div class="note">Please provide your bank details before requesting a withdrawal. Withdrawals are processed within 1–3 business days.</div>
+      <div class="note">Minimum withdrawal is $20 and maximum withdrawal is $500. Your available balance will be reduced immediately after the request is submitted.</div>
 
       <button class="send-btn" type="submit">Request Withdrawal</button>
     </form>

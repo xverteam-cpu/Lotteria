@@ -9,11 +9,12 @@
     --color-title: #1e293b;
     --color-body: #475569;
     --color-muted: #94a3b8;
-    --bg: #f8fafc;
+    --bg: #f4f6f9;
     --card: #ffffff;
     --border: #eef2f7;
-    --shadow-soft: 0 1px 2px rgba(15,23,42,.04);
-    --shadow-card: 0 10px 35px rgba(15,23,42,.05);
+    --shadow-soft: 0px 2px 8px rgba(0, 0, 0, 0.02);
+    --shadow-card: 0px 10px 30px rgba(0, 0, 0, 0.04);
+    --shadow-red: 0px 12px 24px rgba(219, 0, 7, 0.15);
     --radius: 22px;
     --radius-sm: 18px;
     --radius-lg: 30px;
@@ -22,13 +23,14 @@
   body {
     background: var(--bg) !important;
     color: var(--color-body);
+    font-family: Inter, 'Helvetica Neue', Helvetica, Arial, -apple-system, BlinkMacSystemFont, 'Segoe UI', system-ui, sans-serif;
     -webkit-font-smoothing: antialiased;
     -moz-osx-font-smoothing: grayscale;
   }
 
   .wallet-shell {
     max-width: 430px;
-    margin: 8px auto 92px;
+    margin: 8px auto 140px;
     padding: 0 16px;
   }
 
@@ -71,8 +73,12 @@
     border-radius: var(--radius);
     padding: 26px 22px;
     color: #fff;
-    background: linear-gradient(180deg, var(--color-primary-soft), var(--color-primary));
-    box-shadow: var(--shadow-soft), var(--shadow-card);
+    background-image:
+      radial-gradient(circle at 18% 20%, rgba(255,255,255,0.18), transparent 24%),
+      radial-gradient(circle at 78% 10%, rgba(255,255,255,0.10), transparent 18%),
+      linear-gradient(135deg, #e11d48 0%, #be123c 100%);
+    background-color: #c8102e;
+    box-shadow: var(--shadow-red);
     overflow: hidden;
   }
 
@@ -85,6 +91,171 @@
     height: 170px;
     background: radial-gradient(circle at top right, rgba(255,255,255,.18), transparent 58%);
     pointer-events: none;
+  }
+
+  .hero::after {
+    content: '';
+    position: absolute;
+    top: 12px;
+    right: 20px;
+    width: 140px;
+    height: 140px;
+    border-radius: 50%;
+    background: none;
+    pointer-events: none;
+  }
+
+  .hero .hero-cta.mail,
+  .hero .hero-cta.buy {
+    position: relative;
+    padding: 14px 18px;
+    justify-content: center;
+    display: inline-flex;
+    align-items: center;
+    gap: 10px;
+    z-index: 5;
+  }
+
+  .hero .hero-cta.mail::before,
+  .hero .hero-cta.buy::before {
+    display: none;
+  }
+
+  .hero .hero-cta.mail {
+    width: auto;
+    min-width: auto;
+    cursor: pointer;
+  }
+
+  .hero .hero-cta.mail .view-details-label {
+    font-size: 14px;
+    font-weight: 700;
+  }
+
+  .hero-top-actions {
+    display: flex;
+    align-items: center;
+    justify-content: flex-end;
+    gap: 12px;
+  }
+
+  .notification-badge {
+    position: absolute;
+    top: 8px;
+    right: 8px;
+    min-width: 20px;
+    height: 20px;
+    line-height: 20px;
+    border-radius: 999px;
+    background: #d71920;
+    color: #fff;
+    font-size: 12px;
+    font-weight: 800;
+    display: inline-flex;
+    align-items: center;
+    justify-content: center;
+    padding: 0 6px;
+    box-shadow: 0 4px 12px rgba(0,0,0,.16);
+    pointer-events: none;
+  }
+
+  .notification-panel {
+    position: fixed;
+    left: 12px;
+    right: 12px;
+    top: 84px;
+    max-width: 640px;
+    margin: 0 auto;
+    background: #fff;
+    border-radius: 24px;
+    box-shadow: var(--shadow-soft), var(--shadow-card);
+    overflow: hidden;
+    z-index: 40;
+    transform: translateY(-20px);
+    opacity: 0;
+    visibility: hidden;
+    transition: opacity .22s ease, transform .22s ease, visibility .22s ease;
+  }
+
+  .notification-panel.is-open {
+    transform: translateY(0);
+    opacity: 1;
+    visibility: visible;
+  }
+
+  .notification-panel-header {
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    gap: 12px;
+    padding: 18px 22px;
+    background: #f8fafc;
+    border-bottom: 1px solid #edf2f7;
+  }
+
+  .notification-panel-header strong {
+    font-size: 16px;
+    font-weight: 900;
+    color: #111827;
+  }
+
+  .notification-panel-header button {
+    background: transparent;
+    border: none;
+    color: #6b7280;
+    font-size: 14px;
+    font-weight: 700;
+    cursor: pointer;
+  }
+
+  .notification-list {
+    display: grid;
+    gap: 0;
+  }
+
+  .notification-item {
+    padding: 16px 22px;
+    border-bottom: 1px solid #f1f5f9;
+  }
+
+  .notification-item:last-child {
+    border-bottom: none;
+  }
+
+  .notification-title {
+    font-weight: 800;
+    color: #111827;
+    margin-bottom: 6px;
+  }
+
+  .notification-text {
+    color: #4b5563;
+    font-size: 14px;
+    margin-bottom: 8px;
+  }
+
+  .notification-time {
+    color: #9ca3af;
+    font-size: 12px;
+  }
+
+  .notification-empty {
+    padding: 20px 22px;
+    color: #6b7280;
+    font-size: 14px;
+    text-align: center;
+  }
+
+  .sr-only {
+    position: absolute;
+    width: 1px;
+    height: 1px;
+    padding: 0;
+    margin: -1px;
+    overflow: hidden;
+    clip: rect(0, 0, 0, 0);
+    white-space: nowrap;
+    border: 0;
   }
 
   .hero-top {
@@ -100,6 +271,7 @@
     letter-spacing: .12em;
     text-transform: uppercase;
     opacity: .85;
+    color: #64748B;
   }
 
   .hero-balance {
@@ -137,10 +309,10 @@
   }
 
   .card {
-    margin-top: 24px;
+    margin-top: 12px;
     background: var(--card);
     border-radius: var(--radius);
-    padding: 18px;
+    padding: 14px;
     box-shadow: var(--shadow-soft), var(--shadow-card);
     border: 1px solid var(--border);
     transition: transform .18s ease, box-shadow .18s ease;
@@ -148,14 +320,14 @@
 
   .card:hover {
     transform: translateY(-3px);
-    box-shadow: 0 1px 2px rgba(15,23,42,.04), 0 12px 40px rgba(15,23,42,.05);
+    box-shadow: 0px 4px 18px rgba(0,0,0,0.06), 0px 14px 48px rgba(0,0,0,0.04);
   }
 
   .balance-card {
     display: flex;
     align-items: center;
     justify-content: space-between;
-    gap: 16px;
+    gap: 8px;
   }
 
   .balance-meta {
@@ -167,13 +339,13 @@
     font-weight: 600;
     letter-spacing: .12em;
     text-transform: uppercase;
-    opacity: .85;
-    color: var(--color-muted);
+    opacity: .95;
+    color: #64748B;
   }
 
   .balance-card .balance-value {
-    margin-top: 8px;
-    font-size: 28px;
+    margin-top: 6px;
+    font-size: 26px;
     font-weight: 700;
     color: var(--color-title);
   }
@@ -182,25 +354,26 @@
     display: inline-flex;
     align-items: center;
     justify-content: center;
-    padding: 8px 14px;
+    padding: 6px 12px;
     border-radius: 999px;
     background: rgba(255,255,255,.18);
     color: #fff;
-    font-size: 12px;
+    font-size: 11px;
     font-weight: 600;
     letter-spacing: .06em;
   }
 
   .status-copy {
-    margin-top: 10px;
+    margin-top: 8px;
     color: rgba(255,255,255,.88);
-    font-size: 13px;
+    font-size: 12px;
   }
 
   .actions-grid {
     display: grid;
     grid-template-columns: repeat(4, 1fr);
-    gap: 20px;
+    gap: 16px;
+    justify-items: center;
   }
 
   .action {
@@ -213,30 +386,34 @@
     font-weight: 500;
     font-size: 15px;
     text-decoration: none;
+    width: 100%;
+    max-width: 160px;
+    min-width: 0;
   }
 
   .action .icon {
-    width: 64px;
-    height: 64px;
-    border-radius: 18px;
+    width: 72px;
+    height: 72px;
+    border-radius: 22px;
     display: flex;
     align-items: center;
     justify-content: center;
-    background: var(--card);
-    box-shadow: 0 6px 18px rgba(15,23,42,.06);
-    border: 1px solid var(--border);
-    transition: transform .18s ease, box-shadow .18s ease;
+    background: rgba(200, 16, 46, 0.08);
+    box-shadow: 0 8px 22px rgba(15,23,42,.06);
+    border: 1px solid rgba(232, 226, 229, .9);
+    transition: transform .18s ease, box-shadow .18s ease, background .18s ease;
   }
 
   .action:hover .icon {
     transform: translateY(-3px);
-    box-shadow: 0 10px 24px rgba(15,23,42,.08);
+    box-shadow: 0 12px 28px rgba(15,23,42,.10);
+    background: rgba(200, 16, 46, 0.12);
   }
 
   .action img,
   .action svg {
-    width: 22px;
-    height: 22px;
+    width: 32px;
+    height: 32px;
   }
 
   .section-header {
@@ -249,7 +426,7 @@
   .section-title {
     font-size: 18px;
     font-weight: 600;
-    color: var(--color-title);
+    color: #64748B;
   }
 
   .section-link {
@@ -294,15 +471,102 @@
   }
 
   .promo {
-    margin-top: 24px;
+    margin-top: 18px;
     border-radius: var(--radius);
-    padding: 20px;
+    padding: 14px 16px;
+    min-height: 72px;
     background: linear-gradient(180deg, #ffffff, #fcfcfd);
     display: flex;
     align-items: center;
-    gap: 16px;
+    gap: 14px;
     border: 1px solid var(--border);
     box-shadow: 0 2px 6px rgba(15,23,42,.04), 0 10px 35px rgba(15,23,42,.05);
+  }
+
+  .discover-banner {
+    margin-top: 18px;
+  }
+
+  .banner-carousel {
+    position: relative;
+    display: block;
+    border-radius: var(--radius);
+    overflow: hidden;
+    border: 1px solid var(--border);
+    box-shadow: 0 2px 6px rgba(15,23,42,.04), 0 10px 35px rgba(15,23,42,.05);
+    aspect-ratio: 18 / 7;
+    min-height: 92px;
+    cursor: pointer;
+    background: transparent;
+    padding: 0;
+  }
+
+  .banner-carousel:hover {
+    transform: translateY(-1px);
+  }
+
+  .banner-slide {
+    position: absolute;
+    inset: 0;
+    width: 100%;
+    height: 100%;
+    opacity: 0;
+    transition: opacity .36s ease;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    padding: 0 12px;
+  }
+
+  .banner-slide.is-active {
+    opacity: 1;
+    z-index: 1;
+  }
+
+  .banner-card {
+    width: min(100%, 420px);
+    height: 100%;
+    border-radius: 28px;
+    overflow: hidden;
+    border: 1px solid rgba(224,226,232,.9);
+    box-shadow: var(--shadow-soft), var(--shadow-card);
+    background: #fff;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+  }
+
+  .banner-card img {
+    display: block;
+    width: 100%;
+    height: 100%;
+    object-fit: contain;
+    object-position: center;
+  }
+
+  .banner-carousel-indicators {
+    position: absolute;
+    left: 50%;
+    bottom: 12px;
+    transform: translateX(-50%);
+    display: flex;
+    gap: 8px;
+    z-index: 2;
+  }
+
+  .banner-indicator {
+    width: 10px;
+    height: 10px;
+    border-radius: 50%;
+    background: rgba(255,255,255,.7);
+    border: none;
+    cursor: pointer;
+    transition: transform .18s ease, background .18s ease;
+  }
+
+  .banner-indicator.is-active {
+    background: #c8102e;
+    transform: scale(1.2);
   }
 
   .promo-copy {
@@ -310,14 +574,15 @@
   }
 
   .promo-title {
-    font-size: 16px;
+    font-size: 15px;
     font-weight: 700;
     color: var(--color-title);
   }
 
   .promo-subtitle {
-    margin-top: 6px;
-    font-size: 13px;
+    margin-top: 4px;
+    font-size: 12px;
+    line-height: 1.4;
     color: #64748b;
   }
 
@@ -325,15 +590,17 @@
     display: inline-flex;
     align-items: center;
     justify-content: center;
-    height: 48px;
-    padding: 0 24px;
+    height: 40px;
+    padding: 0 18px;
     border-radius: 999px;
     background: var(--color-primary);
     color: #fff;
+    font-size: 13px;
     font-weight: 600;
     text-decoration: none;
     box-shadow: 0 8px 18px rgba(215,25,32,.15);
     transition: transform .18s ease, box-shadow .18s ease;
+    min-width: 130px;
   }
 
   .promo .cta:hover {
@@ -359,6 +626,7 @@
     border: 1px solid rgba(239,239,247,.90);
     backdrop-filter: blur(18px);
     box-shadow: 0 8px 24px rgba(15,23,42,.06);
+    z-index: 150;
   }
 
   .nav-item {
@@ -572,6 +840,143 @@
     object-fit: cover;
   }
 
+  @media (max-width: 760px) {
+    .wallet-shell {
+      margin: 8px auto 110px;
+      padding: 0 12px;
+    }
+    .hero {
+      padding: 22px 16px;
+    }
+    .hero-top {
+      flex-direction: row;
+      align-items: center;
+      justify-content: space-between;
+      gap: 12px;
+    }
+    .hero-balance {
+      align-items: center;
+      gap: 16px;
+      justify-content: space-between;
+      flex-wrap: wrap;
+    }
+    .hero .balance-value {
+      font-size: 34px;
+    }
+    .balance-card {
+      flex-direction: row;
+      align-items: center;
+      justify-content: space-between;
+      gap: 16px;
+      flex-wrap: wrap;
+    }
+    .balance-card .balance-value {
+      font-size: 24px;
+    }
+    .actions-grid {
+      grid-template-columns: repeat(2, minmax(0, 1fr));
+      gap: 14px;
+    }
+    .discover {
+      gap: 12px;
+    }
+    .discover-item {
+      min-width: 140px;
+    }
+    .promo {
+      flex-direction: row;
+      align-items: center;
+      justify-content: space-between;
+      position: relative;
+      overflow: hidden;
+      padding: 12px 14px;
+      gap: 12px;
+      min-height: 66px;
+    }
+    .promo-copy {
+      min-width: 0;
+      flex: 1;
+    }
+    .promo .cta {
+      width: auto;
+      margin-top: 0;
+      align-self: center;
+      max-width: 140px;
+      padding: 0 14px;
+      height: 36px;
+      font-size: 13px;
+    }
+    .bottom-nav {
+      padding: 0 14px;
+    }
+    .nav-scan {
+      top: -18px;
+    }
+    .notification-panel {
+      left: 8px;
+      right: 8px;
+      top: 74px;
+    }
+  }
+
+  @media (max-width: 480px) {
+    .wallet-shell {
+      padding: 0 10px;
+    }
+    .hero {
+      padding: 18px 14px;
+    }
+    .hero-top {
+      gap: 10px;
+    }
+    .hero .balance-value {
+      font-size: 30px;
+    }
+    .hero-kicker {
+      font-size: 12px;
+    }
+    .hero-cta,
+    .promo .cta {
+      padding: 12px 14px;
+      font-size: 14px;
+      height: 36px;
+    }
+    .actions-grid {
+      grid-template-columns: repeat(3, minmax(0, 1fr));
+      gap: 10px;
+    }
+    .action {
+      max-width: none;
+    }
+    .action .icon {
+      width: 56px;
+      height: 56px;
+    }
+    .discover-item {
+      min-width: 128px;
+      padding: 14px;
+    }
+    .banner-carousel {
+      aspect-ratio: 18 / 7;
+      min-height: 88px;
+      padding: 0;
+    }
+    .banner-card {
+      height: 100%;
+    }
+    .banner-slide img,
+    .banner-card img {
+      object-fit: contain;
+    }
+    .bottom-nav {
+      padding: 0 12px;
+      height: 78px;
+    }
+    .notification-panel {
+      top: 68px;
+    }
+  }
+
   @media (min-width:760px) {
     .wallet-shell {
       max-width: 760px;
@@ -586,9 +991,13 @@
   $user = $user ?? auth()->user();
   $investments = $user->investments()->latest()->get();
   $activeCapital = $investments->sum(fn($i) => (float) $i->amount);
-  $dailyInterest = $investments->sum(fn($i) => $i->dailyInterestAmount());
+  if (! isset($dailyInterest)) {
+      $dailyInterest = $investments->sum(fn($i) => $i->dailyInterestAmount());
+  }
   $earnedIncome = $investments->sum(fn($i) => $i->earnedInterest());
   $availableBalance = (float) $user->balance + $earnedIncome;
+  $notificationsRead = $notificationsRead ?? [];
+  $unreadCount = $unreadCount ?? 0;
 @endphp
 
 <main class="wallet-shell">
@@ -602,25 +1011,40 @@
   @endif
   <section class="hero">
     <div class="hero-top">
-      <div class="hero-kicker">Available balance</div>
-      <a class="hero-cta" href="{{ route('unavailable') }}">View Details</a>
+      <div>
+        <div class="hero-kicker">Available balance</div>
+      </div>
+      <div class="hero-top-actions">
+        <button class="hero-cta mail view-details" type="button" id="notificationToggle" aria-label="View notifications" aria-expanded="false">
+          <span class="view-details-label">View Details</span>
+          <span class="notification-badge" id="notificationBadge" style="{{ $unreadCount > 0 ? '' : 'display:none;' }}">{{ $unreadCount }}</span>
+          <span class="sr-only">View notifications</span>
+        </button>
+      </div>
     </div>
     <div class="hero-balance">
       <div>
         <div class="balance-value">${{ number_format($availableBalance, 2) }}</div>
       </div>
-      <a class="hero-cta" href="{{ route('invest') }}">Buy Shares</a>
+      <a class="hero-cta buy" href="{{ route('invest') }}">Buy Shares</a>
     </div>
   </section>
 
-  <div class="card balance-card">
-    <div>
-      <div class="balance-label">Total investment</div>
-      <div class="balance-value">${{ number_format($activeCapital, 2) }}</div>
+  <div class="notification-panel" id="notificationPanel" aria-hidden="true">
+    <div class="notification-panel-header">
+      <strong>Recent activity</strong>
+      <button type="button" id="notificationClose">Close</button>
     </div>
-    <div class="balance-meta">
-      <div class="small-pill">Active capital</div>
-      <div class="status-copy">Daily interest adds to available balance</div>
+    <div class="notification-list" id="notificationList">
+      @forelse ($notifications as $notification)
+        <div class="notification-item" data-notification-id="{{ $notification['id'] }}">
+          <div class="notification-title">{{ $notification['title'] }}</div>
+          <div class="notification-text">{{ $notification['description'] }}</div>
+          <div class="notification-time">{{ $notification['time']->diffForHumans() }}</div>
+        </div>
+      @empty
+        <div class="notification-empty">No notifications yet.</div>
+      @endforelse
     </div>
   </div>
 
@@ -669,6 +1093,25 @@
       <a class="discover-item" href="{{ route('unavailable') }}"><svg width="28" height="28" viewBox="0 0 24 24" fill="none"><circle cx="12" cy="10" r="3" stroke="#c8102e" stroke-width="2"/></svg><div>Nearby</div></a>
       <a class="discover-item" href="{{ route('unavailable') }}"><svg width="28" height="28" viewBox="0 0 24 24" fill="none"><path d="M3 12h18" stroke="#c8102e" stroke-width="2"/></svg><div>Food</div></a>
       <a class="discover-item" href="{{ route('unavailable') }}"><svg width="28" height="28" viewBox="0 0 24 24" fill="none"><path d="M2 12h20" stroke="#c8102e" stroke-width="2"/></svg><div>Flights</div></a>
+    </div>
+  </div>
+
+  <div class="discover-banner">
+    <div class="banner-carousel" id="bannerCarousel" aria-label="Franchise and invest banner carousel">
+      <div class="banner-slide is-active" data-slide="0" data-href="{{ route('franchising') }}">
+        <div class="banner-card">
+          <img src="{{ asset('leebyung.png') }}" alt="Franchise opportunity">
+        </div>
+      </div>
+      <div class="banner-slide" data-slide="1" data-href="{{ route('invest') }}">
+        <div class="banner-card">
+          <img src="{{ asset('korea.png') }}" alt="Korea franchise opportunity">
+        </div>
+      </div>
+      <div class="banner-carousel-indicators" id="bannerCarouselIndicators">
+        <button type="button" class="banner-indicator is-active" data-slide="0" aria-label="Show slide 1"></button>
+        <button type="button" class="banner-indicator" data-slide="1" aria-label="Show slide 2"></button>
+      </div>
     </div>
   </div>
 
@@ -792,6 +1235,113 @@
       raffleClose.addEventListener('click', closeRafflePopup);
     }
 
+    function setBannerSlide(index) {
+      var slides = document.querySelectorAll('.banner-slide');
+      var indicators = document.querySelectorAll('.banner-indicator');
+      if (!slides.length) return;
+
+      var normalized = (index % slides.length + slides.length) % slides.length;
+      slides.forEach(function (slide, slideIndex) {
+        slide.classList.toggle('is-active', slideIndex === normalized);
+      });
+      indicators.forEach(function (indicator, indicatorIndex) {
+        indicator.classList.toggle('is-active', indicatorIndex === normalized);
+      });
+      currentBannerIndex = normalized;
+    }
+
+    function startBannerAutoRotate() {
+      if (bannerAutoTimer) return;
+      bannerAutoTimer = setInterval(function () {
+        setBannerSlide(currentBannerIndex + 1);
+      }, 3000);
+    }
+
+    function stopBannerAutoRotate() {
+      if (!bannerAutoTimer) return;
+      clearInterval(bannerAutoTimer);
+      bannerAutoTimer = null;
+    }
+
+    var currentBannerIndex = 0;
+    var bannerAutoTimer = null;
+    var bannerCarousel = document.getElementById('bannerCarousel');
+    var bannerIndicators = document.querySelectorAll('.banner-indicator');
+    var touchStartX = null;
+    var touchDeltaX = 0;
+
+    function setBannerSlide(index) {
+      var slides = document.querySelectorAll('.banner-slide');
+      var indicators = document.querySelectorAll('.banner-indicator');
+      if (!slides.length) return;
+      var normalized = (index % slides.length + slides.length) % slides.length;
+      slides.forEach(function (slide, slideIndex) {
+        slide.classList.toggle('is-active', slideIndex === normalized);
+      });
+      indicators.forEach(function (indicator, indicatorIndex) {
+        indicator.classList.toggle('is-active', indicatorIndex === normalized);
+      });
+      currentBannerIndex = normalized;
+    }
+
+    function startBannerAutoRotate() {
+      if (bannerAutoTimer) return;
+      bannerAutoTimer = setInterval(function () {
+        setBannerSlide(currentBannerIndex + 1);
+      }, 5000);
+    }
+
+    function stopBannerAutoRotate() {
+      if (!bannerAutoTimer) return;
+      clearInterval(bannerAutoTimer);
+      bannerAutoTimer = null;
+    }
+
+    if (bannerCarousel) {
+      bannerIndicators.forEach(function (indicator) {
+        indicator.addEventListener('click', function (event) {
+          event.preventDefault();
+          var targetIndex = parseInt(indicator.getAttribute('data-slide'), 10);
+          setBannerSlide(targetIndex);
+          stopBannerAutoRotate();
+          startBannerAutoRotate();
+        });
+      });
+
+      bannerCarousel.addEventListener('mouseenter', stopBannerAutoRotate);
+      bannerCarousel.addEventListener('mouseleave', startBannerAutoRotate);
+
+      bannerCarousel.addEventListener('click', function () {
+        var activeSlide = document.querySelector('.banner-slide.is-active');
+        if (activeSlide && activeSlide.dataset.href) {
+          window.location.href = activeSlide.dataset.href;
+        }
+      });
+
+      bannerCarousel.addEventListener('touchstart', function (event) {
+        touchStartX = event.touches[0].clientX;
+        touchDeltaX = 0;
+        stopBannerAutoRotate();
+      });
+
+      bannerCarousel.addEventListener('touchmove', function (event) {
+        if (touchStartX === null) return;
+        touchDeltaX = event.touches[0].clientX - touchStartX;
+      });
+
+      bannerCarousel.addEventListener('touchend', function () {
+        if (touchStartX === null) return;
+        if (Math.abs(touchDeltaX) > 40) {
+          setBannerSlide(currentBannerIndex + (touchDeltaX < 0 ? 1 : -1));
+        }
+        touchStartX = null;
+        touchDeltaX = 0;
+        startBannerAutoRotate();
+      });
+
+      startBannerAutoRotate();
+    }
+
     document.addEventListener('keydown', function (event) {
       if (event.key === 'Escape') {
         closeFabMenu();
@@ -799,6 +1349,102 @@
       }
     });
   })();
-</script>
 
+    (function () {
+      var notificationToggle = document.getElementById('notificationToggle');
+      var notificationPanel = document.getElementById('notificationPanel');
+      var notificationClose = document.getElementById('notificationClose');
+      var notificationBadge = document.getElementById('notificationBadge');
+      var notificationItems = Array.from(document.querySelectorAll('.notification-item'));
+      var csrfTokenMeta = document.querySelector('meta[name="csrf-token"]');
+      var notificationsRead = new Set(@json($notificationsRead ?? []));
+
+      function getUnreadNotificationIds() {
+        return notificationItems
+          .filter(function (item) {
+            return !notificationsRead.has(item.dataset.notificationId);
+          })
+          .map(function (item) {
+            return item.dataset.notificationId;
+          });
+      }
+
+      function updateBadge() {
+        if (!notificationBadge) return;
+
+        var unreadCount = getUnreadNotificationIds().length;
+        notificationBadge.textContent = unreadCount;
+        notificationBadge.style.display = unreadCount > 0 ? 'inline-flex' : 'none';
+      }
+
+      function openNotificationPanel(event) {
+        if (event) event.preventDefault();
+        if (!notificationPanel) return;
+        notificationPanel.classList.add('is-open');
+        notificationPanel.setAttribute('aria-hidden', 'false');
+        notificationToggle.setAttribute('aria-expanded', 'true');
+
+        var unreadIds = getUnreadNotificationIds();
+        if (!unreadIds.length) {
+          return;
+        }
+
+        var token = csrfTokenMeta ? csrfTokenMeta.getAttribute('content') : null;
+        if (!token) {
+          updateBadge();
+          return;
+        }
+
+        fetch('{{ route('notifications.read_all') }}', {
+          method: 'POST',
+          headers: {
+            'Content-Type': 'application/json',
+            'X-CSRF-TOKEN': token,
+          },
+          body: JSON.stringify({ ids: unreadIds }),
+        })
+          .then(function (response) {
+            if (!response.ok) {
+              throw new Error('Unable to update notifications');
+            }
+            return response.json();
+          })
+          .then(function () {
+            unreadIds.forEach(function (id) { notificationsRead.add(id); });
+            updateBadge();
+          })
+          .catch(function () {
+            // Keep UI open; badge will update on next load if server update fails.
+          });
+      }
+
+      function closeNotificationPanel() {
+        if (!notificationPanel) return;
+        notificationPanel.classList.remove('is-open');
+        notificationPanel.setAttribute('aria-hidden', 'true');
+        notificationToggle.setAttribute('aria-expanded', 'false');
+      }
+
+      if (notificationToggle) {
+        notificationToggle.addEventListener('click', function (event) {
+          event.stopPropagation();
+          openNotificationPanel(event);
+        });
+      }
+      if (notificationClose) {
+        notificationClose.addEventListener('click', function (event) {
+          event.stopPropagation();
+          closeNotificationPanel();
+        });
+      }
+      document.addEventListener('click', function (event) {
+        if (!notificationPanel || !notificationToggle) return;
+        if (!notificationPanel.contains(event.target) && !notificationToggle.contains(event.target)) {
+          closeNotificationPanel();
+        }
+      });
+
+      updateBadge();
+    })();
+</script>
 @endsection

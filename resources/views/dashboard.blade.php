@@ -9,7 +9,7 @@
   .account-hero::after { content:''; position:absolute; inset:0; background:linear-gradient(90deg, rgba(176,0,0,.92), rgba(227,27,35,.68), rgba(245,164,0,.32)); }
   .hero-inner { position:relative; z-index:1; padding:28px 16px 20px; }
   .hero-kicker { margin:0 0 8px; color:#ffe0a3; font-size:12px; line-height:16px; font-weight:800; letter-spacing:.18em; text-transform:uppercase; }
-  .balance-label { color:#ffe0a3; font-size:14px; line-height:19px; font-weight:700; }
+  .balance-label { color:#ffffff !important; font-size:14px; line-height:19px; font-weight:700; text-shadow:0 1px 0 rgba(0,0,0,.25); }
   .balance-value { margin-top:4px; color:#fff; font-size:32px; line-height:38px; font-weight:800; }
   .hero-actions { display:flex; flex-wrap:wrap; gap:6px; margin-top:12px; }
   .hero-action { display:inline-flex; align-items:center; justify-content:center; min-height:32px; padding:0 11px; border-radius:7px; border:1px solid rgba(255,255,255,.35); background:transparent; color:#fff; font-size:10px; line-height:13px; font-weight:800; letter-spacing:.08em; text-transform:uppercase; text-decoration:none; cursor:pointer; }
@@ -124,6 +124,31 @@
     .summary-card { padding:20px; }
     .activity-card { padding:24px; }
     .activity-head, .activity-item { display:flex; align-items:center; justify-content:space-between; }
+  }
+  /* Mobile tweaks */
+  @media (max-width: 480px) {
+    .dashboard-shell { max-width:100%; margin:12px 10px 20px; padding:0 10px; }
+    .account-hero { border-radius:14px; }
+    .hero-inner { padding:18px 12px 16px; }
+    .balance-value { font-size:28px; line-height:34px; }
+    .balance-label { font-size:13px; }
+    .hero-actions { gap:8px; }
+    .hero-action { font-size:11px; padding:0 10px; min-height:30px; }
+    .swipe-invest { padding:6px; min-height:44px; border-radius:12px; }
+    .swipe-knob { width:44px; height:44px; font-size:22px; }
+    .summary-grid { grid-template-columns:1fr; gap:12px; }
+    .summary-card { padding:10px; border-radius:12px; min-height:unset; }
+    .summary-card > div:first-child { display:flex; align-items:center; justify-content:space-between; gap:8px; }
+    .summary-card.featured { padding:8px 10px; }
+    .summary-card.featured > div:first-child { align-items:center; }
+    .summary-card.featured .summary-value { font-size:22px; margin:0; line-height:1; }
+    .summary-value { font-size:20px; margin-top:0; }
+    .summary-label { font-size:11px; }
+    .summary-help { margin-top:6px; font-size:12px; }
+    .notice { max-width:100%; }
+    .activity-card { padding:14px; }
+    .activity-item { padding:12px; }
+    body, html { -webkit-text-size-adjust:100%; }
   }
 </style>
 

@@ -207,6 +207,18 @@
     .white-card h3 { margin: 0 0 10px; font-size: 18px; color: var(--charcoal); }
     .amount { font-size: 24px; color: var(--lotteria-red); font-weight: 900; letter-spacing: -.03em; }
     .white-card p, .white-card li { color: var(--muted); }
+    .section-image {
+      width: 100%;
+      border-radius: 28px;
+      overflow: hidden;
+      margin: 26px 0 24px;
+      box-shadow: 0 24px 58px rgba(64,39,0,.12);
+    }
+    .section-image img {
+      display: block;
+      width: 100%;
+      height: auto;
+    }
     .split { display: grid; grid-template-columns: 1fr 1fr; gap: 18px; align-items: stretch; }
     .dark-panel {
       background:
@@ -231,6 +243,203 @@
     .step-number { width: 38px; height: 38px; border-radius: 999px; background: var(--lotteria-red); color: #fff; display: grid; place-items: center; font-weight: 900; margin-bottom: 12px; box-shadow: inset 0 -4px 0 rgba(0,0,0,.12); }
     .footer { padding: 34px 0 44px; background: #211415; color: rgba(255,255,255,.72); font-size: 13px; border-top: 8px solid var(--lotteria-red); }
     .footer strong { color: #fff; }
+
+    .reveal {
+      opacity: 0;
+      transform: translateY(36px) scale(0.98);
+      filter: blur(10px);
+      transition: opacity 0.7s ease, transform 0.7s ease, filter 0.7s ease;
+      will-change: transform, opacity, filter;
+    }
+
+    .reveal.is-visible {
+      opacity: 1;
+      transform: translateY(0) scale(1);
+      filter: blur(0);
+    }
+
+    .reveal-card {
+      border-radius: 24px;
+      overflow: hidden;
+      transform-origin: center bottom;
+    }
+
+    .bottom-nav {
+      position: fixed;
+      left: 12px;
+      right: 12px;
+      bottom: 12px;
+      display: flex;
+      align-items: center;
+      justify-content: space-around;
+      gap: 18px;
+      max-width: 640px;
+      margin: 0 auto;
+      padding: 0 22px;
+      height: 86px;
+      background: rgba(255,255,255,.95);
+      border-radius: 30px;
+      border: 1px solid rgba(239,239,247,.90);
+      backdrop-filter: blur(18px);
+      box-shadow: 0 8px 24px rgba(15,23,42,.06);
+      z-index: 15;
+    }
+
+    .nav-item {
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+      gap: 6px;
+      color: var(--muted);
+      font-weight: 500;
+      font-size: 13px;
+      text-decoration: none;
+      transition: transform .2s ease, color .2s ease;
+    }
+
+    .nav-item:hover {
+      transform: translateY(-2px);
+      color: var(--ink);
+    }
+
+    .nav-item img {
+      width: 22px;
+      height: 22px;
+    }
+
+    .bottom-nav a {
+      text-decoration: none;
+    }
+
+    .nav-scan {
+      position: relative;
+      top: -24px;
+      width: 64px;
+      height: 64px;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      background: transparent;
+      box-shadow: none;
+      transition: transform .18s ease;
+    }
+
+    .nav-scan:hover {
+      transform: translateY(-6px);
+    }
+
+    .nav-scan img {
+      width: 100%;
+      height: 100%;
+      object-fit: contain;
+      display: block;
+    }
+
+    .fab-scrim {
+      position: fixed;
+      inset: 0;
+      z-index: 120;
+      background: rgba(0,0,0,0.52);
+      opacity: 0;
+      visibility: hidden;
+      transition: opacity .28s ease;
+    }
+
+    .fab-scrim.is-open {
+      opacity: 1;
+      visibility: visible;
+    }
+
+    .fab-panel {
+      position: fixed;
+      left: 0;
+      right: 0;
+      bottom: 0;
+      z-index: 130;
+      transform: translateY(110%);
+      transition: transform .34s cubic-bezier(.22,1,.36,1);
+    }
+
+    .fab-panel.is-open {
+      transform: translateY(0);
+    }
+
+    .fab-sheet {
+      border-radius: 28px 28px 0 0;
+      padding: 18px 18px 28px;
+      background: #fff;
+      box-shadow: 0 -18px 60px rgba(3,7,18,0.14);
+    }
+
+    .fab-sheet-handle {
+      width: 68px;
+      height: 6px;
+      margin: 0 auto 14px;
+      border-radius: 999px;
+      background: #e9e9e9;
+    }
+
+    .fab-sheet-title {
+      font-size: 16px;
+      font-weight: 900;
+      color: #121212;
+      text-align: center;
+      margin-bottom: 18px;
+    }
+
+    .fab-actions {
+      display: grid;
+      gap: 12px;
+    }
+
+    .fab-action {
+      display: flex;
+      align-items: center;
+      gap: 14px;
+      padding: 14px 16px;
+      border-radius: 18px;
+      background: #f9fafb;
+      color: #121212;
+      text-decoration: none;
+      font-weight: 800;
+      transition: transform .2s ease, background .2s ease;
+      transform: translateY(24px);
+      opacity: 0;
+    }
+
+    .fab-panel.is-open .fab-action {
+      transform: translateY(0);
+      opacity: 1;
+    }
+
+    .fab-action:hover {
+      background: #fff;
+      transform: translateY(-2px);
+    }
+
+    .fab-action-icon {
+      width: 38px;
+      height: 38px;
+      border-radius: 16px;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      background: linear-gradient(135deg, #e31b23, #ff6b4a);
+      color: #fff;
+      font-size: 18px;
+    }
+
+    .fab-close {
+      margin-top: 16px;
+      width: 100%;
+      border: none;
+      border-radius: 16px;
+      padding: 14px 16px;
+      background: #f5f5f5;
+      color: #4b5563;
+      font-weight: 900;
+      cursor: pointer;
+    }
 
     @media (max-width: 860px) {
       .hero, .split { grid-template-columns: 1fr; }
@@ -260,7 +469,7 @@
     <div class="shell">
       <nav class="nav">
             <div class="brand"><img src="lotterialogo.png" alt="Lotteria Philippines" style="height:48px; width:auto; display:block; margin-right:12px;" /><div>LOTTERIA<br>PHILIPPINES</div></div>
-      <section class="hero">
+      <section class="hero reveal">
         <div>
           <div class="eyebrow">Lotteria Franchise Investment View</div>
           <h1>40-Pyeong Franchise Cost Presentation</h1>
@@ -268,6 +477,7 @@
           <div class="cta-row">
             <a class="btn btn-primary" href="#costs">View Cost Breakdown</a>
             <a class="btn btn-secondary" href="#checklist">Investor Checklist</a>
+            <a class="btn btn-primary" href="franchise_40pyeong_application.html">Apply Now</a>
           </div>
         </div>
         <aside class="fin-card">
@@ -286,10 +496,13 @@
       </section>
     </div>
 
-    <section class="section">
+    <section class="section reveal">
       <div class="shell">
         <h2>Executive Investment Snapshot</h2>
         <p class="lead">A 40-pyeong branch is designed for dine-in, takeout and delivery-ready operations in mall or high-foot-traffic locations. The largest cash requirement usually comes before opening day.</p>
+        <div class="section-image">
+          <img src="40pyeong.png" alt="40-Pyeong franchise concept image">
+        </div>
         <div class="card-grid">
           <div class="white-card"><h3>Complete Store Footprint</h3><p>Dining area, service counter, kitchen line, cold and dry storage, staff area and utility zones.</p></div>
           <div class="white-card"><h3>Primary Cost Drivers</h3><p>Fit-out, kitchen equipment and other setup expenses carry the heaviest pre-opening capital requirement.</p></div>
@@ -298,7 +511,7 @@
       </div>
     </section>
 
-    <section class="section" id="costs">
+    <section class="section reveal" id="costs">
       <div class="shell">
         <h2>Core Build-Out Budget</h2>
         <p class="lead">These costs convert the site into a brand-compliant, operating fast-food branch.</p>
@@ -315,7 +528,7 @@
       </div>
     </section>
 
-    <section class="section">
+    <section class="section reveal">
       <div class="shell split">
         <div class="dark-panel">
           <h2>Opening Readiness Budget</h2>
@@ -337,7 +550,7 @@
       </div>
     </section>
 
-    <section class="section">
+    <section class="section reveal">
       <div class="shell">
         <h2>Suggested Capital Preparation Scenarios</h2>
         <p class="lead">Choose capital planning based on site quality, landlord demands and desired safety margin.</p>
@@ -350,7 +563,7 @@
       </div>
     </section>
 
-    <section class="section" id="checklist">
+    <section class="section reveal" id="checklist">
       <div class="shell">
         <h2>Verification Checklist & Next Steps</h2>
         <p class="lead">Before presenting the amount as final, confirm every major cost line with official documents.</p>
@@ -371,5 +584,117 @@
       </div>
     </footer>
   </main>
+  <script>
+    document.addEventListener('DOMContentLoaded', function () {
+      var revealItems = document.querySelectorAll('.reveal');
+
+      if (!('IntersectionObserver' in window)) {
+        revealItems.forEach(function (item) {
+          item.classList.add('is-visible');
+        });
+        return;
+      }
+
+      var observer = new IntersectionObserver(function (entries) {
+        entries.forEach(function (entry) {
+          if (entry.isIntersecting) {
+            entry.target.classList.add('is-visible');
+            observer.unobserve(entry.target);
+          }
+        });
+      }, {
+        threshold: 0.15,
+        rootMargin: '0px 0px -40px 0px'
+      });
+
+      revealItems.forEach(function (item) {
+        observer.observe(item);
+      });
+    });
+  </script>
+
+  <div class="fab-scrim" id="fabScrim" aria-hidden="true"></div>
+  <div class="fab-panel" id="fabPanel" aria-hidden="true">
+    <div class="fab-sheet" role="dialog" aria-modal="true" aria-label="Quick actions menu">
+      <div class="fab-sheet-handle"></div>
+      <div class="fab-sheet-title">Quick actions</div>
+      <div class="fab-actions">
+        <a class="fab-action" href="franchise_40pyeong.html">
+          <span class="fab-action-icon">🏬</span>
+          <span>40-Pyeong</span>
+        </a>
+        <a class="fab-action" href="franchise_60pyeong.html">
+          <span class="fab-action-icon">🏬</span>
+          <span>60-Pyeong</span>
+        </a>
+        <a class="fab-action" href="franchise_40pyeong_application.html">
+          <span class="fab-action-icon">📝</span>
+          <span>Apply 40P</span>
+        </a>
+        <a class="fab-action" href="franchise_60pyeong_application.html">
+          <span class="fab-action-icon">📝</span>
+          <span>Apply 60P</span>
+        </a>
+      </div>
+      <button class="fab-close" type="button" id="fabClose">Close menu</button>
+    </div>
+  </div>
+
+  <nav class="bottom-nav" aria-hidden="false">
+    <a class="nav-item active" href="index.php">
+      <img src="home.png" alt="Home">
+      <div>Home</div>
+    </a>
+    <a class="nav-item" href="#">
+      <img src="history.png" alt="History">
+      <div>History</div>
+    </a>
+    <a class="nav-item" href="#" id="fabToggle">
+      <div class="nav-scan">
+        <img src="menu.png" alt="Menu">
+      </div>
+    </a>
+    <a class="nav-item" href="#">
+      <img src="reward.png" alt="Rewards">
+      <div>Rewards</div>
+    </a>
+    <a class="nav-item" href="#">
+      <img src="profile.png" alt="Profile">
+      <div>Profile</div>
+    </a>
+  </nav>
+
+  <script>
+    (function () {
+      var fabToggle = document.getElementById('fabToggle');
+      var fabScrim = document.getElementById('fabScrim');
+      var fabPanel = document.getElementById('fabPanel');
+      var fabClose = document.getElementById('fabClose');
+
+      function openFabMenu(event) {
+        if (event) event.preventDefault();
+        if (!fabScrim || !fabPanel) return;
+        fabScrim.classList.add('is-open');
+        fabPanel.classList.add('is-open');
+        fabScrim.setAttribute('aria-hidden', 'false');
+        fabPanel.setAttribute('aria-hidden', 'false');
+      }
+
+      function closeFabMenu() {
+        if (!fabScrim || !fabPanel) return;
+        fabScrim.classList.remove('is-open');
+        fabPanel.classList.remove('is-open');
+        fabScrim.setAttribute('aria-hidden', 'true');
+        fabPanel.setAttribute('aria-hidden', 'true');
+      }
+
+      if (fabToggle) fabToggle.addEventListener('click', openFabMenu);
+      if (fabScrim) fabScrim.addEventListener('click', closeFabMenu);
+      if (fabClose) fabClose.addEventListener('click', closeFabMenu);
+      document.addEventListener('keydown', function (event) {
+        if (event.key === 'Escape') closeFabMenu();
+      });
+    })();
+  </script>
 </body>
 </html>
