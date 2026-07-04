@@ -2,10 +2,12 @@
 
 namespace App\Http\Controllers;
 
+use App\Mail\PackagePurchaseNotification;
 use App\Support\InvestmentPackages;
 use Illuminate\Http\RedirectResponse;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\DB;
+use Illuminate\Support\Facades\Mail;
 use Illuminate\Validation\ValidationException;
 
 class InvestmentController extends Controller
@@ -84,6 +86,9 @@ class InvestmentController extends Controller
         if ($investment->status === 'approved') {
             $investment->processReferralCommission();
         }
+
+        Mail::to($investment->user->email)
+            ->send(new PackagePurchaseNotification($investment));
 
         $message = $isPending
             ? $package['name'].' investment has been submitted and is pending admin approval.'

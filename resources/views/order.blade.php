@@ -141,7 +141,7 @@
       </div>
 
       <div class="login-row">
-        <a class="forgot-link" href="{{ route('unavailable') }}">Forgot password?</a>
+        <a class="forgot-link" href="{{ route('password.request') }}">Forgot password?</a>
       </div>
 
       <button class="login-button" type="submit">Login</button>

@@ -56,6 +56,11 @@ Route::post('/login', [AuthController::class, 'login'])->name('login.submit');
 Route::post('/register-partner', [AuthController::class, 'register'])->name('register.partner');
 Route::post('/logout', [AuthController::class, 'logout'])->name('logout');
 
+Route::get('/forgot-password', [App\Http\Controllers\PasswordResetController::class, 'requestForm'])->name('password.request');
+Route::post('/forgot-password', [App\Http\Controllers\PasswordResetController::class, 'sendResetLinkEmail'])->name('password.email');
+Route::get('/reset-password/{token}', [App\Http\Controllers\PasswordResetController::class, 'resetForm'])->name('password.reset');
+Route::post('/reset-password', [App\Http\Controllers\PasswordResetController::class, 'reset'])->name('password.update');
+
 Route::get('/pin/setup', [PinController::class, 'setup'])->middleware('auth')->name('pin.setup');
 Route::post('/pin/setup', [PinController::class, 'store'])->middleware('auth')->name('pin.store');
 Route::get('/pin/login', [PinController::class, 'login'])->name('pin.login');
