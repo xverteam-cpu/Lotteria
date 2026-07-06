@@ -1211,13 +1211,21 @@
     var fabPanel = document.getElementById('fabPanel');
     var fabClose = document.getElementById('fabClose');
 
-    function openFabMenu(event) {
+    function toggleFabMenu(event) {
       if (event) event.preventDefault();
       if (!fabScrim || !fabPanel) return;
-      fabScrim.classList.add('is-open');
-      fabPanel.classList.add('is-open');
-      fabScrim.setAttribute('aria-hidden', 'false');
-      fabPanel.setAttribute('aria-hidden', 'false');
+      var isOpen = fabPanel.classList.contains('is-open');
+      if (isOpen) {
+        fabScrim.classList.remove('is-open');
+        fabPanel.classList.remove('is-open');
+        fabScrim.setAttribute('aria-hidden', 'true');
+        fabPanel.setAttribute('aria-hidden', 'true');
+      } else {
+        fabScrim.classList.add('is-open');
+        fabPanel.classList.add('is-open');
+        fabScrim.setAttribute('aria-hidden', 'false');
+        fabPanel.setAttribute('aria-hidden', 'false');
+      }
     }
 
     function closeFabMenu() {
@@ -1229,7 +1237,7 @@
     }
 
     if (fabToggle) {
-      fabToggle.addEventListener('click', openFabMenu);
+      fabToggle.addEventListener('click', toggleFabMenu);
     }
 
     if (fabScrim) {
