@@ -415,6 +415,12 @@
     object-fit: contain;
   }
 
+  /* Slightly smaller referrals icon to match others visually */
+  .action-referrals .icon img {
+    width: 56px;
+    height: 56px;
+  }
+
   .section-header {
     display: flex;
     align-items: center;
@@ -1070,7 +1076,7 @@
         <div>Withdraw</div>
       </a>
 
-      <a class="action" href="{{ route('referrals') }}">
+      <a class="action action-referrals" href="{{ route('referrals') }}">
         <div class="icon"><img src="{{ asset('referrals.png') }}" alt="Referrals" loading="lazy" decoding="async"></div>
         <div>Referrals</div>
       </a>
