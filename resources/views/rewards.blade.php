@@ -132,7 +132,7 @@
     <a class="back-link" href="{{ route('dashboard') }}">← Back to Dashboard</a>
 
     <div class="card">
-      <img src="{{ asset('signup.png') }}" alt="Sign up bonus">
+      <img src="{{ asset('signup.png') }}" alt="Sign up bonus" loading="lazy" decoding="async">
       <div class="eyebrow">Welcome reward</div>
       <div class="title">$5 Sign Up Bonus</div>
       <div class="reward-pill">One-time reward • Instant credit</div>

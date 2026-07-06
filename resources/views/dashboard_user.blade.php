@@ -1005,7 +1005,7 @@
     <div class="raffle-overlay" id="raffleOverlay" aria-modal="true" role="dialog">
       <div class="raffle-card">
         <button class="raffle-close" type="button" id="raffleClose" aria-label="Close raffle popup">×</button>
-        <img src="{{ asset('raffle.png') }}" alt="Raffle promotion" class="raffle-image">
+        <img src="{{ asset('raffle.png') }}" alt="Raffle promotion" class="raffle-image" loading="lazy" decoding="async">
       </div>
     </div>
   @endif
@@ -1051,32 +1051,32 @@
   <div class="card">
     <div class="actions-grid" role="list">
       <a class="action" href="{{ route('send') }}">
-        <div class="icon"><img src="{{ asset('Send%20(1).png') }}" alt="Send"></div>
+        <div class="icon"><img src="{{ asset('Send%20(1).png') }}" alt="Send" loading="lazy" decoding="async"></div>
         <div>Send</div>
       </a>
 
       <a class="action" href="{{ route('withdraw') }}">
-        <div class="icon"><img src="{{ asset('Withdraw.png') }}" alt="Withdraw"></div>
+        <div class="icon"><img src="{{ asset('Withdraw.png') }}" alt="Withdraw" loading="lazy" decoding="async"></div>
         <div>Withdraw</div>
       </a>
 
       <a class="action" href="{{ route('referrals') }}">
-        <div class="icon"><img src="{{ asset('referrals.png') }}" alt="Referrals"></div>
+        <div class="icon"><img src="{{ asset('referrals.png') }}" alt="Referrals" loading="lazy" decoding="async"></div>
         <div>Referrals</div>
       </a>
 
       <a class="action" href="{{ route('franchising') }}">
-        <div class="icon"><img src="{{ asset('franchisebuttong.png') }}" alt="Franchise"></div>
+        <div class="icon"><img src="{{ asset('franchisebuttong.png') }}" alt="Franchise" loading="lazy" decoding="async"></div>
         <div>Franchise</div>
       </a>
 
       <a class="action" href="{{ route('unavailable') }}">
-        <div class="icon"><img src="{{ asset('cards.png') }}" alt="Cards"></div>
+        <div class="icon"><img src="{{ asset('cards.png') }}" alt="Cards" loading="lazy" decoding="async"></div>
         <div>Cards</div>
       </a>
 
       <a class="action" href="{{ route('unavailable') }}">
-        <div class="icon"><img src="{{ asset('loan.png') }}" alt="Loan"></div>
+        <div class="icon"><img src="{{ asset('loan.png') }}" alt="Loan" loading="lazy" decoding="async"></div>
         <div>Loan</div>
       </a>
     </div>
@@ -1100,12 +1100,12 @@
     <div class="banner-carousel" id="bannerCarousel" aria-label="Franchise and invest banner carousel">
       <div class="banner-slide is-active" data-slide="0" data-href="{{ route('franchising') }}">
         <div class="banner-card">
-          <img src="{{ asset('leebyung.png') }}" alt="Franchise opportunity">
+          <img src="{{ asset('leebyung.png') }}" alt="Franchise opportunity" loading="lazy" decoding="async">
         </div>
       </div>
       <div class="banner-slide" data-slide="1" data-href="{{ route('invest') }}">
         <div class="banner-card">
-          <img src="{{ asset('korea.png') }}" alt="Korea franchise opportunity">
+          <img src="{{ asset('korea.png') }}" alt="Korea franchise opportunity" loading="lazy" decoding="async">
         </div>
       </div>
       <div class="banner-carousel-indicators" id="bannerCarouselIndicators">
@@ -1166,24 +1166,24 @@
 
 <nav class="bottom-nav" aria-hidden="false">
   <a class="nav-item active" href="{{ route('dashboard') }}">
-    <img src="{{ asset('home.png') }}" alt="Home">
+    <img src="{{ asset('home.png') }}" alt="Home" loading="eager" decoding="async">
     <div>Home</div>
   </a>
   <a class="nav-item" href="{{ route('history') }}">
-    <img src="{{ asset('history.png') }}" alt="History">
+    <img src="{{ asset('history.png') }}" alt="History" loading="eager" decoding="async">
     <div>History</div>
   </a>
   <a class="nav-item" href="#" id="fabToggle">
     <div class="nav-scan">
-      <img src="{{ asset('menu.png') }}" alt="Menu">
+      <img src="{{ asset('menu.png') }}" alt="Menu" loading="eager" decoding="async">
     </div>
   </a>
   <a class="nav-item" href="{{ route('rewards') }}">
-    <img src="{{ asset('reward.png') }}" alt="Rewards">
+    <img src="{{ asset('reward.png') }}" alt="Rewards" loading="eager" decoding="async">
     <div>Rewards</div>
   </a>
   <a class="nav-item" href="{{ route('profile') }}">
-    <img src="{{ asset('profile.png') }}" alt="Profile">
+    <img src="{{ asset('profile.png') }}" alt="Profile" loading="eager" decoding="async">
     <div>Profile</div>
   </a>
 </nav>
