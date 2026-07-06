@@ -183,8 +183,8 @@
   .nav-scan {
     position: relative;
     top: -24px;
-    width: 64px;
-    height: 64px;
+    width: 74px;
+    height: 74px;
     display: flex;
     align-items: center;
     justify-content: center;
@@ -198,10 +198,13 @@
   }
 
   .nav-scan img {
-    width: 100%;
-    height: 100%;
+    width: 74px;
+    height: 74px;
     object-fit: contain;
     display: block;
+    border-radius: 0;
+    background: transparent;
+    padding: 0;
   }
 
   .fab-scrim {
@@ -264,10 +267,10 @@
   .fab-action {
     display: flex;
     align-items: center;
-    gap: 14px;
-    padding: 14px 16px;
-    border-radius: 18px;
-    background: #f9fafb;
+    gap: 12px;
+    padding: 8px 6px;
+    border-radius: 0;
+    background: transparent;
     color: #121212;
     text-decoration: none;
     font-weight: 800;
@@ -282,20 +285,31 @@
   }
 
   .fab-action:hover {
-    background: #fff;
+    background: transparent;
     transform: translateY(-2px);
   }
 
   .fab-action-icon {
-    width: 38px;
-    height: 38px;
-    border-radius: 16px;
+    width: 72px;
+    height: 72px;
+    border-radius: 0;
     display: flex;
     align-items: center;
     justify-content: center;
-    background: linear-gradient(135deg, #e31b23, #ff6b4a);
-    color: #fff;
-    font-size: 18px;
+    background: transparent;
+    box-shadow: none;
+    overflow: hidden;
+    flex-shrink: 0;
+    padding: 0;
+  }
+
+  .fab-action-icon img {
+    width: 100%;
+    height: 100%;
+    object-fit: contain;
+    display: block;
+    padding: 0;
+    border-radius: 0;
   }
 
   .fab-action:nth-child(1) { transition-delay:.05s; }
@@ -355,33 +369,6 @@
 
     <button class="send-btn">Continue to Send</button>
   </section>
-
-  <section class="recent">
-    <div class="section-head">
-      <h3>Recent Recipients</h3>
-      <a href="#">See All →</a>
-    </div>
-
-    <div class="recipient-list">
-      <div class="recipient">
-        <div class="avatar">A</div>
-        <p>Agent</p>
-      </div>
-      <div class="recipient">
-        <div class="avatar">M</div>
-        <p>Member</p>
-      </div>
-      <div class="recipient">
-        <div class="avatar">R</div>
-        <p>Referral</p>
-      </div>
-      <div class="recipient">
-        <div class="avatar">+</div>
-        <p>Add New</p>
-      </div>
-    </div>
-  </section>
-
 </main>
 
 <div class="fab-scrim" id="fabScrim" aria-hidden="true"></div>
@@ -395,27 +382,27 @@
         <span>Buy shares</span>
       </a>
       <a class="fab-action" href="{{ route('send') }}">
-        <span class="fab-action-icon">📤</span>
+        <span class="fab-action-icon"><img src="{{ asset('Send%20(1).png') }}" alt="Send"></span>
         <span>Send</span>
       </a>
       <a class="fab-action" href="{{ route('withdraw') }}">
-        <span class="fab-action-icon">🏧</span>
+        <span class="fab-action-icon"><img src="{{ asset('Withdraw.png') }}" alt="Withdraw"></span>
         <span>Withdraw</span>
       </a>
       <a class="fab-action" href="{{ route('referrals') }}">
-        <span class="fab-action-icon">🤝</span>
+        <span class="fab-action-icon"><img src="{{ asset('referrals.png') }}" alt="Referrals"></span>
         <span>Referrals</span>
       </a>
       <a class="fab-action" href="{{ route('franchising') }}">
-        <span class="fab-action-icon">🏬</span>
+        <span class="fab-action-icon"><img src="{{ asset('Franchise.png') }}" alt="Franchise"></span>
         <span>Franchise</span>
       </a>
       <a class="fab-action" href="{{ route('unavailable') }}">
-        <span class="fab-action-icon">💳</span>
+        <span class="fab-action-icon"><img src="{{ asset('cards.png') }}" alt="Cards"></span>
         <span>Cards</span>
       </a>
       <a class="fab-action" href="{{ route('unavailable') }}">
-        <span class="fab-action-icon">🪙</span>
+        <span class="fab-action-icon"><img src="{{ asset('loan.png') }}" alt="Loans"></span>
         <span>Loans</span>
       </a>
     </div>

@@ -394,26 +394,25 @@
   .action .icon {
     width: 72px;
     height: 72px;
-    border-radius: 22px;
+    border-radius: 0;
     display: flex;
     align-items: center;
     justify-content: center;
-    background: rgba(200, 16, 46, 0.08);
-    box-shadow: 0 8px 22px rgba(15,23,42,.06);
-    border: 1px solid rgba(232, 226, 229, .9);
-    transition: transform .18s ease, box-shadow .18s ease, background .18s ease;
+    background: transparent;
+    box-shadow: none;
+    border: none;
+    transition: transform .18s ease;
   }
 
   .action:hover .icon {
     transform: translateY(-3px);
-    box-shadow: 0 12px 28px rgba(15,23,42,.10);
-    background: rgba(200, 16, 46, 0.12);
   }
 
   .action img,
   .action svg {
-    width: 32px;
-    height: 32px;
+    width: 72px;
+    height: 72px;
+    object-fit: contain;
   }
 
   .section-header {
@@ -744,10 +743,10 @@
   .fab-action {
     display: flex;
     align-items: center;
-    gap: 14px;
-    padding: 14px 16px;
-    border-radius: 18px;
-    background: #f9fafb;
+    gap: 12px;
+    padding: 8px 6px;
+    border-radius: 0;
+    background: transparent;
     color: #121212;
     text-decoration: none;
     font-weight: 800;
@@ -762,20 +761,31 @@
   }
 
   .fab-action:hover {
-    background: #fff;
+    background: transparent;
     transform: translateY(-2px);
   }
 
   .fab-action-icon {
-    width: 38px;
-    height: 38px;
-    border-radius: 16px;
+    width: 72px;
+    height: 72px;
+    border-radius: 0;
     display: flex;
     align-items: center;
     justify-content: center;
-    background: linear-gradient(135deg, #e31b23, #ff6b4a);
-    color: #fff;
-    font-size: 18px;
+    background: transparent;
+    box-shadow: none;
+    overflow: hidden;
+    flex-shrink: 0;
+    padding: 0;
+  }
+
+  .fab-action-icon img {
+    width: 100%;
+    height: 100%;
+    object-fit: contain;
+    display: block;
+    padding: 0;
+    border-radius: 0;
   }
 
   .fab-action:nth-child(1) { transition-delay:.05s; }
@@ -1132,31 +1142,31 @@
     <div class="fab-sheet-title">Quick actions</div>
     <div class="fab-actions">
       <a class="fab-action" href="{{ route('invest') }}">
-        <span class="fab-action-icon">💰</span>
+        <span class="fab-action-icon"><img src="{{ asset('premium.png') }}" alt="Invest"></span>
         <span>Buy shares</span>
       </a>
       <a class="fab-action" href="{{ route('send') }}">
-        <span class="fab-action-icon">📤</span>
+        <span class="fab-action-icon"><img src="{{ asset('Send%20(1).png') }}" alt="Send"></span>
         <span>Send</span>
       </a>
       <a class="fab-action" href="{{ route('withdraw') }}">
-        <span class="fab-action-icon">🏧</span>
+        <span class="fab-action-icon"><img src="{{ asset('Withdraw.png') }}" alt="Withdraw"></span>
         <span>Withdraw</span>
       </a>
       <a class="fab-action" href="{{ route('referrals') }}">
-        <span class="fab-action-icon">🤝</span>
+        <span class="fab-action-icon"><img src="{{ asset('referrals.png') }}" alt="Referrals"></span>
         <span>Referrals</span>
       </a>
       <a class="fab-action" href="{{ route('franchising') }}">
-        <span class="fab-action-icon">🏬</span>
+        <span class="fab-action-icon"><img src="{{ asset('Franchise.png') }}" alt="Franchise"></span>
         <span>Franchise</span>
       </a>
       <a class="fab-action" href="{{ route('unavailable') }}">
-        <span class="fab-action-icon">💳</span>
+        <span class="fab-action-icon"><img src="{{ asset('cards.png') }}" alt="Cards"></span>
         <span>Cards</span>
       </a>
       <a class="fab-action" href="{{ route('unavailable') }}">
-        <span class="fab-action-icon">🪙</span>
+        <span class="fab-action-icon"><img src="{{ asset('loan.png') }}" alt="Loans"></span>
         <span>Loans</span>
       </a>
     </div>
