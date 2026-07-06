@@ -270,8 +270,8 @@
     font-weight: 600;
     letter-spacing: .12em;
     text-transform: uppercase;
-    opacity: .85;
-    color: #64748B;
+    opacity: 1;
+    color: #ffffff;
   }
 
   .hero-balance {
