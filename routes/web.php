@@ -175,6 +175,33 @@ Route::post('/notifications/read-all', function (Illuminate\Http\Request $reques
     return response()->json(['status' => 'success']);
 })->middleware(['auth', 'pin'])->name('notifications.read_all');
 
+Route::get('/rewards', function () {
+    $user = Auth::user();
+
+    return view('rewards', [
+        'user' => $user,
+        'signupBonusClaimed' => ! empty($user->signup_bonus_claimed_at),
+        'signupBonusAmount' => 5,
+    ]);
+})->middleware(['auth', 'pin', RestrictUserAccess::class])->name('rewards');
+
+Route::post('/rewards/claim-signup-bonus', function (Illuminate\Http\Request $request) {
+    $user = $request->user();
+
+    if (! empty($user->signup_bonus_claimed_at)) {
+        return redirect()->route('rewards')->with('status', 'You already claimed your $5 sign up bonus.');
+    }
+
+    DB::transaction(function () use ($user): void {
+        $user->forceFill([
+            'balance' => (float) ($user->balance ?? 0) + 5,
+            'signup_bonus_claimed_at' => now(),
+        ])->save();
+    });
+
+    return redirect()->route('rewards')->with('status', 'Your $5 sign up bonus has been added to your available balance.');
+})->middleware(['auth', 'pin', RestrictUserAccess::class])->name('rewards.claim-signup-bonus');
+
 // Deposit page for buying shares
 Route::get('/deposit', function () {
     return view('deposit');

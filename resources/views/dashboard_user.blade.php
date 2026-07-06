@@ -1178,7 +1178,7 @@
       <img src="{{ asset('menu.png') }}" alt="Menu">
     </div>
   </a>
-  <a class="nav-item" href="{{ route('unavailable') }}">
+  <a class="nav-item" href="{{ route('rewards') }}">
     <img src="{{ asset('reward.png') }}" alt="Rewards">
     <div>Rewards</div>
   </a>

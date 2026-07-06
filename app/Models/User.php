@@ -37,6 +37,7 @@ class User extends Authenticatable
         'referred_by',
         'pin_hash',
         'pin_set_at',
+        'signup_bonus_claimed_at',
         'is_admin',
         'is_restricted',
         'restricted_ip_address',
