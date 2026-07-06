@@ -1070,12 +1070,12 @@
         <div>Franchise</div>
       </a>
 
-      <a class="action" href="{{ route('cards') }}">
+      <a class="action" href="{{ route('unavailable') }}">
         <div class="icon"><img src="{{ asset('cards.png') }}" alt="Cards"></div>
         <div>Cards</div>
       </a>
 
-      <a class="action" href="{{ route('loan') }}">
+      <a class="action" href="{{ route('unavailable') }}">
         <div class="icon"><img src="{{ asset('loan.png') }}" alt="Loan"></div>
         <div>Loan</div>
       </a>
@@ -1151,11 +1151,11 @@
         <span class="fab-action-icon">🏬</span>
         <span>Franchise</span>
       </a>
-      <a class="fab-action" href="{{ route('cards') }}">
+      <a class="fab-action" href="{{ route('unavailable') }}">
         <span class="fab-action-icon">💳</span>
         <span>Cards</span>
       </a>
-      <a class="fab-action" href="{{ route('loan') }}">
+      <a class="fab-action" href="{{ route('unavailable') }}">
         <span class="fab-action-icon">🪙</span>
         <span>Loans</span>
       </a>
