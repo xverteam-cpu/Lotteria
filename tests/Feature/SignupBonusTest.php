@@ -31,4 +31,23 @@ class SignupBonusTest extends TestCase
         $secondResponse->assertRedirect();
         $this->assertEquals(5.0, (float) $user->fresh()->balance);
     }
+
+    public function test_claimed_signup_bonus_appears_in_account_history(): void
+    {
+        $user = User::factory()->create([
+            'balance' => 0,
+            'pin_hash' => Hash::make('1234'),
+        ]);
+
+        $this->actingAs($user);
+        $this->withSession(['pin_verified' => true]);
+
+        $this->post(route('rewards.claim-signup-bonus'));
+
+        $response = $this->get(route('history'));
+
+        $response->assertOk();
+        $response->assertSee('$5 Sign Up Bonus');
+        $response->assertSee('Welcome reward');
+    }
 }

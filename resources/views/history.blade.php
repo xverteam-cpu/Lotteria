@@ -123,7 +123,7 @@
           <tr>
             <th>Date</th>
             <th>Amount</th>
-            <th>Method</th>
+            <th>Description</th>
             <th>Status</th>
           </tr>
         </thead>
@@ -132,7 +132,14 @@
             <tr>
               <td>{{ $withdrawal->created_at->format('M d, Y') }}</td>
               <td>${{ number_format($withdrawal->amount, 2) }}</td>
-              <td>{{ ucwords(str_replace('_', ' ', $withdrawal->payment_method)) }}</td>
+              <td>
+                @if ($withdrawal->bank_name === 'Welcome Bonus')
+                  <strong>$5 Sign Up Bonus</strong><br>
+                  <span style="color:#d71920;font-size:12px;">Welcome reward</span>
+                @else
+                  {{ ucwords(str_replace('_', ' ', $withdrawal->payment_method)) }}
+                @endif
+              </td>
               <td>
                 <span class="badge badge-{{ $withdrawal->status }}">
                   {{ ucfirst($withdrawal->status) }}

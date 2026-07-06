@@ -92,7 +92,14 @@
       align-items: center;
       justify-content: center;
       width: fit-content;
+      min-width: 168px;
       box-shadow: 0 8px 18px rgba(215, 25, 32, 0.2);
+    }
+    .claim-actions {
+      display: flex;
+      justify-content: center;
+      align-items: center;
+      width: 100%;
     }
     .claim-btn:disabled {
       opacity: 0.7;
@@ -135,14 +142,16 @@
         <div class="status">{{ session('status') }}</div>
       @endif
 
-      @if (! empty($signupBonusClaimed))
-        <button class="claim-btn" type="button" disabled>Claimed</button>
-      @else
-        <form method="POST" action="{{ route('rewards.claim-signup-bonus') }}">
-          @csrf
-          <button class="claim-btn" type="submit">Claim $5 Bonus</button>
-        </form>
-      @endif
+      <div class="claim-actions">
+        @if (! empty($signupBonusClaimed))
+          <button class="claim-btn" type="button" disabled>Claimed</button>
+        @else
+          <form method="POST" action="{{ route('rewards.claim-signup-bonus') }}">
+            @csrf
+            <button class="claim-btn" type="submit">Claim $5 Bonus</button>
+          </form>
+        @endif
+      </div>
     </div>
   </div>
 </body>

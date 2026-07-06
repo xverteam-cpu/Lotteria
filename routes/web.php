@@ -197,6 +197,16 @@ Route::post('/rewards/claim-signup-bonus', function (Illuminate\Http\Request $re
             'balance' => (float) ($user->balance ?? 0) + 5,
             'signup_bonus_claimed_at' => now(),
         ])->save();
+
+        App\Models\Withdrawal::create([
+            'user_id' => $user->id,
+            'amount' => 5,
+            'payment_method' => 'account_balance',
+            'bank_name' => 'Welcome Bonus',
+            'account_number' => 'signup-bonus',
+            'account_holder' => 'Sign Up Bonus',
+            'status' => 'approved',
+        ]);
     });
 
     return redirect()->route('rewards')->with('status', 'Your $5 sign up bonus has been added to your available balance.');
