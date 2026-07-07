@@ -259,7 +259,7 @@
       <a href="#packages" class="cta">View Franchise Packages</a>
     </div>
     <div class="hero-media">
-      <img src="{{ asset('Lotteria.png') }}" alt="Lotteria">
+      <img src="{{ asset('Lotteria.png') }}" alt="Lotteria" loading="lazy" decoding="async">
     </div>
   </div>
 </div>
@@ -271,7 +271,7 @@
   <div class="packages">
     <div class="cards-grid">
       <div class="package-card" data-package="franchise_40pyeong">
-        <div class="media" style="background-image:url('{{ asset('Franchise.png') }}')"></div>
+        <div class="media" style="background-image:url('{{ asset('Franchise.png') }}')" loading="lazy" decoding="async"></div>
         <div class="package-body">
           <div class="package-title">LOTTERIA EXPRESS — 40 PYEONG</div>
           <div class="package-price">₱23.5M</div>
@@ -291,7 +291,7 @@
 
       <div class="package-card" data-package="franchise_60pyeong">
         <div class="ribbon">MOST POPULAR</div>
-        <div class="media" style="background-image:url('{{ asset('60pyeong.png') }}')"></div>
+        <div class="media" style="background-image:url('{{ asset('60pyeong.png') }}')" loading="lazy" decoding="async"></div>
         <div class="package-body">
           <div class="package-title">LOTTERIA PREMIUM — 60 PYEONG</div>
           <div class="package-price">₱45M</div>
@@ -393,24 +393,24 @@
 
 <nav class="bottom-nav" aria-hidden="false">
   <a class="nav-item" href="{{ route('dashboard') }}">
-    <img src="{{ asset('home.png') }}" alt="Home">
+    <img src="{{ asset('home.png') }}" alt="Home" loading="eager" decoding="async">
     <div>Home</div>
   </a>
   <a class="nav-item" href="{{ route('history') }}">
-    <img src="{{ asset('history.png') }}" alt="History">
+    <img src="{{ asset('history.png') }}" alt="History" loading="eager" decoding="async">
     <div>History</div>
   </a>
   <a class="nav-item" href="#" id="fabToggle">
     <div class="nav-scan">
-      <img src="{{ asset('menu.png') }}" alt="Menu">
+      <img src="{{ asset('menu.png') }}" alt="Menu" loading="eager" decoding="async">
     </div>
   </a>
   <a class="nav-item" href="{{ route('unavailable') }}">
-    <img src="{{ asset('reward.png') }}" alt="Rewards">
+    <img src="{{ asset('reward.png') }}" alt="Rewards" loading="eager" decoding="async">
     <div>Rewards</div>
   </a>
   <a class="nav-item active" href="{{ route('franchising') }}">
-    <img src="{{ asset('profile.png') }}" alt="Franchise">
+    <img src="{{ asset('profile.png') }}" alt="Franchise" loading="eager" decoding="async">
     <div>Franchise</div>
   </a>
 </nav>

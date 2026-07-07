@@ -475,7 +475,7 @@
 <div class="package-modal" id="packageModal" aria-hidden="true">
   <div class="modal-card" role="dialog" aria-modal="true" aria-label="Package details">
     <div class="modal-image-wrap">
-      <img class="modal-image" id="packageModalImage" src="" alt="">
+      <img class="modal-image" id="packageModalImage" src="" alt="" loading="lazy" decoding="async">
       <div class="slots-circle" id="packageSlotBadge" aria-hidden="true">250 slots</div>
     </div>
     <div class="modal-actions">
@@ -541,8 +541,8 @@
           <span>Pay through bank deposit</span>
         </div>
         <div class="payment-icons">
-          <img src="{{ asset('landbank_logo_2021_12_12_18_42_13.jpg') }}" alt="Landbank logo">
-          <img src="{{ asset('bank-of-the-philippine-islands-bpi-logo-vector.png') }}" alt="BPI logo">
+          <img src="{{ asset('landbank_logo_2021_12_12_18_42_13.jpg') }}" alt="Landbank logo" loading="lazy" decoding="async">
+          <img src="{{ asset('bank-of-the-philippine-islands-bpi-logo-vector.png') }}" alt="BPI logo" loading="lazy" decoding="async">
         </div>
       </button>
       <button class="payment-choice" type="button" data-payment-method="account_balance">
@@ -571,11 +571,11 @@
     <p class="amount-copy">Use any of the supported banks below to complete your deposit.</p>
     <div class="bank-logos">
       <button class="bank-logo-item" type="button" data-bank-qr="{{ asset('LandbankQR.png') }}" data-bank-name="Landbank">
-        <img src="{{ asset('landbank_logo_2021_12_12_18_42_13.jpg') }}" alt="Landbank logo">
+        <img src="{{ asset('landbank_logo_2021_12_12_18_42_13.jpg') }}" alt="Landbank logo" loading="lazy" decoding="async">
         <span>Landbank</span>
       </button>
       <button class="bank-logo-item" type="button" data-bank-qr="{{ asset('BPIQR.png') }}" data-bank-name="BPI">
-        <img src="{{ asset('bank-of-the-philippine-islands-bpi-logo-vector.png') }}" alt="BPI logo">
+        <img src="{{ asset('bank-of-the-philippine-islands-bpi-logo-vector.png') }}" alt="BPI logo" loading="lazy" decoding="async">
         <span>BPI</span>
       </button>
     </div>
@@ -590,7 +590,7 @@
 <div class="package-modal" id="qrModal" aria-hidden="true">
   <div class="modal-card" role="dialog" aria-modal="true" aria-label="Bank QR code">
     <h2 class="amount-title" id="qrModalTitle">Bank QR</h2>
-    <img class="modal-image" id="qrModalImage" src="" alt="Bank QR code">
+    <img class="modal-image" id="qrModalImage" src="" alt="Bank QR code" loading="lazy" decoding="async">
     <div class="modal-actions">
       <button class="modal-button confirm" type="button" id="qrModalConfirm">Confirm</button>
       <button class="modal-button cancel" type="button" id="qrModalClose">Cancel</button>

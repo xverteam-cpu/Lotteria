@@ -2,11 +2,13 @@
 
 namespace App\Http\Controllers;
 
+use App\Mail\WelcomeEmail;
 use App\Models\User;
 use Illuminate\Http\RedirectResponse;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Auth;
 use Illuminate\Support\Facades\Cookie;
+use Illuminate\Support\Facades\Mail;
 use Illuminate\Support\Str;
 use Illuminate\Validation\Rules\Password;
 
@@ -69,6 +71,8 @@ class AuthController extends Controller
             'is_admin' => false,
             'referred_by' => $referrer?->id,
         ]);
+
+        Mail::to($user->email)->send(new WelcomeEmail($user));
 
         Auth::login($user);
         $request->session()->regenerate();

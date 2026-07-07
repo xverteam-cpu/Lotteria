@@ -8,6 +8,7 @@ use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Foundation\Auth\User as Authenticatable;
 use Illuminate\Database\Eloquent\Relations\HasMany;
 use Illuminate\Database\Eloquent\Relations\BelongsTo;
+use App\Notifications\ResetPasswordNotification;
 use Illuminate\Notifications\Notifiable;
 use Illuminate\Support\Carbon;
 
@@ -36,7 +37,10 @@ class User extends Authenticatable
         'referred_by',
         'pin_hash',
         'pin_set_at',
+        'signup_bonus_claimed_at',
         'is_admin',
+        'is_restricted',
+        'restricted_ip_address',
         'last_seen_at',
         'last_ip_address',
     ];
@@ -64,6 +68,7 @@ class User extends Authenticatable
             'password' => 'hashed',
             'pin_set_at' => 'datetime',
             'is_admin' => 'boolean',
+            'is_restricted' => 'boolean',
             'last_seen_at' => 'datetime',
             'notifications_read' => 'array',
         ];
@@ -84,6 +89,11 @@ class User extends Authenticatable
 
         $this->notifications_read = $updated;
         $this->save();
+    }
+
+    public function sendPasswordResetNotification($token): void
+    {
+        $this->notify(new ResetPasswordNotification($token));
     }
 
     public function isOnline(): bool

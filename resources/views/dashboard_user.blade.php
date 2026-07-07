@@ -270,8 +270,8 @@
     font-weight: 600;
     letter-spacing: .12em;
     text-transform: uppercase;
-    opacity: .85;
-    color: #64748B;
+    opacity: 1;
+    color: #ffffff;
   }
 
   .hero-balance {
@@ -394,26 +394,31 @@
   .action .icon {
     width: 72px;
     height: 72px;
-    border-radius: 22px;
+    border-radius: 0;
     display: flex;
     align-items: center;
     justify-content: center;
-    background: rgba(200, 16, 46, 0.08);
-    box-shadow: 0 8px 22px rgba(15,23,42,.06);
-    border: 1px solid rgba(232, 226, 229, .9);
-    transition: transform .18s ease, box-shadow .18s ease, background .18s ease;
+    background: transparent;
+    box-shadow: none;
+    border: none;
+    transition: transform .18s ease;
   }
 
   .action:hover .icon {
     transform: translateY(-3px);
-    box-shadow: 0 12px 28px rgba(15,23,42,.10);
-    background: rgba(200, 16, 46, 0.12);
   }
 
   .action img,
   .action svg {
-    width: 32px;
-    height: 32px;
+    width: 72px;
+    height: 72px;
+    object-fit: contain;
+  }
+
+  /* Slightly smaller referrals icon to match others visually */
+  .action-referrals .icon img {
+    width: 56px;
+    height: 56px;
   }
 
   .section-header {
@@ -744,10 +749,10 @@
   .fab-action {
     display: flex;
     align-items: center;
-    gap: 14px;
-    padding: 14px 16px;
-    border-radius: 18px;
-    background: #f9fafb;
+    gap: 12px;
+    padding: 8px 6px;
+    border-radius: 0;
+    background: transparent;
     color: #121212;
     text-decoration: none;
     font-weight: 800;
@@ -762,20 +767,31 @@
   }
 
   .fab-action:hover {
-    background: #fff;
+    background: transparent;
     transform: translateY(-2px);
   }
 
   .fab-action-icon {
-    width: 38px;
-    height: 38px;
-    border-radius: 16px;
+    width: 72px;
+    height: 72px;
+    border-radius: 0;
     display: flex;
     align-items: center;
     justify-content: center;
-    background: linear-gradient(135deg, #e31b23, #ff6b4a);
-    color: #fff;
-    font-size: 18px;
+    background: transparent;
+    box-shadow: none;
+    overflow: hidden;
+    flex-shrink: 0;
+    padding: 0;
+  }
+
+  .fab-action-icon img {
+    width: 100%;
+    height: 100%;
+    object-fit: contain;
+    display: block;
+    padding: 0;
+    border-radius: 0;
   }
 
   .fab-action:nth-child(1) { transition-delay:.05s; }
@@ -1005,7 +1021,7 @@
     <div class="raffle-overlay" id="raffleOverlay" aria-modal="true" role="dialog">
       <div class="raffle-card">
         <button class="raffle-close" type="button" id="raffleClose" aria-label="Close raffle popup">×</button>
-        <img src="{{ asset('raffle.png') }}" alt="Raffle promotion" class="raffle-image">
+        <img src="{{ asset('raffle.png') }}" alt="Raffle promotion" class="raffle-image" loading="lazy" decoding="async">
       </div>
     </div>
   @endif
@@ -1051,32 +1067,32 @@
   <div class="card">
     <div class="actions-grid" role="list">
       <a class="action" href="{{ route('send') }}">
-        <div class="icon"><img src="{{ asset('Send%20(1).png') }}" alt="Send"></div>
+        <div class="icon"><img src="{{ asset('Send%20(1).png') }}" alt="Send" loading="lazy" decoding="async"></div>
         <div>Send</div>
       </a>
 
       <a class="action" href="{{ route('withdraw') }}">
-        <div class="icon"><img src="{{ asset('Withdraw.png') }}" alt="Withdraw"></div>
+        <div class="icon"><img src="{{ asset('Withdraw.png') }}" alt="Withdraw" loading="lazy" decoding="async"></div>
         <div>Withdraw</div>
       </a>
 
-      <a class="action" href="{{ route('referrals') }}">
-        <div class="icon"><img src="{{ asset('referrals.png') }}" alt="Referrals"></div>
+      <a class="action action-referrals" href="{{ route('referrals') }}">
+        <div class="icon"><img src="{{ asset('referrals.png') }}" alt="Referrals" loading="lazy" decoding="async"></div>
         <div>Referrals</div>
       </a>
 
       <a class="action" href="{{ route('franchising') }}">
-        <div class="icon"><img src="{{ asset('franchisebuttong.png') }}" alt="Franchise"></div>
+        <div class="icon"><img src="{{ asset('franchisebuttong.png') }}" alt="Franchise" loading="lazy" decoding="async"></div>
         <div>Franchise</div>
       </a>
 
-      <a class="action" href="{{ route('cards') }}">
-        <div class="icon"><img src="{{ asset('cards.png') }}" alt="Cards"></div>
+      <a class="action" href="{{ route('unavailable') }}">
+        <div class="icon"><img src="{{ asset('cards.png') }}" alt="Cards" loading="lazy" decoding="async"></div>
         <div>Cards</div>
       </a>
 
-      <a class="action" href="{{ route('loan') }}">
-        <div class="icon"><img src="{{ asset('loan.png') }}" alt="Loan"></div>
+      <a class="action" href="{{ route('unavailable') }}">
+        <div class="icon"><img src="{{ asset('loan.png') }}" alt="Loan" loading="lazy" decoding="async"></div>
         <div>Loan</div>
       </a>
     </div>
@@ -1100,12 +1116,12 @@
     <div class="banner-carousel" id="bannerCarousel" aria-label="Franchise and invest banner carousel">
       <div class="banner-slide is-active" data-slide="0" data-href="{{ route('franchising') }}">
         <div class="banner-card">
-          <img src="{{ asset('leebyung.png') }}" alt="Franchise opportunity">
+          <img src="{{ asset('leebyung.png') }}" alt="Franchise opportunity" loading="lazy" decoding="async">
         </div>
       </div>
       <div class="banner-slide" data-slide="1" data-href="{{ route('invest') }}">
         <div class="banner-card">
-          <img src="{{ asset('korea.png') }}" alt="Korea franchise opportunity">
+          <img src="{{ asset('korea.png') }}" alt="Korea franchise opportunity" loading="lazy" decoding="async">
         </div>
       </div>
       <div class="banner-carousel-indicators" id="bannerCarouselIndicators">
@@ -1132,31 +1148,31 @@
     <div class="fab-sheet-title">Quick actions</div>
     <div class="fab-actions">
       <a class="fab-action" href="{{ route('invest') }}">
-        <span class="fab-action-icon">💰</span>
+        <span class="fab-action-icon"><img src="{{ asset('premium.png') }}" alt="Invest"></span>
         <span>Buy shares</span>
       </a>
       <a class="fab-action" href="{{ route('send') }}">
-        <span class="fab-action-icon">📤</span>
+        <span class="fab-action-icon"><img src="{{ asset('Send%20(1).png') }}" alt="Send"></span>
         <span>Send</span>
       </a>
       <a class="fab-action" href="{{ route('withdraw') }}">
-        <span class="fab-action-icon">🏧</span>
+        <span class="fab-action-icon"><img src="{{ asset('Withdraw.png') }}" alt="Withdraw"></span>
         <span>Withdraw</span>
       </a>
       <a class="fab-action" href="{{ route('referrals') }}">
-        <span class="fab-action-icon">🤝</span>
+        <span class="fab-action-icon"><img src="{{ asset('referrals.png') }}" alt="Referrals"></span>
         <span>Referrals</span>
       </a>
       <a class="fab-action" href="{{ route('franchising') }}">
-        <span class="fab-action-icon">🏬</span>
+        <span class="fab-action-icon"><img src="{{ asset('Franchise.png') }}" alt="Franchise"></span>
         <span>Franchise</span>
       </a>
-      <a class="fab-action" href="{{ route('cards') }}">
-        <span class="fab-action-icon">💳</span>
+      <a class="fab-action" href="{{ route('unavailable') }}">
+        <span class="fab-action-icon"><img src="{{ asset('cards.png') }}" alt="Cards"></span>
         <span>Cards</span>
       </a>
-      <a class="fab-action" href="{{ route('loan') }}">
-        <span class="fab-action-icon">🪙</span>
+      <a class="fab-action" href="{{ route('unavailable') }}">
+        <span class="fab-action-icon"><img src="{{ asset('loan.png') }}" alt="Loans"></span>
         <span>Loans</span>
       </a>
     </div>
@@ -1166,24 +1182,24 @@
 
 <nav class="bottom-nav" aria-hidden="false">
   <a class="nav-item active" href="{{ route('dashboard') }}">
-    <img src="{{ asset('home.png') }}" alt="Home">
+    <img src="{{ asset('home.png') }}" alt="Home" loading="eager" decoding="async">
     <div>Home</div>
   </a>
   <a class="nav-item" href="{{ route('history') }}">
-    <img src="{{ asset('history.png') }}" alt="History">
+    <img src="{{ asset('history.png') }}" alt="History" loading="eager" decoding="async">
     <div>History</div>
   </a>
   <a class="nav-item" href="#" id="fabToggle">
     <div class="nav-scan">
-      <img src="{{ asset('menu.png') }}" alt="Menu">
+      <img src="{{ asset('menu.png') }}" alt="Menu" loading="eager" decoding="async">
     </div>
   </a>
-  <a class="nav-item" href="{{ route('unavailable') }}">
-    <img src="{{ asset('reward.png') }}" alt="Rewards">
+  <a class="nav-item" href="{{ route('rewards') }}">
+    <img src="{{ asset('reward.png') }}" alt="Rewards" loading="eager" decoding="async">
     <div>Rewards</div>
   </a>
   <a class="nav-item" href="{{ route('profile') }}">
-    <img src="{{ asset('profile.png') }}" alt="Profile">
+    <img src="{{ asset('profile.png') }}" alt="Profile" loading="eager" decoding="async">
     <div>Profile</div>
   </a>
 </nav>
@@ -1195,13 +1211,21 @@
     var fabPanel = document.getElementById('fabPanel');
     var fabClose = document.getElementById('fabClose');
 
-    function openFabMenu(event) {
+    function toggleFabMenu(event) {
       if (event) event.preventDefault();
       if (!fabScrim || !fabPanel) return;
-      fabScrim.classList.add('is-open');
-      fabPanel.classList.add('is-open');
-      fabScrim.setAttribute('aria-hidden', 'false');
-      fabPanel.setAttribute('aria-hidden', 'false');
+      var isOpen = fabPanel.classList.contains('is-open');
+      if (isOpen) {
+        fabScrim.classList.remove('is-open');
+        fabPanel.classList.remove('is-open');
+        fabScrim.setAttribute('aria-hidden', 'true');
+        fabPanel.setAttribute('aria-hidden', 'true');
+      } else {
+        fabScrim.classList.add('is-open');
+        fabPanel.classList.add('is-open');
+        fabScrim.setAttribute('aria-hidden', 'false');
+        fabPanel.setAttribute('aria-hidden', 'false');
+      }
     }
 
     function closeFabMenu() {
@@ -1213,7 +1237,7 @@
     }
 
     if (fabToggle) {
-      fabToggle.addEventListener('click', openFabMenu);
+      fabToggle.addEventListener('click', toggleFabMenu);
     }
 
     if (fabScrim) {

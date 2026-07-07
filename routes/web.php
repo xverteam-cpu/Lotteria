@@ -6,6 +6,7 @@ use App\Http\Controllers\Admin\InvestmentApprovalController;
 use App\Http\Controllers\Admin\WithdrawalController;
 use App\Http\Controllers\InvestmentController;
 use App\Http\Controllers\PinController;
+use App\Http\Middleware\RestrictUserAccess;
 use App\Models\Investment;
 use App\Models\User;
 use App\Models\Withdrawal;
@@ -54,6 +55,11 @@ Route::get('/login', function () {
 Route::post('/login', [AuthController::class, 'login'])->name('login.submit');
 Route::post('/register-partner', [AuthController::class, 'register'])->name('register.partner');
 Route::post('/logout', [AuthController::class, 'logout'])->name('logout');
+
+Route::get('/forgot-password', [App\Http\Controllers\PasswordResetController::class, 'requestForm'])->name('password.request');
+Route::post('/forgot-password', [App\Http\Controllers\PasswordResetController::class, 'sendResetLinkEmail'])->name('password.email');
+Route::get('/reset-password/{token}', [App\Http\Controllers\PasswordResetController::class, 'resetForm'])->name('password.reset');
+Route::post('/reset-password', [App\Http\Controllers\PasswordResetController::class, 'reset'])->name('password.update');
 
 Route::get('/pin/setup', [PinController::class, 'setup'])->middleware('auth')->name('pin.setup');
 Route::post('/pin/setup', [PinController::class, 'store'])->middleware('auth')->name('pin.store');
@@ -156,7 +162,7 @@ Route::get('/dashboard', function () {
         'notificationsRead' => $notificationsRead,
         'unreadCount' => $unreadCount,
     ]);
-})->middleware(['auth', 'pin'])->name('dashboard');
+})->middleware(['auth', 'pin', RestrictUserAccess::class])->name('dashboard');
 
 Route::post('/notifications/read-all', function (Illuminate\Http\Request $request) {
     $data = $request->validate([
@@ -169,10 +175,47 @@ Route::post('/notifications/read-all', function (Illuminate\Http\Request $reques
     return response()->json(['status' => 'success']);
 })->middleware(['auth', 'pin'])->name('notifications.read_all');
 
+Route::get('/rewards', function () {
+    $user = Auth::user();
+
+    return view('rewards', [
+        'user' => $user,
+        'signupBonusClaimed' => ! empty($user->signup_bonus_claimed_at),
+        'signupBonusAmount' => 5,
+    ]);
+})->middleware(['auth', 'pin', RestrictUserAccess::class])->name('rewards');
+
+Route::post('/rewards/claim-signup-bonus', function (Illuminate\Http\Request $request) {
+    $user = $request->user();
+
+    if (! empty($user->signup_bonus_claimed_at)) {
+        return redirect()->route('rewards')->with('status', 'You already claimed your $5 sign up bonus.');
+    }
+
+    DB::transaction(function () use ($user): void {
+        $user->forceFill([
+            'balance' => (float) ($user->balance ?? 0) + 5,
+            'signup_bonus_claimed_at' => now(),
+        ])->save();
+
+        App\Models\Withdrawal::create([
+            'user_id' => $user->id,
+            'amount' => 5,
+            'payment_method' => 'account_balance',
+            'bank_name' => 'Welcome Bonus',
+            'account_number' => 'signup-bonus',
+            'account_holder' => 'Sign Up Bonus',
+            'status' => 'approved',
+        ]);
+    });
+
+    return redirect()->route('rewards')->with('status', 'Your $5 sign up bonus has been added to your available balance.');
+})->middleware(['auth', 'pin', RestrictUserAccess::class])->name('rewards.claim-signup-bonus');
+
 // Deposit page for buying shares
 Route::get('/deposit', function () {
     return view('deposit');
-})->middleware(['auth', 'pin'])->name('deposit');
+})->middleware(['auth', 'pin', RestrictUserAccess::class])->name('deposit');
 
 Route::get('/invest', function () {
     $meta = CurrencyRateService::latestUsdToPhpWithMeta();
@@ -190,7 +233,7 @@ Route::get('/invest', function () {
 // User actions (authenticated)
 Route::get('/send', function () {
     return view('send');
-})->middleware(['auth', 'pin'])->name('send');
+})->middleware(['auth', 'pin', RestrictUserAccess::class])->name('send');
 
 Route::get('/withdraw', function () {
     $user = Auth::user();
@@ -210,7 +253,7 @@ Route::get('/withdraw', function () {
         'availableBalance' => $availableBalance,
         'recentWithdrawals' => $recentWithdrawals,
     ]);
-})->middleware(['auth', 'pin'])->name('withdraw');
+})->middleware(['auth', 'pin', RestrictUserAccess::class])->name('withdraw');
 
 Route::post('/withdrawals', function (Illuminate\Http\Request $request) {
     $data = $request->validate([
@@ -256,7 +299,7 @@ Route::post('/withdrawals', function (Illuminate\Http\Request $request) {
     });
 
     return redirect()->route('withdraw')->with('status', 'Withdrawal request submitted successfully.');
-})->middleware(['auth', 'pin'])->name('withdrawals.store');
+})->middleware(['auth', 'pin', RestrictUserAccess::class])->name('withdrawals.store');
 
 Route::get('/history', function () {
     $user = Auth::user();
@@ -278,82 +321,90 @@ Route::get('/history', function () {
         'withdrawals' => $withdrawals,
         'dailyInterest' => $dailyInterest,
     ]);
-})->middleware(['auth', 'pin'])->name('history');
+})->middleware(['auth', 'pin', RestrictUserAccess::class])->name('history');
 
 Route::get('/referrals', function () {
     return view('referrals');
-})->middleware(['auth', 'pin'])->name('referrals');
+})->middleware(['auth', 'pin', RestrictUserAccess::class])->name('referrals');
 
 Route::get('/cards', function () {
     return view('cards');
-})->middleware(['auth', 'pin'])->name('cards');
+})->middleware(['auth', 'pin', RestrictUserAccess::class])->name('cards');
 
 Route::get('/loan', function () {
     return view('loan');
-})->middleware(['auth', 'pin'])->name('loan');
+})->middleware(['auth', 'pin', RestrictUserAccess::class])->name('loan');
 
 Route::get('/profile', function () {
     return view('profile');
-})->middleware(['auth', 'pin'])->name('profile');
+})->middleware(['auth', 'pin', RestrictUserAccess::class])->name('profile');
 
 Route::post('/investments', [InvestmentController::class, 'store'])
-    ->middleware(['auth', 'pin'])
+    ->middleware(['auth', 'pin', RestrictUserAccess::class])
     ->name('investments.store');
 
 Route::get('/admin/dashboard', function () {
     abort_unless(Auth::user()?->is_admin, 403);
 
     return app(UserManagementController::class)->index(request());
-})->middleware(['auth', 'pin'])->name('admin.dashboard');
+})->middleware(['auth', 'pin', RestrictUserAccess::class])->name('admin.dashboard');
 
 Route::get('/admin/users/{user}', function (User $user) {
     abort_unless(Auth::user()?->is_admin, 403);
 
     return app(UserManagementController::class)->show($user);
-})->middleware(['auth', 'pin'])->name('admin.users.show');
+})->middleware(['auth', 'pin', RestrictUserAccess::class])->name('admin.users.show');
+
+Route::delete('/admin/users/{user}', [UserManagementController::class, 'destroy'])
+    ->middleware(['auth', 'pin', RestrictUserAccess::class])
+    ->name('admin.users.destroy');
+
+Route::post('/admin/users/{user}/restrict', [UserManagementController::class, 'restrict'])
+    ->middleware(['auth', 'pin', RestrictUserAccess::class])
+    ->name('admin.users.restrict');
 
 Route::get('/admin/investments', [InvestmentApprovalController::class, 'index'])
-    ->middleware(['auth', 'pin'])
+    ->middleware(['auth', 'pin', RestrictUserAccess::class])
     ->name('admin.investments');
 
 Route::get('/admin/investments/{investment}', [InvestmentApprovalController::class, 'show'])
-    ->middleware(['auth', 'pin'])
+    ->middleware(['auth', 'pin', RestrictUserAccess::class])
     ->name('admin.investments.show');
 
 Route::post('/admin/investments/{investment}/approve', [InvestmentApprovalController::class, 'approve'])
-    ->middleware(['auth', 'pin'])
+    ->middleware(['auth', 'pin', RestrictUserAccess::class])
     ->name('admin.investments.approve');
 
 Route::get('/admin/withdrawals', [WithdrawalController::class, 'index'])
-    ->middleware(['auth', 'pin'])
+    ->middleware(['auth', 'pin', RestrictUserAccess::class])
     ->name('admin.withdrawals');
 
 Route::get('/admin/withdrawals/{withdrawal}', [WithdrawalController::class, 'show'])
-    ->middleware(['auth', 'pin'])
+    ->middleware(['auth', 'pin', RestrictUserAccess::class])
     ->name('admin.withdrawals.show');
 
 Route::post('/admin/withdrawals/{withdrawal}/approve', [WithdrawalController::class, 'approve'])
-    ->middleware(['auth', 'pin'])
+    ->middleware(['auth', 'pin', RestrictUserAccess::class])
     ->name('admin.withdrawals.approve');
 
 Route::post('/admin/withdrawals/{withdrawal}/reject', [WithdrawalController::class, 'reject'])
-    ->middleware(['auth', 'pin'])
+    ->middleware(['auth', 'pin', RestrictUserAccess::class])
     ->name('admin.withdrawals.reject');
 
 Route::post('/admin/investments/{investment}/reject', [InvestmentApprovalController::class, 'reject'])
-    ->middleware(['auth', 'pin'])
+    ->middleware(['auth', 'pin', RestrictUserAccess::class])
     ->name('admin.investments.reject');
 
 Route::post('/admin/send-package', [UserManagementController::class, 'sendPackage'])
-    ->middleware(['auth', 'pin'])
+    ->middleware(['auth', 'pin', RestrictUserAccess::class])
     ->name('admin.send-package');
 
 Route::post('/admin/package-slots', [UserManagementController::class, 'updatePackageSlots'])
-    ->middleware(['auth', 'pin'])
+    ->middleware(['auth', 'pin', RestrictUserAccess::class])
     ->name('admin.package-slots.update');
 
 Route::post('/admin/send-funds', [UserManagementController::class, 'sendFunds'])
-    ->middleware(['auth', 'pin'])
+    ->middleware(['auth', 'pin', RestrictUserAccess::class])
     ->name('admin.send-funds');
 
 Route::fallback(function () {

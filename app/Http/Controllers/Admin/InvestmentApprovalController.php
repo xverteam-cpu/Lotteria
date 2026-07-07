@@ -3,11 +3,13 @@
 namespace App\Http\Controllers\Admin;
 
 use App\Http\Controllers\Controller;
+use App\Mail\PackageGiftedEmail;
 use App\Models\Investment;
 use App\Support\InvestmentPackages;
 use Illuminate\Http\RedirectResponse;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\DB;
+use Illuminate\Support\Facades\Mail;
 use Illuminate\View\View;
 
 class InvestmentApprovalController extends Controller
@@ -67,7 +69,7 @@ class InvestmentApprovalController extends Controller
         }
 
         $approved = DB::transaction(function () use ($investment, $request) {
-            if (! InvestmentPackages::reserveSlot($investment->package_key)) {
+            if ($investment->payment_method !== 'admin_transfer' && ! InvestmentPackages::reserveSlot($investment->package_key)) {
                 return false;
             }
 
@@ -77,6 +79,10 @@ class InvestmentApprovalController extends Controller
                 'approved_at' => now(),
                 'starts_at' => now(),
             ]);
+
+            $investment->refresh();
+            $investment->accrueDailyInterest();
+            Mail::to($investment->user->email)->send(new PackageGiftedEmail($investment));
 
             return true;
         });

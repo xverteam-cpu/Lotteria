@@ -81,7 +81,24 @@
         <h1 class="user-title">{{ $managedUser->name }}</h1>
         <p style="margin:8px 0 0;color:#667085;">Registered {{ $managedUser->created_at?->format('M d, Y h:i A') ?: '-' }}</p>
       </div>
-      <a class="back-link" href="{{ route('admin.dashboard') }}">Back to users</a>
+      <div style="display:flex; gap:10px; align-items:center; flex-wrap:wrap;">
+        <a class="back-link" href="{{ route('admin.dashboard') }}">Back to users</a>
+        @if(! $managedUser->is_admin)
+          <form action="{{ route('admin.users.restrict', $managedUser) }}" method="POST" style="display:inline;" onsubmit="return confirm('Restrict this user from accessing the website?');">
+            @csrf
+            <button type="submit" style="background:#111827; color:#fff; border:none; border-radius:8px; padding:10px 14px; font-weight:700; cursor:pointer;">
+              {{ $managedUser->is_restricted ? 'Already restricted' : 'Restrict IP' }}
+            </button>
+          </form>
+          <form action="{{ route('admin.users.destroy', $managedUser) }}" method="POST" onsubmit="return confirm('Delete this user account? This action cannot be undone.');">
+            @csrf
+            @method('DELETE')
+            <button type="submit" style="background:#c40000; color:#fff; border:none; border-radius:8px; padding:10px 14px; font-weight:700; cursor:pointer;">
+              Delete account
+            </button>
+          </form>
+        @endif
+      </div>
     </div>
 
     <div class="detail-grid">

@@ -7,6 +7,10 @@
   <meta name="apple-mobile-web-app-capable" content="yes">
   <meta name="apple-mobile-web-app-status-bar-style" content="default">
   <meta name="apple-mobile-web-app-title" content="Lotteria">
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link rel="dns-prefetch" href="https://fonts.googleapis.com">
+  <link rel="dns-prefetch" href="https://fonts.gstatic.com">
   <link rel="icon" type="image/png" href="{{ asset('lotterialogo.png') }}">
   <link rel="shortcut icon" type="image/png" href="{{ asset('lotterialogo.png') }}">
   <link rel="apple-touch-icon" href="{{ asset('lotterialogo.png') }}">

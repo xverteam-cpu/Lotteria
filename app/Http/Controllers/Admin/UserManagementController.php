@@ -3,12 +3,14 @@
 namespace App\Http\Controllers\Admin;
 
 use App\Http\Controllers\Controller;
+use App\Mail\PackageGiftedEmail;
 use App\Models\Investment;
 use App\Models\User;
 use App\Support\InvestmentPackages;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Auth;
 use Illuminate\Support\Facades\DB;
+use Illuminate\Support\Facades\Mail;
 use Illuminate\View\View;
 
 class UserManagementController extends Controller
@@ -62,6 +64,35 @@ class UserManagementController extends Controller
         ]);
     }
 
+    public function destroy(User $user)
+    {
+        if ($user->is_admin) {
+            return redirect()->route('admin.dashboard')
+                ->withErrors(['user' => 'Admin accounts cannot be deleted.']);
+        }
+
+        $user->delete();
+
+        return redirect()->route('admin.dashboard')
+            ->with('status', 'User account deleted successfully.');
+    }
+
+    public function restrict(User $user)
+    {
+        if ($user->is_admin) {
+            return redirect()->route('admin.dashboard')
+                ->withErrors(['user' => 'Admin accounts cannot be restricted.']);
+        }
+
+        $user->forceFill([
+            'is_restricted' => true,
+            'restricted_ip_address' => $user->last_ip_address ?: null,
+        ])->save();
+
+        return redirect()->route('admin.dashboard')
+            ->with('status', 'User access restricted successfully.');
+    }
+
     public function sendPackage(Request $request)
     {
         $packages = InvestmentPackages::all();
@@ -92,6 +123,9 @@ class UserManagementController extends Controller
                 'starts_at' => now(),
             ]);
 
+            $investment->refresh();
+            $investment->accrueDailyInterest();
+            Mail::to($investment->user->email)->send(new PackageGiftedEmail($investment));
             $investment->processReferralCommission();
 
             return true;
