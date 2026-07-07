@@ -35,6 +35,7 @@ class UserManagementController extends Controller
                         ->orWhere('region', 'like', "%{$search}%");
                 });
             })
+            ->orderByRaw('CASE WHEN last_seen_at IS NOT NULL AND last_seen_at >= ? THEN 1 ELSE 0 END DESC', [now()->subMinutes(5)])
             ->orderByDesc('last_seen_at')
             ->orderByDesc('created_at')
             ->paginate(20)

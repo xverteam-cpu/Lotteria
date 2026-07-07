@@ -3,7 +3,154 @@
 @section('content')
 @include('partials.admin-dashboard-styles')
 
+<style>
+  .user-row {
+    cursor: pointer;
+    transition: background-color 0.18s ease;
+  }
 
+  .user-row:hover,
+  .user-row:focus-visible {
+    background-color: #fff8f8;
+    outline: none;
+  }
+
+  .user-modal-overlay {
+    position: fixed;
+    inset: 0;
+    display: none;
+    align-items: center;
+    justify-content: center;
+    padding: 20px;
+    background: rgba(0, 0, 0, 0.6);
+    z-index: 300;
+  }
+
+  .user-modal-overlay.is-open {
+    display: flex;
+  }
+
+  .user-modal-card {
+    width: min(980px, 100%);
+    max-height: 90vh;
+    overflow-y: auto;
+    background: #fff;
+    border-radius: 18px;
+    box-shadow: 0 24px 70px rgba(0, 0, 0, 0.22);
+    padding: 24px;
+    position: relative;
+  }
+
+  .user-modal-close {
+    position: absolute;
+    top: 14px;
+    right: 14px;
+    border: 0;
+    background: transparent;
+    color: #64748b;
+    font-size: 24px;
+    cursor: pointer;
+  }
+
+  .user-modal-header {
+    display: flex;
+    justify-content: space-between;
+    gap: 16px;
+    margin-bottom: 20px;
+    padding-bottom: 16px;
+    border-bottom: 1px solid #f1f5f9;
+  }
+
+  .user-modal-title {
+    margin: 0;
+    color: #111827;
+    font-size: 22px;
+  }
+
+  .user-modal-subtitle {
+    margin: 4px 0 0;
+    color: #64748b;
+    font-size: 13px;
+  }
+
+  .user-modal-grid {
+    display: grid;
+    grid-template-columns: repeat(2, minmax(0, 1fr));
+    gap: 12px;
+    margin-bottom: 18px;
+  }
+
+  .user-modal-field {
+    padding: 12px 14px;
+    border-radius: 10px;
+    background: #fff7f7;
+    border: 1px solid #ffe2e6;
+  }
+
+  .user-modal-field-label {
+    display: block;
+    margin-bottom: 4px;
+    color: #c40000;
+    font-size: 11px;
+    font-weight: 800;
+    text-transform: uppercase;
+    letter-spacing: 0.06em;
+  }
+
+  .user-modal-field-value {
+    color: #111827;
+    font-size: 14px;
+    line-height: 20px;
+    overflow-wrap: anywhere;
+  }
+
+  .user-history-section {
+    margin-top: 16px;
+  }
+
+  .user-history-title {
+    margin: 0 0 10px;
+    color: #111827;
+    font-size: 16px;
+  }
+
+  .user-history-list {
+    display: grid;
+    gap: 10px;
+  }
+
+  .user-history-item {
+    padding: 12px 14px;
+    border: 1px solid #e5e7eb;
+    border-radius: 10px;
+    background: #f9fafb;
+  }
+
+  .user-history-item strong {
+    display: block;
+    color: #111827;
+    margin-bottom: 4px;
+  }
+
+  .user-history-meta {
+    display: flex;
+    justify-content: space-between;
+    gap: 10px;
+    color: #64748b;
+    font-size: 12px;
+    flex-wrap: wrap;
+  }
+
+  @media (max-width: 640px) {
+    .user-modal-grid {
+      grid-template-columns: 1fr;
+    }
+
+    .user-modal-card {
+      padding: 20px;
+    }
+  }
+</style>
 
 <div class="admin-shell">
   <!-- Top Navigation Bar -->
@@ -207,26 +354,38 @@
           <thead>
             <tr>
               <th>User Information</th>
-              <th>Contact</th>
-              <th>Region</th>
+              <th>Referred By</th>
+              <th>Available Balance</th>
               <th>Status</th>
-              <th>IP Address</th>
               <th>Registered</th>
-              <th style="width: 60px; text-align: center;">Action</th>
             </tr>
           </thead>
           <tbody>
             @forelse ($users as $user)
-              <tr>
+              <tr
+                class="user-row"
+                tabindex="0"
+                role="button"
+                aria-label="View details for {{ $user->name }}"
+                onclick="openUserModal('userModal-{{ $user->id }}')"
+                onkeydown="if (event.key === 'Enter' || event.key === ' ') { event.preventDefault(); openUserModal('userModal-{{ $user->id }}'); }"
+              >
                 <!-- User Information -->
                 <td>
                   <span class="user-cell-name">{{ $user->name }}</span>
                   <span class="user-cell-email">{{ $user->email }}</span>
                 </td>
-                <!-- Contact -->
-                <td>{{ $user->phone ?: '—' }}</td>
-                <!-- Region -->
-                <td>{{ $user->region ?: '—' }}</td>
+                <!-- Referred By -->
+                <td>
+                  @php
+                    $referrer = $user->referrer;
+                  @endphp
+                  {{ $referrer ? ($referrer->name ?: $referrer->email) : '—' }}
+                </td>
+                <!-- Available Balance -->
+                <td style="white-space: nowrap;">
+                  {{ $user->balance != null ? '$' . number_format((float) $user->balance, 2) : '$0.00' }}
+                </td>
                 <!-- Status Badges -->
                 <td>
                   <div class="status-badges">
@@ -241,22 +400,14 @@
                     @endif
                   </div>
                 </td>
-                <!-- IP Address -->
-                <td class="user-cell-ip">
-                  {{ $user->last_ip_address ?: '—' }}
-                </td>
                 <!-- Registration Date -->
                 <td style="white-space: nowrap;">
                   {{ $user->created_at?->format('M d, Y') ?: '—' }}
                 </td>
-                <!-- Action -->
-                <td style="text-align: center;">
-                  <a class="view-link" href="{{ route('admin.users.show', $user) }}">View Details →</a>
-                </td>
               </tr>
             @empty
               <tr>
-                <td colspan="7" class="empty-state">
+                <td colspan="5" class="empty-state">
                   <p style="margin: 0;">No users found. Try adjusting your search filters.</p>
                 </td>
               </tr>
@@ -272,4 +423,167 @@
     </div>
   </div>
 </div>
+
+@foreach ($users as $user)
+  <template id="userModal-{{ $user->id }}">
+    <div class="user-modal-card">
+      <button class="user-modal-close" type="button" onclick="closeUserModal()" aria-label="Close user details">&times;</button>
+      <div class="user-modal-header">
+        <div>
+          <h2 class="user-modal-title">{{ $user->name }}</h2>
+          <p class="user-modal-subtitle">Registered {{ $user->created_at?->format('M d, Y h:i A') ?: '—' }}</p>
+        </div>
+        <span class="status-badge {{ $user->isOnline() ? 'online' : 'offline' }}">
+          {{ $user->isOnline() ? 'Online' : 'Offline' }}
+        </span>
+      </div>
+
+      <div class="user-modal-grid">
+        <div class="user-modal-field">
+          <span class="user-modal-field-label">Email</span>
+          <div class="user-modal-field-value">{{ $user->email }}</div>
+        </div>
+        <div class="user-modal-field">
+          <span class="user-modal-field-label">Phone</span>
+          <div class="user-modal-field-value">{{ $user->phone ?: '—' }}</div>
+        </div>
+        <div class="user-modal-field">
+          <span class="user-modal-field-label">Referred By</span>
+          <div class="user-modal-field-value">
+            @php $referrer = $user->referrer; @endphp
+            {{ $referrer ? ($referrer->name ?: $referrer->email) : '—' }}
+          </div>
+        </div>
+        <div class="user-modal-field">
+          <span class="user-modal-field-label">Available Balance</span>
+          <div class="user-modal-field-value">{{ $user->balance != null ? '$' . number_format((float) $user->balance, 2) : '$0.00' }}</div>
+        </div>
+        <div class="user-modal-field">
+          <span class="user-modal-field-label">Region</span>
+          <div class="user-modal-field-value">{{ $user->region ?: '—' }}</div>
+        </div>
+        <div class="user-modal-field">
+          <span class="user-modal-field-label">Address</span>
+          <div class="user-modal-field-value">{{ $user->address ?: '—' }}</div>
+        </div>
+        <div class="user-modal-field">
+          <span class="user-modal-field-label">IP Address</span>
+          <div class="user-modal-field-value">{{ $user->last_ip_address ?: '—' }}</div>
+        </div>
+        <div class="user-modal-field">
+          <span class="user-modal-field-label">IP Location</span>
+          <div class="user-modal-field-value">{{ $user->region ?: $user->address ?: 'Not available' }}</div>
+        </div>
+        <div class="user-modal-field" style="grid-column: 1 / -1;">
+          <span class="user-modal-field-label">Last Seen</span>
+          <div class="user-modal-field-value">{{ $user->last_seen_at?->format('M d, Y h:i A') ?: '—' }}</div>
+        </div>
+      </div>
+
+      <div class="user-history-section">
+        <h3 class="user-history-title">Deposit / Investment History</h3>
+        @if($user->investments()->latest()->get()->isNotEmpty())
+          <div class="user-history-list">
+            @foreach($user->investments()->latest()->get() as $investment)
+              <div class="user-history-item">
+                <strong>{{ $investment->package_name ?: 'Investment' }}</strong>
+                <div class="user-history-meta">
+                  <span>{{ $investment->status }}</span>
+                  <span>${{ number_format((float) $investment->amount, 2) }}</span>
+                  <span>{{ $investment->created_at?->format('M d, Y') ?: '—' }}</span>
+                </div>
+              </div>
+            @endforeach
+          </div>
+        @else
+          <p style="margin:0;color:#64748b;">No investment history.</p>
+        @endif
+      </div>
+
+      <div class="user-history-section">
+        <h3 class="user-history-title">Withdraw History</h3>
+        @if($user->withdrawals()->latest()->get()->isNotEmpty())
+          <div class="user-history-list">
+            @foreach($user->withdrawals()->latest()->get() as $withdrawal)
+              <div class="user-history-item">
+                <strong>${{ number_format((float) $withdrawal->amount, 2) }}</strong>
+                <div class="user-history-meta">
+                  <span>{{ $withdrawal->status }}</span>
+                  <span>{{ $withdrawal->payment_method }}</span>
+                  <span>{{ $withdrawal->created_at?->format('M d, Y') ?: '—' }}</span>
+                </div>
+              </div>
+            @endforeach
+          </div>
+        @else
+          <p style="margin:0;color:#64748b;">No withdrawal history.</p>
+        @endif
+      </div>
+
+      <div class="user-history-section">
+        <h3 class="user-history-title">Income History</h3>
+        @if($user->referralEarnings()->latest()->get()->isNotEmpty())
+          <div class="user-history-list">
+            @foreach($user->referralEarnings()->latest()->get() as $earning)
+              <div class="user-history-item">
+                <strong>${{ number_format((float) $earning->amount, 2) }}</strong>
+                <div class="user-history-meta">
+                  <span>Referral commission</span>
+                  <span>{{ $earning->created_at?->format('M d, Y') ?: '—' }}</span>
+                </div>
+              </div>
+            @endforeach
+          </div>
+        @else
+          <p style="margin:0;color:#64748b;">No income history.</p>
+        @endif
+      </div>
+    </div>
+  </template>
+@endforeach
+
+<div id="userDetailsModal" class="user-modal-overlay" role="dialog" aria-modal="true" aria-labelledby="userDetailsTitle">
+  <div id="userDetailsModalBody" class="user-modal-card"></div>
+</div>
+
+<script>
+  function openUserModal(templateId) {
+    var template = document.getElementById(templateId);
+    var body = document.getElementById('userDetailsModalBody');
+    var modal = document.getElementById('userDetailsModal');
+
+    if (!template || !body || !modal) {
+      return;
+    }
+
+    body.innerHTML = template.innerHTML;
+    modal.classList.add('is-open');
+    document.body.style.overflow = 'hidden';
+  }
+
+  function closeUserModal() {
+    var modal = document.getElementById('userDetailsModal');
+    if (modal) {
+      modal.classList.remove('is-open');
+      document.body.style.overflow = '';
+    }
+  }
+
+  document.addEventListener('click', function (event) {
+    var modal = document.getElementById('userDetailsModal');
+    if (!modal || !modal.classList.contains('is-open')) {
+      return;
+    }
+
+    if (event.target === modal) {
+      closeUserModal();
+    }
+  });
+
+  document.addEventListener('keydown', function (event) {
+    if (event.key === 'Escape') {
+      closeUserModal();
+    }
+  });
+</script>
 @endsection

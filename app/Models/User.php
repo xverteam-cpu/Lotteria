@@ -107,6 +107,11 @@ class User extends Authenticatable
         return $this->belongsTo(User::class, 'referred_by');
     }
 
+    public function withdrawals(): HasMany
+    {
+        return $this->hasMany(Withdrawal::class, 'user_id');
+    }
+
     public function referralEarnings(): HasMany
     {
         return $this->hasMany(\App\Models\ReferralEarning::class, 'user_id');
