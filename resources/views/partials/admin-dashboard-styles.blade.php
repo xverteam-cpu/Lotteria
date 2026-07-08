@@ -142,6 +142,16 @@
     transform: translateY(0) scale(0.98);
   }
 
+  .header-btn-secondary {
+    background-color: #ffffff;
+    color: #0F172A;
+    border: 1px solid #D1D5DB;
+  }
+
+  .header-btn-secondary:hover {
+    background-color: #F8FAFC;
+  }
+
   /* Content Wrapper */
   .admin-content {
     padding: 24px;
@@ -336,6 +346,17 @@
     background-color: #FAFBFC;
   }
 
+  .user-row {
+    cursor: pointer;
+    transition: background-color .18s ease;
+  }
+
+  .user-row:hover,
+  .user-row:focus-visible {
+    background-color: #FEF2F2;
+    outline: none;
+  }
+
   .user-cell-name {
     font-size: 15px;
     font-weight: 600;
@@ -447,6 +468,310 @@
   .pagination .disabled {
     color: #d1d5db;
     cursor: not-allowed;
+  }
+
+  .modal-overlay {
+    position: fixed;
+    inset: 0;
+    display: none;
+    align-items: center;
+    justify-content: center;
+    padding: 20px;
+    background: rgba(0, 0, 0, 0.6);
+    z-index: 300;
+  }
+
+  .modal-overlay.is-open {
+    display: flex;
+  }
+
+  .modal-card {
+    width: min(880px, 100%);
+    max-height: 90vh;
+    overflow-y: auto;
+    background: #fff;
+    border-radius: 18px;
+    box-shadow: 0 24px 70px rgba(0, 0, 0, 0.22);
+    padding: 32px;
+    position: relative;
+  }
+
+  .modal-header {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    gap: 16px;
+    margin-bottom: 20px;
+    padding-bottom: 8px;
+    border-bottom: 1px solid #E5E7EB;
+  }
+
+  .modal-title {
+    margin: 0;
+    font-size: 22px;
+    font-weight: 700;
+    color: #0F172A;
+  }
+
+  .modal-subtitle {
+    margin: 4px 0 0;
+    color: #64748B;
+    font-size: 13px;
+  }
+
+  .modal-close {
+    border: 0;
+    background: transparent;
+    color: #64748B;
+    font-size: 24px;
+    cursor: pointer;
+  }
+
+  .modal-form {
+    display: flex;
+    flex-direction: column;
+    gap: 18px;
+  }
+
+  .modal-grid {
+    display: grid;
+    grid-template-columns: repeat(2, minmax(0, 1fr));
+    gap: 12px;
+    margin-bottom: 18px;
+  }
+
+  .modal-field {
+    display: flex;
+    flex-direction: column;
+    gap: 8px;
+  }
+
+  .modal-label {
+    font-size: 13px;
+    font-weight: 600;
+    color: #1F2937;
+  }
+
+  .modal-select,
+  .modal-input,
+  .modal-textarea {
+    width: 100%;
+    padding: 12px 14px;
+    border: 1px solid #D1D5DB;
+    border-radius: 12px;
+    font-size: 14px;
+    color: #0F172A;
+    background: #ffffff;
+    box-sizing: border-box;
+  }
+
+  .modal-textarea {
+    min-height: 110px;
+    resize: vertical;
+    font-family: inherit;
+  }
+
+  .modal-value {
+    font-size: 14px;
+    color: #0F172A;
+    line-height: 1.6;
+    word-break: break-word;
+  }
+
+  .modal-actions {
+    display: flex;
+    gap: 12px;
+    flex-wrap: wrap;
+    margin-top: 4px;
+  }
+
+  .modal-action {
+    flex: 1;
+    min-width: 120px;
+    border-radius: 12px;
+    padding: 12px 16px;
+    border: 1px solid transparent;
+    font-size: 14px;
+    font-weight: 700;
+    cursor: pointer;
+    transition: background .18s ease, transform .18s ease;
+  }
+
+  .modal-action-primary {
+    background: #C8102E;
+    color: #ffffff;
+    border-color: transparent;
+  }
+
+  .modal-action-secondary {
+    background: #ffffff;
+    color: #0F172A;
+    border-color: #D1D5DB;
+  }
+
+  .modal-action-secondary:hover {
+    background: #F8FAFC;
+  }
+
+  .package-quick-row {
+    display: flex;
+    gap: 8px;
+    flex-wrap: wrap;
+    margin-top: 10px;
+  }
+
+  .package-quick-btn {
+    border: 1px solid #D1D5DB;
+    background: #ffffff;
+    color: #0F172A;
+    border-radius: 10px;
+    padding: 10px 14px;
+    font-weight: 700;
+    cursor: pointer;
+    transition: background .18s ease;
+  }
+
+  .package-quick-btn:hover {
+    background: #F8FAFC;
+  }
+
+  .toolbar-actions {
+    display: flex;
+    flex-wrap: wrap;
+    gap: 10px;
+  }
+
+  .toolbar-btn {
+    border: 1px solid #D1D5DB;
+    background: #ffffff;
+    color: #475569;
+    border-radius: 12px;
+    padding: 12px 16px;
+    font-size: 13px;
+    font-weight: 700;
+    cursor: pointer;
+    transition: background .18s ease, transform .18s ease;
+  }
+
+  .toolbar-btn:hover {
+    background: #F8FAFC;
+  }
+
+  .toolbar-btn-secondary {
+    background: #F8FAFC;
+    border-color: transparent;
+  }
+
+  .user-history-section {
+    margin-top: 16px;
+    border: 1px solid #E5E7EB;
+    border-radius: 14px;
+    background: #ffffff;
+    overflow: hidden;
+  }
+
+  .user-history-section summary {
+    cursor: pointer;
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    gap: 12px;
+    padding: 16px 18px;
+    background: #F8FAFC;
+    border: none;
+    list-style: none;
+  }
+
+  .user-history-section summary::-webkit-details-marker {
+    display: none;
+  }
+
+  .user-history-section summary::after {
+    content: '\203A';
+    transform: rotate(90deg);
+    transition: transform 0.2s ease;
+    color: #64748B;
+    font-size: 18px;
+  }
+
+  .user-history-section[open] summary::after {
+    transform: rotate(-90deg);
+  }
+
+  .user-history-list {
+    display: grid;
+    gap: 10px;
+    padding: 16px 18px 18px;
+  }
+
+  .user-history-item {
+    padding: 12px 14px;
+    border: 1px solid #E5E7EB;
+    border-radius: 10px;
+    background: #F9FAFB;
+  }
+
+  .user-history-item strong {
+    display: block;
+    color: #111827;
+    margin-bottom: 4px;
+  }
+
+  .user-history-meta {
+    display: flex;
+    justify-content: space-between;
+    gap: 10px;
+    color: #64748B;
+    font-size: 12px;
+    flex-wrap: wrap;
+  }
+
+  .table-card-header {
+    padding: 24px 32px;
+    font-size: 16px;
+    font-weight: 700;
+    color: #0F172A;
+  }
+
+  .section-label {
+    display: block;
+    margin-bottom: 8px;
+    color: #94A3B8;
+    font-size: 12px;
+    font-weight: 700;
+    letter-spacing: 0.12em;
+    text-transform: uppercase;
+  }
+
+  .section-title {
+    margin: 0;
+    font-size: 22px;
+    font-weight: 800;
+    color: #0F172A;
+  }
+
+  .section-subtitle {
+    margin: 8px 0 0;
+    color: #94A3B8;
+    font-size: 14px;
+  }
+
+  .text-nowrap {
+    white-space: nowrap;
+  }
+
+  .modal-full-width {
+    grid-column: 1 / -1;
+  }
+
+  .error-list {
+    margin: 0;
+    padding-left: 18px;
+  }
+
+  .empty-message {
+    margin: 0;
+    color: #64748B;
   }
 
   /* Empty State */

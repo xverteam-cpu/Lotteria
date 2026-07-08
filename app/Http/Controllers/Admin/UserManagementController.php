@@ -6,6 +6,7 @@ use App\Http\Controllers\Controller;
 use App\Mail\PackageGiftedEmail;
 use App\Models\Investment;
 use App\Models\User;
+use App\Models\Withdrawal;
 use App\Support\InvestmentPackages;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Auth;
@@ -43,14 +44,14 @@ class UserManagementController extends Controller
             ->paginate(20)
             ->withQueryString();
 
-        $allUsers = User::query()->get();
-
         return view('admin.dashboard', [
             'users' => $users,
-            'totalUsers' => $allUsers->count(),
-            'newUsersCount' => $allUsers->where('created_at', '>=', now()->subDay())->count(),
-            'adminUsersCount' => $allUsers->where('is_admin', true)->count(),
-            'onlineUsersCount' => $allUsers->filter->isOnline()->count(),
+            'totalUsers' => User::count(),
+            'newUsersCount' => User::where('created_at', '>=', now()->subDay())->count(),
+            'adminUsersCount' => User::where('is_admin', true)->count(),
+            'onlineUsersCount' => User::where('last_seen_at', '>=', now()->subMinutes(5))->count(),
+            'approvedDepositTotal' => Investment::where('status', 'approved')->sum('amount'),
+            'pendingWithdrawalsCount' => Withdrawal::where('status', 'pending')->count(),
             'search' => $search,
             'packages' => InvestmentPackages::all(),
             'packageSlots' => InvestmentPackages::currentSlots(),

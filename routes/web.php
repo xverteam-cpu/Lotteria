@@ -339,6 +339,18 @@ Route::get('/profile', function () {
     return view('profile');
 })->middleware(['auth', 'pin', RestrictUserAccess::class])->name('profile');
 
+Route::get('/profile/edit', function () {
+    return view('profile-edit');
+})->middleware(['auth', 'pin', RestrictUserAccess::class])->name('profile.edit');
+
+Route::get('/profile/password', function () {
+    return view('change-password');
+})->middleware(['auth', 'pin', RestrictUserAccess::class])->name('profile.password');
+
+Route::get('/profile/notifications', function () {
+    return view('notification-settings');
+})->middleware(['auth', 'pin', RestrictUserAccess::class])->name('profile.notifications');
+
 Route::post('/investments', [InvestmentController::class, 'store'])
     ->middleware(['auth', 'pin', RestrictUserAccess::class])
     ->name('investments.store');

@@ -3,371 +3,191 @@
 @section('content')
 @include('partials.admin-dashboard-styles')
 
-<style>
-  .user-row {
-    cursor: pointer;
-    transition: background-color 0.18s ease;
-  }
-
-  .user-row:hover,
-  .user-row:focus-visible {
-    background-color: #fff8f8;
-    outline: none;
-  }
-
-  .user-modal-overlay {
-    position: fixed;
-    inset: 0;
-    display: none;
-    align-items: center;
-    justify-content: center;
-    padding: 20px;
-    background: rgba(0, 0, 0, 0.6);
-    z-index: 300;
-  }
-
-  .user-modal-overlay.is-open {
-    display: flex;
-  }
-
-  .user-modal-card {
-    width: min(980px, 100%);
-    max-height: 90vh;
-    overflow-y: auto;
-    background: #fff;
-    border-radius: 18px;
-    box-shadow: 0 24px 70px rgba(0, 0, 0, 0.22);
-    padding: 24px;
-    position: relative;
-  }
-
-  .user-modal-close {
-    position: absolute;
-    top: 14px;
-    right: 14px;
-    border: 0;
-    background: transparent;
-    color: #64748b;
-    font-size: 24px;
-    cursor: pointer;
-  }
-
-  .user-modal-header {
-    display: flex;
-    justify-content: space-between;
-    gap: 16px;
-    margin-bottom: 20px;
-    padding-bottom: 16px;
-    border-bottom: 1px solid #f1f5f9;
-  }
-
-  .user-modal-title {
-    margin: 0;
-    color: #111827;
-    font-size: 22px;
-  }
-
-  .user-modal-subtitle {
-    margin: 4px 0 0;
-    color: #64748b;
-    font-size: 13px;
-  }
-
-  .user-modal-grid {
-    display: grid;
-    grid-template-columns: repeat(2, minmax(0, 1fr));
-    gap: 12px;
-    margin-bottom: 18px;
-  }
-
-  .user-modal-field {
-    padding: 12px 14px;
-    border-radius: 10px;
-    background: #fff7f7;
-    border: 1px solid #ffe2e6;
-  }
-
-  .user-modal-field-label {
-    display: block;
-    margin-bottom: 4px;
-    color: #c40000;
-    font-size: 11px;
-    font-weight: 800;
-    text-transform: uppercase;
-    letter-spacing: 0.06em;
-  }
-
-  .user-modal-field-value {
-    color: #111827;
-    font-size: 14px;
-    line-height: 20px;
-    overflow-wrap: anywhere;
-  }
-
-  .user-history-section {
-    margin-top: 16px;
-  }
-
-  .user-history-title {
-    margin: 0 0 10px;
-    color: #111827;
-    font-size: 16px;
-  }
-
-  .user-history-list {
-    display: grid;
-    gap: 10px;
-  }
-
-  .user-history-section {
-    margin-top: 16px;
-    border: 1px solid #e5e7eb;
-    border-radius: 14px;
-    overflow: hidden;
-    background: #fff;
-  }
-
-  .user-history-section summary {
-    cursor: pointer;
-    display: flex;
-    align-items: center;
-    justify-content: space-between;
-    gap: 12px;
-    padding: 16px 18px;
-    background: #f8fafc;
-    border: none;
-    list-style: none;
-  }
-
-  .user-history-section summary::-webkit-details-marker {
-    display: none;
-  }
-
-  .user-history-title {
-    margin: 0;
-    color: #111827;
-    font-size: 16px;
-    font-weight: 700;
-  }
-
-  .user-history-section summary::after {
-    content: '\203A';
-    transform: rotate(90deg);
-    transition: transform 0.2s ease;
-    color: #64748b;
-    font-size: 18px;
-  }
-
-  .user-history-section[open] summary::after {
-    transform: rotate(-90deg);
-  }
-
-  .user-history-list {
-    display: grid;
-    gap: 10px;
-    padding: 16px 18px 18px;
-  }
-
-  .user-history-item {
-    padding: 12px 14px;
-    border: 1px solid #e5e7eb;
-    border-radius: 10px;
-    background: #f9fafb;
-  }
-
-  .user-history-item strong {
-    display: block;
-    color: #111827;
-    margin-bottom: 4px;
-  }
-
-  .user-history-meta {
-    display: flex;
-    justify-content: space-between;
-    gap: 10px;
-    color: #64748b;
-    font-size: 12px;
-    flex-wrap: wrap;
-  }
-
-  @media (max-width: 640px) {
-    .user-modal-grid {
-      grid-template-columns: 1fr;
-    }
-
-    .user-modal-card {
-      padding: 20px;
-    }
-  }
-</style>
-
 <div class="admin-shell">
-  <!-- Top Navigation Bar -->
   <nav class="admin-nav">
-    <a class="admin-nav-btn active" href="{{ route('admin.dashboard') }}" title="View all users">
-      <span>👥</span>
-      <span>All Users</span>
-    </a>
-    <a class="admin-nav-btn" href="{{ route('admin.withdrawals') }}" title="Pending withdrawal requests">
-      <span>💸</span>
-      <span>Withdrawals</span>
-    </a>
-    <a class="admin-nav-btn" href="{{ route('admin.investments', ['status' => 'pending']) }}" title="Pending investment deposits">
-      <span>💰</span>
-      <span>Deposits</span>
-    </a>
-    <form action="{{ route('logout') }}" method="post" style="display:inline; margin-left:auto;">
-      @csrf
-      <button class="admin-nav-btn" type="submit" title="Sign out from admin panel">
-        <span>🚪</span>
-        <span>Logout</span>
-      </button>
-    </form>
+    <a class="admin-nav-btn active" href="{{ route('admin.dashboard') }}">Users</a>
+    <a class="admin-nav-btn" href="{{ route('admin.withdrawals') }}">Withdrawals</a>
+    <a class="admin-nav-btn" href="{{ route('admin.investments', ['status' => 'pending']) }}">Deposits</a>
   </nav>
 
-  <!-- Header Section -->
   <div class="admin-header">
-    <div class="admin-header-content">
-      <div class="admin-header-info">
-        <h1 class="admin-title">Admin Dashboard</h1>
-        <p class="admin-copy">Monitor all registered users, track activity, and manage user accounts</p>
-      </div>
-      <div class="admin-header-actions">
-        <button class="header-btn" type="button" onclick="document.getElementById('sendPackageModal').style.display='block';">
-          <span>📦</span>
-          <span>Send Package</span>
-        </button>
-        <button class="header-btn" type="button" onclick="document.getElementById('manageSlotsModal').style.display='block';">
-          <span>🎛️</span>
-          <span>Manage Slots</span>
-        </button>
-        <button class="header-btn" type="button" onclick="document.getElementById('sendFundsModal').style.display='block';">
-          <span>💳</span>
-          <span>Send Funds</span>
-        </button>
-      </div>
+    <div class="admin-header-copy">
+      <h1 class="admin-title">Admin Dashboard</h1>
+      <p class="admin-copy">Monitor registered users and account activity.</p>
+    </div>
+    <div class="admin-header-actions">
+      <button class="header-btn header-btn-primary" type="button" onclick="toggleModal('sendPackageModal', true)">
+        <span>📦</span>
+        <span>Send Package</span>
+      </button>
+      <button class="header-btn header-btn-secondary" type="button" onclick="toggleModal('manageSlotsModal', true)">
+        Manage Slots
+      </button>
+      <button class="header-btn header-btn-secondary" type="button" onclick="toggleModal('sendFundsModal', true)">
+        Send Funds
+      </button>
     </div>
   </div>
 
+  @if (session('status'))
+    <div class="alert alert-success">{{ session('status') }}</div>
+  @endif
+
+  @if ($errors->any())
+    <div class="alert alert-danger">
+      <ul class="error-list">
+        @foreach ($errors->all() as $error)
+          <li>{{ $error }}</li>
+        @endforeach
+      </ul>
+    </div>
+  @endif
+
+  <section class="summary-grid">
+    <div class="summary-card">
+      <span class="summary-label">Total Accounts</span>
+      <strong class="summary-value">{{ number_format($totalUsers) }}</strong>
+    </div>
+    <div class="summary-card">
+      <span class="summary-label">Active Now</span>
+      <strong class="summary-value">{{ number_format($onlineUsersCount) }}</strong>
+    </div>
+    <div class="summary-card">
+      <span class="summary-label">Approved Deposits</span>
+      <strong class="summary-value">₱{{ number_format($approvedDepositTotal, 2) }}</strong>
+    </div>
+    <div class="summary-card">
+      <span class="summary-label">Pending Withdrawals</span>
+      <strong class="summary-value">{{ number_format($pendingWithdrawalsCount) }}</strong>
+    </div>
+  </section>
+
   <!-- Send Package Modal -->
-  <div id="sendPackageModal" style="display: none; position: fixed; top: 0; left: 0; right: 0; bottom: 0; background: rgba(0,0,0,0.5); z-index: 200; padding: 20px;">
-    <div style="background: white; border-radius: 8px; max-width: 500px; margin: 60px auto; padding: 32px; box-shadow: 0 20px 60px rgba(0,0,0,0.3);">
-      <div style="display: flex; justify-content: space-between; align-items: center; margin-bottom: 24px;">
-        <h2 style="margin: 0; font-size: 20px; font-weight: 700; color: #1f2937;">Send Package to User</h2>
-        <button onclick="document.getElementById('sendPackageModal').style.display='none';" style="background: none; border: none; font-size: 24px; cursor: pointer; color: #9ca3af;">&times;</button>
-      </div>
-      <form method="POST" action="{{ route('admin.send-package') ?? '#' }}" style="display: flex; flex-direction: column; gap: 16px;">
-        @csrf
+  <div id="sendPackageModal" class="modal-overlay" aria-hidden="true">
+    <div class="modal-card">
+      <div class="modal-header">
         <div>
-          <label style="display: block; font-size: 13px; font-weight: 600; color: #1f2937; margin-bottom: 8px;">Select User</label>
-          <select name="user_id" required style="width: 100%; padding: 10px 12px; border: 1px solid #d1d5db; border-radius: 6px; font-size: 13px; color: #1f2937;">
+          <h2 class="modal-title">Send Package to User</h2>
+          <p class="modal-subtitle">Choose a user and package to gift instantly.</p>
+        </div>
+        <button type="button" class="modal-close" onclick="toggleModal('sendPackageModal', false)" aria-label="Close send package modal">&times;</button>
+      </div>
+
+      <form method="POST" action="{{ route('admin.send-package') }}" class="modal-form">
+        @csrf
+
+        <div class="modal-field">
+          <label class="modal-label" for="send-package-user">Select User</label>
+          <select id="send-package-user" name="user_id" required class="modal-select">
             <option value="">-- Choose a user --</option>
             @foreach($users as $user)
               <option value="{{ $user->id }}">{{ $user->name }} ({{ $user->email }})</option>
             @endforeach
           </select>
         </div>
-        <div>
-          <label style="display: block; font-size: 13px; font-weight: 600; color: #1f2937; margin-bottom: 8px;">Select Package</label>
-          <select id="adminPackageSelect" name="package" required style="width: 100%; padding: 10px 12px; border: 1px solid #d1d5db; border-radius: 6px; font-size: 13px; color: #1f2937;">
+
+        <div class="modal-field">
+          <label class="modal-label" for="adminPackageSelect">Select Package</label>
+          <select id="adminPackageSelect" name="package" required class="modal-select">
             <option value="">-- Choose a package --</option>
             @foreach($packages as $packageKey => $package)
               <option value="{{ $packageKey }}">{{ $package['name'] }} — ${{ number_format($package['price'], 2, '.', ',') }} — {{ number_format($package['daily_interest_rate'], 2) }}% daily</option>
             @endforeach
           </select>
-
-          <div style="margin-top:10px; display:flex; gap:8px; flex-wrap:wrap;">
-            @foreach($packages as $packageKey => $package)
-              <button type="button" class="package-quick-btn" data-package-key="{{ $packageKey }}" style="padding:8px 12px; border-radius:6px; border:1px solid #d1d5db; background:white; cursor:pointer; font-weight:700;">
-                {{ $package['name'] }}
-              </button>
-            @endforeach
-          </div>
-          <script>
-            (function () {
-              var buttons = document.querySelectorAll('.package-quick-btn');
-              var select = document.getElementById('adminPackageSelect');
-              buttons.forEach(function (btn) {
-                btn.addEventListener('click', function () {
-                  var key = btn.getAttribute('data-package-key');
-                  if (select) select.value = key;
-                });
-              });
-            }());
-          </script>
         </div>
-        <div style="display: flex; gap: 12px;">
-          <button type="submit" class="header-btn" style="flex: 1; margin: 0;">
-            ✓ Send Package
-          </button>
-          <button type="button" onclick="document.getElementById('sendPackageModal').style.display='none';" style="flex: 1; padding: 0 16px; height: 36px; border: 1px solid #d1d5db; border-radius: 6px; background: white; color: #374151; font-weight: 600; cursor: pointer;">Cancel</button>
+
+        <div class="package-quick-row">
+          @foreach($packages as $packageKey => $package)
+            <button type="button" class="package-quick-btn" data-package-key="{{ $packageKey }}">
+              {{ $package['name'] }}
+            </button>
+          @endforeach
+        </div>
+
+        <div class="modal-actions">
+          <button type="submit" class="modal-action modal-action-primary">✓ Send Package</button>
+          <button type="button" class="modal-action modal-action-secondary" onclick="toggleModal('sendPackageModal', false)">Cancel</button>
         </div>
       </form>
     </div>
   </div>
 
   <!-- Manage Package Slots Modal -->
-  <div id="manageSlotsModal" style="display: none; position: fixed; top: 0; left: 0; right: 0; bottom: 0; background: rgba(0,0,0,0.5); z-index: 200; padding: 20px;">
-    <div style="background: white; border-radius: 8px; max-width: 520px; margin: 60px auto; padding: 32px; box-shadow: 0 20px 60px rgba(0,0,0,0.3);">
-      <div style="display: flex; justify-content: space-between; align-items: center; margin-bottom: 24px;">
-        <h2 style="margin: 0; font-size: 20px; font-weight: 700; color: #1f2937;">Manage Package Slot Counts</h2>
-        <button onclick="document.getElementById('manageSlotsModal').style.display='none';" style="background: none; border: none; font-size: 24px; cursor: pointer; color: #9ca3af;">&times;</button>
+  <div id="manageSlotsModal" class="modal-overlay" aria-hidden="true">
+    <div class="modal-card">
+      <div class="modal-header">
+        <div>
+          <h2 class="modal-title">Manage Package Slot Counts</h2>
+          <p class="modal-subtitle">Update remaining slots for active packages.</p>
+        </div>
+        <button type="button" class="modal-close" onclick="toggleModal('manageSlotsModal', false)" aria-label="Close manage slots modal">&times;</button>
       </div>
-      <form method="POST" action="{{ route('admin.package-slots.update') ?? '#' }}" style="display: flex; flex-direction: column; gap: 18px;">
+
+      <form method="POST" action="{{ route('admin.package-slots.update') }}" class="modal-form">
         @csrf
-        @foreach ($packages as $packageKey => $package)
-          <div>
-            <label style="display: block; font-size: 13px; font-weight: 600; color: #1f2937; margin-bottom: 8px;">{{ $package['name'] }} Remaining Slots</label>
-            <input
-              type="number"
-              name="slots[{{ $packageKey }}]"
-              min="0"
-              value="{{ $packageSlots[$packageKey] ?? 0 }}"
-              required
-              style="width: 100%; padding: 10px 12px; border: 1px solid #d1d5db; border-radius: 6px; font-size: 13px; color: #1f2937; box-sizing: border-box;">
-          </div>
-        @endforeach
-        <div style="display: flex; gap: 12px;">
-          <button type="submit" class="header-btn" style="flex: 1; margin: 0;">
-            ✓ Update Slots
-          </button>
-          <button type="button" onclick="document.getElementById('manageSlotsModal').style.display='none';" style="flex: 1; padding: 0 16px; height: 36px; border: 1px solid #d1d5db; border-radius: 6px; background: white; color: #374151; font-weight: 600; cursor: pointer;">Cancel</button>
+
+        <div class="modal-grid">
+          @foreach ($packages as $packageKey => $package)
+            <div class="modal-field">
+              <label class="modal-label" for="slots-{{ $packageKey }}">{{ $package['name'] }} Remaining Slots</label>
+              <input
+                id="slots-{{ $packageKey }}"
+                type="number"
+                name="slots[{{ $packageKey }}]"
+                min="0"
+                value="{{ $packageSlots[$packageKey] ?? 0 }}"
+                required
+                class="modal-input"
+              >
+            </div>
+          @endforeach
+        </div>
+
+        <div class="modal-actions">
+          <button type="submit" class="modal-action modal-action-primary">✓ Update Slots</button>
+          <button type="button" class="modal-action modal-action-secondary" onclick="toggleModal('manageSlotsModal', false)">Cancel</button>
         </div>
       </form>
     </div>
   </div>
 
   <!-- Send Funds Modal -->
-  <div id="sendFundsModal" style="display: none; position: fixed; top: 0; left: 0; right: 0; bottom: 0; background: rgba(0,0,0,0.5); z-index: 200; padding: 20px;">
-    <div style="background: white; border-radius: 8px; max-width: 500px; margin: 60px auto; padding: 32px; box-shadow: 0 20px 60px rgba(0,0,0,0.3);">
-      <div style="display: flex; justify-content: space-between; align-items: center; margin-bottom: 24px;">
-        <h2 style="margin: 0; font-size: 20px; font-weight: 700; color: #1f2937;">Send Funds to User</h2>
-        <button onclick="document.getElementById('sendFundsModal').style.display='none';" style="background: none; border: none; font-size: 24px; cursor: pointer; color: #9ca3af;">&times;</button>
-      </div>
-      <form method="POST" action="{{ route('admin.send-funds') ?? '#' }}" style="display: flex; flex-direction: column; gap: 16px;">
-        @csrf
+  <div id="sendFundsModal" class="modal-overlay" aria-hidden="true">
+    <div class="modal-card">
+      <div class="modal-header">
         <div>
-          <label style="display: block; font-size: 13px; font-weight: 600; color: #1f2937; margin-bottom: 8px;">Select User</label>
-          <select name="user_id" required style="width: 100%; padding: 10px 12px; border: 1px solid #d1d5db; border-radius: 6px; font-size: 13px; color: #1f2937;">
+          <h2 class="modal-title">Send Funds to User</h2>
+          <p class="modal-subtitle">Credit a user's account quickly and safely.</p>
+        </div>
+        <button type="button" class="modal-close" onclick="toggleModal('sendFundsModal', false)" aria-label="Close send funds modal">&times;</button>
+      </div>
+
+      <form method="POST" action="{{ route('admin.send-funds') }}" class="modal-form">
+        @csrf
+
+        <div class="modal-field">
+          <label class="modal-label" for="send-funds-user">Select User</label>
+          <select id="send-funds-user" name="user_id" required class="modal-select">
             <option value="">-- Choose a user --</option>
             @foreach($users as $user)
               <option value="{{ $user->id }}">{{ $user->name }} ({{ $user->email }})</option>
             @endforeach
           </select>
         </div>
-        <div>
-          <label style="display: block; font-size: 13px; font-weight: 600; color: #1f2937; margin-bottom: 8px;">Amount (USD)</label>
-          <input type="number" name="amount" step="0.01" min="0.01" required placeholder="Enter amount" style="width: 100%; padding: 10px 12px; border: 1px solid #d1d5db; border-radius: 6px; font-size: 13px; color: #1f2937; box-sizing: border-box;">
+
+        <div class="modal-field">
+          <label class="modal-label" for="send-funds-amount">Amount (USD)</label>
+          <input id="send-funds-amount" type="number" name="amount" step="0.01" min="0.01" required placeholder="Enter amount" class="modal-input">
         </div>
-        <div>
-          <label style="display: block; font-size: 13px; font-weight: 600; color: #1f2937; margin-bottom: 8px;">Reason/Note</label>
-          <textarea name="reason" placeholder="Enter reason for sending funds" rows="3" style="width: 100%; padding: 10px 12px; border: 1px solid #d1d5db; border-radius: 6px; font-size: 13px; color: #1f2937; box-sizing: border-box; font-family: inherit;"></textarea>
+
+        <div class="modal-field modal-full-width">
+          <label class="modal-label" for="send-funds-reason">Reason/Note</label>
+          <textarea id="send-funds-reason" name="reason" placeholder="Enter reason for sending funds" rows="3" class="modal-textarea"></textarea>
         </div>
-        <div style="display: flex; gap: 12px;">
-          <button type="submit" class="header-btn" style="flex: 1; margin: 0;">
-            ✓ Send Funds
-          </button>
-          <button type="button" onclick="document.getElementById('sendFundsModal').style.display='none';" style="flex: 1; padding: 0 16px; height: 36px; border: 1px solid #d1d5db; border-radius: 6px; background: white; color: #374151; font-weight: 600; cursor: pointer;">Cancel</button>
+
+        <div class="modal-actions">
+          <button type="submit" class="modal-action modal-action-primary">✓ Send Funds</button>
+          <button type="button" class="modal-action modal-action-secondary" onclick="toggleModal('sendFundsModal', false)">Cancel</button>
         </div>
       </form>
     </div>
@@ -377,14 +197,14 @@
   <div class="admin-content">
     <!-- Users Panel -->
     <div class="users-panel">
-      <!-- Panel Header with Search -->
       <div class="users-panel-header">
-        <div class="users-panel-title">
-          <span class="users-panel-title-main">User Management</span>
-          <span class="users-panel-title-sub">{{ $users->total() }} matching accounts</span>
+        <div class="users-panel-copy">
+          <span class="section-label">User Management</span>
+          <h2 class="section-title">All registered accounts</h2>
+          <p class="section-subtitle">{{ $users->total() }} matching accounts</p>
         </div>
         <div class="search-box">
-          <form method="get" action="{{ route('admin.dashboard') }}">
+          <form class="search-form" method="get" action="{{ route('admin.dashboard') }}">
             <input
               class="search-input"
               name="search"
@@ -394,75 +214,89 @@
               aria-label="Search users"
             >
           </form>
+          <div class="toolbar-actions">
+            <button class="toolbar-btn" type="button">Status ▼</button>
+            <button class="toolbar-btn" type="button">Date ▼</button>
+            <button class="toolbar-btn" type="button">Balance ▼</button>
+            <button class="toolbar-btn toolbar-btn-secondary" type="button">Export CSV</button>
+          </div>
         </div>
       </div>
 
       <!-- Data Table -->
-      <div class="table-wrap">
-        <table class="users-table">
-          <thead>
-            <tr>
-              <th>User Information</th>
-              <th>Referred By</th>
-              <th>Available Balance</th>
-              <th>Status</th>
-              <th>Registered</th>
-            </tr>
-          </thead>
-          <tbody>
-            @forelse ($users as $user)
-              <tr
-                class="user-row"
-                tabindex="0"
-                role="button"
-                aria-label="View details for {{ $user->name }}"
-                onclick="openUserModal('userModal-{{ $user->id }}')"
-                onkeydown="if (event.key === 'Enter' || event.key === ' ') { event.preventDefault(); openUserModal('userModal-{{ $user->id }}'); }"
-              >
-                <!-- User Information -->
-                <td>
-                  <span class="user-cell-name">{{ $user->name }}</span>
-                  <span class="user-cell-email">{{ $user->email }}</span>
-                </td>
-                <!-- Referred By -->
-                <td>
-                  @php
-                    $referrer = $user->referrer;
-                  @endphp
-                  {{ $referrer ? ($referrer->name ?: $referrer->email) : '—' }}
-                </td>
-                <!-- Available Balance -->
-                <td style="white-space: nowrap;">
-                  {{ $user->balance != null ? '$' . number_format((float) $user->balance, 2) : '$0.00' }}
-                </td>
-                <!-- Status Badges -->
-                <td>
-                  <div class="status-badges">
-                    <span class="status-badge {{ $user->isOnline() ? 'online' : 'offline' }}">
-                      {{ $user->isOnline() ? 'Online' : 'Offline' }}
-                    </span>
-                    @if ($user->created_at && $user->created_at->greaterThan(now()->subDay()))
-                      <span class="status-badge new">New</span>
-                    @endif
-                    @if ($user->is_admin)
-                      <span class="status-badge admin">Admin</span>
-                    @endif
-                  </div>
-                </td>
-                <!-- Registration Date -->
-                <td style="white-space: nowrap;">
-                  {{ $user->created_at?->format('M d, Y') ?: '—' }}
-                </td>
-              </tr>
-            @empty
+      <div class="table-card">
+        <div class="table-card-header">Users</div>
+        <div class="table-wrap">
+          <table class="users-table">
+            <thead>
               <tr>
-                <td colspan="5" class="empty-state">
-                  <p style="margin: 0;">No users found. Try adjusting your search filters.</p>
-                </td>
+                <th>USER</th>
+                <th>REFERRER</th>
+                <th>BALANCE</th>
+                <th>STATUS</th>
+                <th>REGISTERED</th>
               </tr>
-            @endforelse
-          </tbody>
-        </table>
+            </thead>
+            <tbody>
+              @forelse ($users as $user)
+                <tr
+                  class="user-row"
+                  tabindex="0"
+                  role="button"
+                  aria-label="View details for {{ $user->name }}"
+                  onclick="openUserModal('userModal-{{ $user->id }}')"
+                  onkeydown="if (event.key === 'Enter' || event.key === ' ') { event.preventDefault(); openUserModal('userModal-{{ $user->id }}'); }"
+                >
+                  <!-- User Information -->
+                  <td>
+                    <div class="user-info">
+                      <span class="user-avatar">{{ strtoupper(substr($user->name, 0, 1)) }}</span>
+                      <div>
+                        <span class="user-cell-name">{{ $user->name }}</span>
+                        <span class="user-cell-email">{{ $user->email }}</span>
+                      </div>
+                    </div>
+                  </td>
+                  <!-- Referred By -->
+                  <td>
+                    @php
+                      $referrer = $user->referrer;
+                    @endphp
+                    {{ $referrer ? ($referrer->name ?: $referrer->email) : '—' }}
+                  </td>
+                  <!-- Available Balance -->
+                  <td class="text-nowrap">
+                    {{ $user->balance != null ? '$' . number_format((float) $user->balance, 2) : '$0.00' }}
+                  </td>
+                  <!-- Status Badges -->
+                  <td>
+                    <div class="status-badges">
+                      <span class="status-badge {{ $user->isOnline() ? 'online' : 'offline' }}">
+                        {{ $user->isOnline() ? 'Online' : 'Offline' }}
+                      </span>
+                      @if ($user->created_at && $user->created_at->greaterThan(now()->subDay()))
+                        <span class="status-badge new">New</span>
+                      @endif
+                      @if ($user->is_admin)
+                        <span class="status-badge admin">Admin</span>
+                      @endif
+                    </div>
+                  </td>
+                  <!-- Registration Date -->
+                  <td class="text-nowrap">
+                    {{ $user->created_at?->format('M d, Y') ?: '—' }}
+                  </td>
+                </tr>
+              @empty
+                <tr>
+                  <td colspan="5" class="empty-state">
+                    <p class="empty-message">No users found. Try adjusting your search filters.</p>
+                  </td>
+                </tr>
+              @endforelse
+            </tbody>
+          </table>
+        </div>
       </div>
 
       <!-- Pagination -->
@@ -475,30 +309,30 @@
 
 @foreach ($users as $user)
   <template id="userModal-{{ $user->id }}">
-    <div class="user-modal-card">
-      <button class="user-modal-close" type="button" onclick="closeUserModal()" aria-label="Close user details">&times;</button>
-      <div class="user-modal-header">
+    <div class="modal-card">
+      <button class="modal-close" type="button" onclick="closeUserModal()" aria-label="Close user details">&times;</button>
+      <div class="modal-header">
         <div>
-          <h2 class="user-modal-title">{{ $user->name }}</h2>
-          <p class="user-modal-subtitle">Registered {{ $user->created_at?->format('M d, Y h:i A') ?: '—' }}</p>
+          <h2 class="modal-title">{{ $user->name }}</h2>
+          <p class="modal-subtitle">Registered {{ $user->created_at?->format('M d, Y h:i A') ?: '—' }}</p>
         </div>
         <span class="status-badge {{ $user->isOnline() ? 'online' : 'offline' }}">
           {{ $user->isOnline() ? 'Online' : 'Offline' }}
         </span>
       </div>
 
-      <div class="user-modal-grid">
-        <div class="user-modal-field">
-          <span class="user-modal-field-label">Email</span>
-          <div class="user-modal-field-value">{{ $user->email }}</div>
+      <div class="modal-grid">
+        <div class="modal-field">
+          <span class="modal-label">Email</span>
+          <div class="modal-value">{{ $user->email }}</div>
         </div>
-        <div class="user-modal-field">
-          <span class="user-modal-field-label">Phone</span>
-          <div class="user-modal-field-value">{{ $user->phone ?: '—' }}</div>
+        <div class="modal-field">
+          <span class="modal-label">Phone</span>
+          <div class="modal-value">{{ $user->phone ?: '—' }}</div>
         </div>
-        <div class="user-modal-field">
-          <span class="user-modal-field-label">Referred By</span>
-          <div class="user-modal-field-value">
+        <div class="modal-field">
+          <span class="modal-label">Referred By</span>
+          <div class="modal-value">
             @php $referrer = $user->referrer; @endphp
             {{ $referrer ? ($referrer->name ?: $referrer->email) : '—' }}
           </div>
@@ -510,33 +344,33 @@
           $displayBalance = (float) ($user->balance ?? 0) + $totalEstimatedInterest;
         @endphp
 
-        <div class="user-modal-field">
-          <span class="user-modal-field-label">Available Balance</span>
-          <div class="user-modal-field-value">${{ number_format($displayBalance, 2) }}</div>
+        <div class="modal-field">
+          <span class="modal-label">Available Balance</span>
+          <div class="modal-value">${{ number_format($displayBalance, 2) }}</div>
         </div>
-        <div class="user-modal-field">
-          <span class="user-modal-field-label">Balance Breakdown</span>
-          <div class="user-modal-field-value">${{ number_format((float) ($user->balance ?? 0), 2) }} + ${{ number_format($totalEstimatedInterest, 2) }}</div>
+        <div class="modal-field">
+          <span class="modal-label">Balance Breakdown</span>
+          <div class="modal-value">${{ number_format((float) ($user->balance ?? 0), 2) }} + ${{ number_format($totalEstimatedInterest, 2) }}</div>
         </div>
-        <div class="user-modal-field">
-          <span class="user-modal-field-label">Region</span>
-          <div class="user-modal-field-value">{{ $user->region ?: '—' }}</div>
+        <div class="modal-field">
+          <span class="modal-label">Region</span>
+          <div class="modal-value">{{ $user->region ?: '—' }}</div>
         </div>
-        <div class="user-modal-field">
-          <span class="user-modal-field-label">Address</span>
-          <div class="user-modal-field-value">{{ $user->address ?: '—' }}</div>
+        <div class="modal-field">
+          <span class="modal-label">Address</span>
+          <div class="modal-value">{{ $user->address ?: '—' }}</div>
         </div>
-        <div class="user-modal-field">
-          <span class="user-modal-field-label">IP Address</span>
-          <div class="user-modal-field-value">{{ $user->last_ip_address ?: '—' }}</div>
+        <div class="modal-field">
+          <span class="modal-label">IP Address</span>
+          <div class="modal-value">{{ $user->last_ip_address ?: '—' }}</div>
         </div>
-        <div class="user-modal-field">
-          <span class="user-modal-field-label">IP Location</span>
-          <div class="user-modal-field-value">{{ $user->region ?: $user->address ?: 'Not available' }}</div>
+        <div class="modal-field">
+          <span class="modal-label">IP Location</span>
+          <div class="modal-value">{{ $user->region ?: $user->address ?: 'Not available' }}</div>
         </div>
-        <div class="user-modal-field" style="grid-column: 1 / -1;">
-          <span class="user-modal-field-label">Last Seen</span>
-          <div class="user-modal-field-value">{{ $user->last_seen_at?->format('M d, Y h:i A') ?: '—' }}</div>
+        <div class="modal-field modal-full-width">
+          <span class="modal-label">Last Seen</span>
+          <div class="modal-value">{{ $user->last_seen_at?->format('M d, Y h:i A') ?: '—' }}</div>
         </div>
       </div>
 
@@ -558,7 +392,7 @@
         @else
           <div class="user-history-list">
             <div class="user-history-item">
-              <p style="margin:0;color:#64748b;">No investment history.</p>
+              <p class="empty-message">No investment history.</p>
             </div>
           </div>
         @endif
@@ -582,7 +416,7 @@
         @else
           <div class="user-history-list">
             <div class="user-history-item">
-              <p style="margin:0;color:#64748b;">No withdrawal history.</p>
+              <p class="empty-message">No withdrawal history.</p>
             </div>
           </div>
         @endif
@@ -615,7 +449,7 @@
         @else
           <div class="user-history-list">
             <div class="user-history-item">
-              <p style="margin:0;color:#64748b;">No income history.</p>
+              <p class="empty-message">No income history.</p>
             </div>
           </div>
         @endif
@@ -624,11 +458,28 @@
   </template>
 @endforeach
 
-<div id="userDetailsModal" class="user-modal-overlay" role="dialog" aria-modal="true" aria-labelledby="userDetailsTitle">
-  <div id="userDetailsModalBody" class="user-modal-card"></div>
+<div id="userDetailsModal" class="modal-overlay" role="dialog" aria-modal="true" aria-labelledby="userDetailsTitle">
+  <div id="userDetailsModalBody" class="modal-card"></div>
 </div>
 
 <script>
+  function toggleModal(modalId, open) {
+    var modal = document.getElementById(modalId);
+    if (!modal) {
+      return;
+    }
+
+    if (open) {
+      modal.classList.add('is-open');
+      modal.setAttribute('aria-hidden', 'false');
+      document.body.style.overflow = 'hidden';
+    } else {
+      modal.classList.remove('is-open');
+      modal.setAttribute('aria-hidden', 'true');
+      document.body.style.overflow = '';
+    }
+  }
+
   function openUserModal(templateId) {
     var template = document.getElementById(templateId);
     var body = document.getElementById('userDetailsModalBody');
