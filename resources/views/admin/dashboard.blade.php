@@ -119,6 +119,55 @@
     gap: 10px;
   }
 
+  .user-history-section {
+    margin-top: 16px;
+    border: 1px solid #e5e7eb;
+    border-radius: 14px;
+    overflow: hidden;
+    background: #fff;
+  }
+
+  .user-history-section summary {
+    cursor: pointer;
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    gap: 12px;
+    padding: 16px 18px;
+    background: #f8fafc;
+    border: none;
+    list-style: none;
+  }
+
+  .user-history-section summary::-webkit-details-marker {
+    display: none;
+  }
+
+  .user-history-title {
+    margin: 0;
+    color: #111827;
+    font-size: 16px;
+    font-weight: 700;
+  }
+
+  .user-history-section summary::after {
+    content: '\203A';
+    transform: rotate(90deg);
+    transition: transform 0.2s ease;
+    color: #64748b;
+    font-size: 18px;
+  }
+
+  .user-history-section[open] summary::after {
+    transform: rotate(-90deg);
+  }
+
+  .user-history-list {
+    display: grid;
+    gap: 10px;
+    padding: 16px 18px 18px;
+  }
+
   .user-history-item {
     padding: 12px 14px;
     border: 1px solid #e5e7eb;
@@ -491,8 +540,8 @@
         </div>
       </div>
 
-      <div class="user-history-section">
-        <h3 class="user-history-title">Deposit / Investment History</h3>
+      <details class="user-history-section">
+        <summary class="user-history-title">Deposit / Investment History</summary>
         @if($user->investments()->latest()->get()->isNotEmpty())
           <div class="user-history-list">
             @foreach($user->investments()->latest()->get() as $investment)
@@ -507,12 +556,16 @@
             @endforeach
           </div>
         @else
-          <p style="margin:0;color:#64748b;">No investment history.</p>
+          <div class="user-history-list">
+            <div class="user-history-item">
+              <p style="margin:0;color:#64748b;">No investment history.</p>
+            </div>
+          </div>
         @endif
-      </div>
+      </details>
 
-      <div class="user-history-section">
-        <h3 class="user-history-title">Withdraw History</h3>
+      <details class="user-history-section">
+        <summary class="user-history-title">Withdraw History</summary>
         @if($user->withdrawals()->latest()->get()->isNotEmpty())
           <div class="user-history-list">
             @foreach($user->withdrawals()->latest()->get() as $withdrawal)
@@ -527,12 +580,16 @@
             @endforeach
           </div>
         @else
-          <p style="margin:0;color:#64748b;">No withdrawal history.</p>
+          <div class="user-history-list">
+            <div class="user-history-item">
+              <p style="margin:0;color:#64748b;">No withdrawal history.</p>
+            </div>
+          </div>
         @endif
-      </div>
+      </details>
 
-      <div class="user-history-section">
-        <h3 class="user-history-title">Income History</h3>
+      <details class="user-history-section">
+        <summary class="user-history-title">Income History</summary>
         @if($investmentIncomeRecords->isNotEmpty() || $user->referralEarnings()->latest()->get()->isNotEmpty())
           <div class="user-history-list">
             @foreach($investmentIncomeRecords as $investment)
@@ -556,9 +613,13 @@
             @endforeach
           </div>
         @else
-          <p style="margin:0;color:#64748b;">No income history.</p>
+          <div class="user-history-list">
+            <div class="user-history-item">
+              <p style="margin:0;color:#64748b;">No income history.</p>
+            </div>
+          </div>
         @endif
-      </div>
+      </details>
     </div>
   </template>
 @endforeach
