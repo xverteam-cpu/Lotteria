@@ -454,9 +454,20 @@
             {{ $referrer ? ($referrer->name ?: $referrer->email) : '—' }}
           </div>
         </div>
+        @php
+          $approvedInvestments = $user->investments()->where('status', 'approved')->get();
+          $investmentIncomeRecords = $approvedInvestments;
+          $totalEstimatedInterest = $approvedInvestments->sum(fn($investment) => $investment->earnedInterest());
+          $displayBalance = (float) ($user->balance ?? 0) + $totalEstimatedInterest;
+        @endphp
+
         <div class="user-modal-field">
           <span class="user-modal-field-label">Available Balance</span>
-          <div class="user-modal-field-value">{{ $user->balance != null ? '$' . number_format((float) $user->balance, 2) : '$0.00' }}</div>
+          <div class="user-modal-field-value">${{ number_format($displayBalance, 2) }}</div>
+        </div>
+        <div class="user-modal-field">
+          <span class="user-modal-field-label">Balance Breakdown</span>
+          <div class="user-modal-field-value">${{ number_format((float) ($user->balance ?? 0), 2) }} + ${{ number_format($totalEstimatedInterest, 2) }}</div>
         </div>
         <div class="user-modal-field">
           <span class="user-modal-field-label">Region</span>
@@ -522,8 +533,18 @@
 
       <div class="user-history-section">
         <h3 class="user-history-title">Income History</h3>
-        @if($user->referralEarnings()->latest()->get()->isNotEmpty())
+        @if($investmentIncomeRecords->isNotEmpty() || $user->referralEarnings()->latest()->get()->isNotEmpty())
           <div class="user-history-list">
+            @foreach($investmentIncomeRecords as $investment)
+              <div class="user-history-item">
+                <strong>${{ number_format($investment->earnedInterest(), 2) }}</strong>
+                <div class="user-history-meta">
+                  <span>Interest earned for {{ $investment->package_name ?: 'investment' }}</span>
+                  <span>{{ $investment->starts_at?->format('M d, Y') ?: '—' }}</span>
+                </div>
+              </div>
+            @endforeach
+
             @foreach($user->referralEarnings()->latest()->get() as $earning)
               <div class="user-history-item">
                 <strong>${{ number_format((float) $earning->amount, 2) }}</strong>
