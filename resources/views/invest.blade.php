@@ -592,6 +592,7 @@
     <h2 class="amount-title" id="qrModalTitle">Bank QR</h2>
     <img class="modal-image" id="qrModalImage" src="" alt="Bank QR code" loading="lazy" decoding="async">
     <div class="modal-actions">
+      <button class="modal-button secondary" type="button" id="qrModalDownload">Download QR Code</button>
       <button class="modal-button confirm" type="button" id="qrModalConfirm">Confirm</button>
       <button class="modal-button cancel" type="button" id="qrModalClose">Cancel</button>
     </div>
@@ -1046,6 +1047,33 @@
       qrModalImage.alt = '';
     }
 
+    function downloadQrCode() {
+      if (!selectedBank || !selectedBank.url) {
+        return;
+      }
+
+      fetch(selectedBank.url)
+        .then(function (response) {
+          if (!response.ok) {
+            throw new Error('Unable to fetch QR code image.');
+          }
+          return response.blob();
+        })
+        .then(function (blob) {
+          var blobUrl = URL.createObjectURL(blob);
+          var link = document.createElement('a');
+          link.href = blobUrl;
+          link.download = (selectedBank.name || 'bank') + '-qr.png';
+          document.body.appendChild(link);
+          link.click();
+          document.body.removeChild(link);
+          URL.revokeObjectURL(blobUrl);
+        })
+        .catch(function () {
+          window.alert('Unable to download the QR code right now. Please try again.');
+        });
+    }
+
     function populateReceipt(investmentData) {
       if (!receiptModal) return;
       var packageName = investmentData && investmentData.package_name ? investmentData.package_name : (selectedPackage ? selectedPackage.title : 'Selected package');
@@ -1130,6 +1158,10 @@
       qrModal.addEventListener('click', function (event) {
         if (event.target === qrModal) closeQrModal();
       });
+    }
+
+    if (qrModalDownload) {
+      qrModalDownload.addEventListener('click', downloadQrCode);
     }
 
     if (qrModalConfirm) {

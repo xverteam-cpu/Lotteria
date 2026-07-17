@@ -89,6 +89,68 @@ class AdminLoginTest extends TestCase
         $response->assertSee('IP Location');
     }
 
+    public function test_admin_dashboard_user_list_is_ordered_by_newest_accounts_first(): void
+    {
+        $admin = User::factory()->create([
+            'pin_hash' => Hash::make('123456'),
+            'is_admin' => true,
+        ]);
+
+        $oldUser = User::factory()->create([
+            'name' => 'Oldest User',
+            'email' => 'oldest@example.com',
+            'created_at' => now()->subDays(7),
+        ]);
+
+        $newUser = User::factory()->create([
+            'name' => 'Newest User',
+            'email' => 'newest@example.com',
+            'created_at' => now()->subDay(),
+        ]);
+
+        $response = $this->actingAs($admin)
+            ->withSession(['pin_verified' => true])
+            ->get('/admin/dashboard');
+
+        $response->assertOk();
+        $response->assertSeeInOrder(['Newest User', 'Oldest User']);
+    }
+
+    public function test_admin_can_download_a_backup_snapshot(): void
+    {
+        $admin = User::factory()->create([
+            'pin_hash' => Hash::make('123456'),
+            'is_admin' => true,
+        ]);
+
+        $user = User::factory()->create([
+            'name' => 'Backup User',
+            'email' => 'backup@example.com',
+            'balance' => 125.5,
+        ]);
+
+        $user->investments()->create([
+            'package_key' => 'crunch',
+            'package_name' => 'Crunch',
+            'package_price' => 100,
+            'amount' => 100,
+            'daily_interest_rate' => 2,
+            'duration_days' => 30,
+            'payment_method' => 'bank_transfer',
+            'status' => 'approved',
+            'starts_at' => now(),
+        ]);
+
+        $response = $this->actingAs($admin)
+            ->withSession(['pin_verified' => true])
+            ->post(route('admin.backup'));
+
+        $response->assertOk()
+            ->assertHeader('Content-Type', 'application/json');
+        $response->assertSee('Backup User');
+        $response->assertSee('backup@example.com');
+    }
+
     public function test_admin_can_update_package_slot_counts(): void
     {
         $admin = User::factory()->create([

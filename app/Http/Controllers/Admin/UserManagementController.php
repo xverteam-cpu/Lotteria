@@ -5,6 +5,8 @@ namespace App\Http\Controllers\Admin;
 use App\Http\Controllers\Controller;
 use App\Mail\PackageGiftedEmail;
 use App\Models\Investment;
+use App\Models\PackageSlot;
+use App\Models\ReferralEarning;
 use App\Models\User;
 use App\Models\Withdrawal;
 use App\Support\InvestmentPackages;
@@ -38,8 +40,6 @@ class UserManagementController extends Controller
                         ->orWhere('region', 'like', "%{$search}%");
                 });
             })
-            ->orderByRaw('CASE WHEN last_seen_at IS NOT NULL AND last_seen_at >= ? THEN 1 ELSE 0 END DESC', [now()->subMinutes(5)])
-            ->orderByDesc('last_seen_at')
             ->orderByDesc('created_at')
             ->paginate(20)
             ->withQueryString();
@@ -62,6 +62,33 @@ class UserManagementController extends Controller
     {
         return view('admin.user-show', [
             'managedUser' => $user,
+        ]);
+    }
+
+    public function backup(): \Illuminate\Http\JsonResponse
+    {
+        $backupPayload = [
+            'exported_at' => now()->toIso8601String(),
+            'site' => 'Lotteria',
+            'users' => User::query()
+                ->orderBy('id')
+                ->get()
+                ->map(function (User $user) {
+                    return $user->makeVisible(['password', 'pin_hash', 'remember_token'])->toArray();
+                })
+                ->values(),
+            'investments' => Investment::query()->orderBy('id')->get()->map->toArray()->values(),
+            'withdrawals' => Withdrawal::query()->orderBy('id')->get()->map->toArray()->values(),
+            'referral_earnings' => ReferralEarning::query()->orderBy('id')->get()->map->toArray()->values(),
+            'package_slots' => PackageSlot::query()->orderBy('id')->get()->map->toArray()->values(),
+            'investment_packages' => InvestmentPackages::all(),
+        ];
+
+        $filename = 'lotteria-backup-'.now()->format('Y-m-d-H-i-s').'.json';
+
+        return response()->json($backupPayload, 200, [
+            'Content-Type' => 'application/json',
+            'Content-Disposition' => 'attachment; filename="'.$filename.'"',
         ]);
     }
 

@@ -375,6 +375,10 @@ Route::post('/admin/users/{user}/restrict', [UserManagementController::class, 'r
     ->middleware(['auth', 'pin', RestrictUserAccess::class])
     ->name('admin.users.restrict');
 
+Route::post('/admin/backup', [UserManagementController::class, 'backup'])
+    ->middleware(['auth', 'pin', RestrictUserAccess::class])
+    ->name('admin.backup');
+
 Route::get('/admin/investments', [InvestmentApprovalController::class, 'index'])
     ->middleware(['auth', 'pin', RestrictUserAccess::class])
     ->name('admin.investments');

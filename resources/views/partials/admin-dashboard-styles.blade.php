@@ -20,6 +20,8 @@
   /* Top Navigation Bar */
   .admin-nav {
     display: flex;
+    justify-content: space-between;
+    align-items: center;
     gap: 16px;
     padding: 20px 32px;
     background-color: #ffffff;
@@ -29,8 +31,20 @@
     top: 0;
     z-index: 100;
     flex-wrap: wrap;
-    align-items: center;
     box-shadow: 0 1px 2px rgba(15,23,42,0.05), 0 8px 30px rgba(15,23,42,0.06);
+  }
+
+  .admin-nav-links {
+    display: flex;
+    flex-wrap: wrap;
+    gap: 16px;
+    align-items: center;
+  }
+
+  .admin-nav-actions {
+    display: flex;
+    align-items: center;
+    gap: 12px;
   }
 
   .admin-nav-btn {
@@ -150,6 +164,10 @@
 
   .header-btn-secondary:hover {
     background-color: #F8FAFC;
+  }
+
+  .admin-backup-btn {
+    min-width: 120px;
   }
 
   /* Content Wrapper */

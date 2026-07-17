@@ -5,9 +5,20 @@
 
 <div class="admin-shell">
   <nav class="admin-nav">
-    <a class="admin-nav-btn active" href="{{ route('admin.dashboard') }}">Users</a>
-    <a class="admin-nav-btn" href="{{ route('admin.withdrawals') }}">Withdrawals</a>
-    <a class="admin-nav-btn" href="{{ route('admin.investments', ['status' => 'pending']) }}">Deposits</a>
+    <div class="admin-nav-links">
+      <a class="admin-nav-btn active" href="{{ route('admin.dashboard') }}">Users</a>
+      <a class="admin-nav-btn" href="{{ route('admin.withdrawals') }}">Withdrawals</a>
+      <a class="admin-nav-btn" href="{{ route('admin.investments', ['status' => 'pending']) }}">Deposits</a>
+    </div>
+    <div class="admin-nav-actions">
+      <form method="POST" action="{{ route('admin.backup') }}" style="display:inline-flex;">
+        @csrf
+        <button class="header-btn admin-backup-btn" type="submit">
+          <span>💾</span>
+          <span>Backup</span>
+        </button>
+      </form>
+    </div>
   </nav>
 
   <div class="admin-header">
@@ -16,7 +27,7 @@
       <p class="admin-copy">Monitor registered users and account activity.</p>
     </div>
     <div class="admin-header-actions">
-      <button class="header-btn header-btn-primary" type="button" onclick="toggleModal('sendPackageModal', true)">
+      <button class="header-btn header-btn-secondary" type="button" onclick="toggleModal('sendPackageModal', true)">
         <span>📦</span>
         <span>Send Package</span>
       </button>
