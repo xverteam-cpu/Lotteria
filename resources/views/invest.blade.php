@@ -1048,30 +1048,25 @@
     }
 
     function downloadQrCode() {
-      if (!selectedBank || !selectedBank.url) {
+      var qrUrl = selectedBank && selectedBank.url ? selectedBank.url : (qrModalImage ? qrModalImage.getAttribute('src') : '');
+
+      if (!qrUrl) {
+        window.alert('No QR code image is available to download.');
         return;
       }
 
-      fetch(selectedBank.url)
-        .then(function (response) {
-          if (!response.ok) {
-            throw new Error('Unable to fetch QR code image.');
-          }
-          return response.blob();
-        })
-        .then(function (blob) {
-          var blobUrl = URL.createObjectURL(blob);
-          var link = document.createElement('a');
-          link.href = blobUrl;
-          link.download = (selectedBank.name || 'bank') + '-qr.png';
-          document.body.appendChild(link);
-          link.click();
-          document.body.removeChild(link);
-          URL.revokeObjectURL(blobUrl);
-        })
-        .catch(function () {
-          window.alert('Unable to download the QR code right now. Please try again.');
-        });
+      var resolvedUrl = qrUrl;
+      if (qrUrl.indexOf('http://') !== 0 && qrUrl.indexOf('https://') !== 0 && qrUrl.indexOf('/') !== 0) {
+        resolvedUrl = window.location.origin + '/' + qrUrl.replace(/^\.\//, '');
+      }
+
+      var link = document.createElement('a');
+      link.href = resolvedUrl;
+      link.download = (selectedBank && selectedBank.name ? selectedBank.name : 'bank') + '-qr.png';
+      link.target = '_blank';
+      document.body.appendChild(link);
+      link.click();
+      document.body.removeChild(link);
     }
 
     function populateReceipt(investmentData) {
