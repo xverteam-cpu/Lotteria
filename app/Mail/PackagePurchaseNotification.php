@@ -23,7 +23,7 @@ class PackagePurchaseNotification extends Mailable
         $user = $this->investment->user;
         $dashboardUrl = url('/dashboard');
 
-        return $this->from('lotteriaphilippines@gmail.com', 'Lotteria Philippines')
+        return $this->from(config('mail.from.address', 'lotteriaph@gmail.com'), config('mail.from.name', 'Lotteria Philippines'))
             ->subject('Your Lotteria Package Purchase Confirmation')
             ->view('emails.package-purchase-notification')
             ->with([

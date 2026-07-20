@@ -20,7 +20,7 @@ class WelcomeEmail extends Mailable
 
     public function build(): self
     {
-        return $this->from('lotteriaphilippines@gmail.com', 'Lotteria Philippines')
+        return $this->from(config('mail.from.address', 'lotteriaph@gmail.com'), config('mail.from.name', 'Lotteria Philippines'))
             ->subject('Welcome to Lotteria Philippines')
             ->view('emails.welcome-email')
             ->with([
