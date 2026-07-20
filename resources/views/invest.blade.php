@@ -601,38 +601,52 @@
 
 <div class="package-modal" id="receiptModal" aria-hidden="true">
   <div class="modal-card" role="dialog" aria-modal="true" aria-label="Investment receipt">
-    <h2 class="amount-title">Investment Receipt</h2>
-    <div style="background: #f5f5f5; padding: 24px; border-radius: 16px; margin: 20px 0;">
-      <div style="display: flex; justify-content: space-between; padding: 12px 0; border-bottom: 1px solid #e0e0e0;">
-        <span style="color: #666; font-weight: 500;">Package</span>
-        <span id="receiptPackage" style="font-weight: 600; color: #333;"></span>
+    <div style="display:flex; align-items:flex-start; justify-content:space-between; gap:12px; margin-bottom:14px;">
+      <div>
+        <div style="font-size:11px; font-weight:900; letter-spacing:0.16em; text-transform:uppercase; color:#d91b0b;">Lotteria Purchase Receipt</div>
+        <h2 class="amount-title" style="margin:4px 0 0;">Investment Receipt</h2>
       </div>
-      <div style="display: flex; justify-content: space-between; padding: 12px 0; border-bottom: 1px solid #e0e0e0;">
-        <span style="color: #666; font-weight: 500;">Investment Amount</span>
-        <span id="receiptAmount" style="font-weight: 600; color: #333;"></span>
-      </div>
-      <div style="display: flex; justify-content: space-between; padding: 12px 0; border-bottom: 1px solid #e0e0e0;">
-        <span style="color: #666; font-weight: 500;">Daily Interest</span>
-        <span id="receiptDaily" style="font-weight: 600; color: #d91b0b;"></span>
-      </div>
-      <div style="display: flex; justify-content: space-between; padding: 12px 0; border-bottom: 1px solid #e0e0e0;">
-        <span style="color: #666; font-weight: 500;">Duration</span>
-        <span id="receiptDuration" style="font-weight: 600; color: #333;"></span>
-      </div>
-      <div style="display: flex; justify-content: space-between; padding: 12px 0; border-bottom: 1px solid #e0e0e0;">
-        <span style="color: #666; font-weight: 500;">Total Expected Return</span>
-        <span id="receiptTotal" style="font-weight: 600; color: #d91b0b;"></span>
-      </div>
-      <div style="display: flex; justify-content: space-between; padding: 12px 0; border-bottom: 1px solid #e0e0e0;">
-        <span style="color: #666; font-weight: 500;">Payment Method</span>
-        <span id="receiptPayment" style="font-weight: 600; color: #333;"></span>
-      </div>
-      <div style="display: flex; justify-content: space-between; padding: 12px 0;">
-        <span style="color: #666; font-weight: 500;">Status</span>
-        <span style="font-weight: 600; color: #ff9800; background: #fff3e0; padding: 4px 12px; border-radius: 8px; font-size: 12px;">⏳ Pending Approval</span>
+      <div style="display:flex; align-items:center; gap:8px;">
+        <div id="receiptBadge" style="padding:8px 10px; border-radius:999px; background:#d91b0b; color:#fff; font-size:12px; font-weight:900;">Pending</div>
+        <button type="button" id="receiptClose" aria-label="Close receipt" style="display:flex; align-items:center; justify-content:center; width:32px; height:32px; border:0; background:#f5f5f5; border-radius:8px; cursor:pointer; font-size:18px; color:#666; transition:all 0.2s ease; flex-shrink:0;">
+          <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+            <line x1="18" y1="6" x2="6" y2="18"></line>
+            <line x1="6" y1="6" x2="18" y2="18"></line>
+          </svg>
+        </button>
       </div>
     </div>
-    <p class="amount-copy" style="color: #666; text-align: center; margin: 20px 0;">Admin will review and activate your investment. You'll receive a notification once approved.</p>
+    <div style="background:linear-gradient(135deg,#fff8f8 0%,#ffffff 100%); border-radius:20px; padding:20px; margin-bottom:18px; border:1px solid #f1d0d4; box-shadow:0 10px 25px rgba(217,27,11,.08);">
+      <div style="display:flex; justify-content:space-between; gap:10px; padding:12px 0; border-bottom:1px solid #f1d0d4;">
+        <span style="color:#64748b; font-weight:700;">Reference</span>
+        <span id="receiptReference" style="font-weight:900; color:#101010;"></span>
+      </div>
+      <div style="display:flex; justify-content:space-between; gap:10px; padding:12px 0; border-bottom:1px solid #f1d0d4;">
+        <span style="color:#64748b; font-weight:700;">Package</span>
+        <span id="receiptPackage" style="font-weight:900; color:#101010;"></span>
+      </div>
+      <div style="display:flex; justify-content:space-between; gap:10px; padding:12px 0; border-bottom:1px solid #f1d0d4;">
+        <span style="color:#64748b; font-weight:700;">Amount</span>
+        <span id="receiptAmount" style="font-weight:900; color:#d91b0b;"></span>
+      </div>
+      <div style="display:flex; justify-content:space-between; gap:10px; padding:12px 0; border-bottom:1px solid #f1d0d4;">
+        <span style="color:#64748b; font-weight:700;">Daily Interest</span>
+        <span id="receiptDaily" style="font-weight:900; color:#d91b0b;"></span>
+      </div>
+      <div style="display:flex; justify-content:space-between; gap:10px; padding:12px 0; border-bottom:1px solid #f1d0d4;">
+        <span style="color:#64748b; font-weight:700;">Duration</span>
+        <span id="receiptDuration" style="font-weight:900; color:#101010;"></span>
+      </div>
+      <div style="display:flex; justify-content:space-between; gap:10px; padding:12px 0; border-bottom:1px solid #f1d0d4;">
+        <span style="color:#64748b; font-weight:700;">Payment Method</span>
+        <span id="receiptPayment" style="font-weight:900; color:#101010;"></span>
+      </div>
+      <div style="display:flex; justify-content:space-between; gap:10px; padding:12px 0;">
+        <span style="color:#64748b; font-weight:700;">Submitted</span>
+        <span id="receiptSubmitted" style="font-weight:900; color:#101010;"></span>
+      </div>
+    </div>
+    <p class="amount-copy" style="color:#666; text-align:center; margin:20px 0;">Your transaction request has been received. Admin review and account activation will follow shortly.</p>
     <div class="modal-actions">
       <button class="modal-button confirm" type="button" id="receiptDone">Done</button>
     </div>
@@ -669,13 +683,16 @@
     var qrModalClose = document.getElementById('qrModalClose');
     var qrModalConfirm = document.getElementById('qrModalConfirm');
     var receiptModal = document.getElementById('receiptModal');
+    var receiptReference = document.getElementById('receiptReference');
     var receiptPackage = document.getElementById('receiptPackage');
     var receiptAmount = document.getElementById('receiptAmount');
     var receiptDaily = document.getElementById('receiptDaily');
     var receiptDuration = document.getElementById('receiptDuration');
-    var receiptTotal = document.getElementById('receiptTotal');
     var receiptPayment = document.getElementById('receiptPayment');
+    var receiptSubmitted = document.getElementById('receiptSubmitted');
+    var receiptBadge = document.getElementById('receiptBadge');
     var receiptDone = document.getElementById('receiptDone');
+    var receiptClose = document.getElementById('receiptClose');
     var bankChoiceButtons = Array.prototype.slice.call(document.querySelectorAll('.bank-logo-item'));
     var selectedBank = null;
     var paymentChoices = Array.prototype.slice.call(document.querySelectorAll('.payment-choice'));
@@ -1069,22 +1086,31 @@
       document.body.removeChild(link);
     }
 
-    function populateReceipt(investmentData) {
+    function populateReceipt(payload) {
       if (!receiptModal) return;
+      var receiptData = payload && payload.receipt ? payload.receipt : null;
+      var investmentData = payload && payload.investment ? payload.investment : payload;
       var packageName = investmentData && investmentData.package_name ? investmentData.package_name : (selectedPackage ? selectedPackage.title : 'Selected package');
       var amountValue = investmentData && investmentData.amount != null ? Number(investmentData.amount) : Number(amountInput.value || 0);
       var dailyRate = investmentData && investmentData.daily_interest_rate != null ? Number(investmentData.daily_interest_rate) : Number(selectedPackage ? selectedPackage.rate : 0);
       var durationDays = investmentData && investmentData.duration_days != null ? Number(investmentData.duration_days) : Number(selectedPackage ? selectedPackage.days : 0);
       var dailyIncome = amountValue * (dailyRate / 100);
-      var totalInterest = dailyIncome * durationDays;
-      var totalReturn = amountValue + totalInterest;
+      var paymentMethod = receiptData && receiptData.payment_method ? receiptData.payment_method : (investmentData && investmentData.payment_method ? investmentData.payment_method : 'Bank Transfer');
+      var statusText = receiptData && receiptData.status ? receiptData.status : (investmentData && investmentData.status === 'pending' ? 'Pending Approval' : 'Active');
+      var submittedAt = receiptData && receiptData.submitted_at ? receiptData.submitted_at : '';
+      var referenceText = receiptData && receiptData.reference ? receiptData.reference : '';
 
+      if (receiptReference) receiptReference.textContent = referenceText;
       if (receiptPackage) receiptPackage.textContent = packageName;
       if (receiptAmount) receiptAmount.textContent = money(amountValue);
       if (receiptDaily) receiptDaily.textContent = money(dailyIncome);
       if (receiptDuration) receiptDuration.textContent = durationDays + ' days';
-      if (receiptTotal) receiptTotal.textContent = money(totalReturn);
-      if (receiptPayment) receiptPayment.textContent = 'Bank Transfer';
+      if (receiptPayment) receiptPayment.textContent = paymentMethod;
+      if (receiptSubmitted) receiptSubmitted.textContent = submittedAt || 'Just now';
+      if (receiptBadge) {
+        receiptBadge.textContent = statusText;
+        receiptBadge.style.background = statusText === 'Active' ? '#137547' : '#d91b0b';
+      }
       if (receiptModal) {
         receiptModal.classList.add('is-open');
         receiptModal.setAttribute('aria-hidden', 'false');
@@ -1163,13 +1189,17 @@
       qrModalConfirm.addEventListener('click', function () {
         submitInvestmentRequest(function (payload) {
           closeQrModal();
-          populateReceipt(payload.investment || payload);
+          populateReceipt(payload);
         });
       });
     }
 
     if (receiptDone) {
       receiptDone.addEventListener('click', closeReceiptModal);
+    }
+
+    if (receiptClose) {
+      receiptClose.addEventListener('click', closeReceiptModal);
     }
 
     if (bankModalConfirm) {

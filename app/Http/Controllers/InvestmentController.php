@@ -107,6 +107,21 @@ class InvestmentController extends Controller
             return response()->json([
                 'success' => true,
                 'message' => $message,
+                'receipt' => [
+                    'reference' => 'LOT-INV-'.str_pad((string) $investment->id, 6, '0', STR_PAD_LEFT),
+                    'package_name' => $investment->package_name,
+                    'amount' => number_format((float) $investment->amount, 2),
+                    'daily_interest_rate' => number_format((float) $investment->daily_interest_rate, 2),
+                    'duration_days' => (int) $investment->duration_days,
+                    'payment_method' => match ($investment->payment_method) {
+                        'bank_transfer' => 'Bank Transfer',
+                        'account_balance' => 'Account Balance',
+                        'crypto' => 'Crypto',
+                        default => ucfirst(str_replace('_', ' ', $investment->payment_method)),
+                    },
+                    'status' => $investment->status === 'pending' ? 'Pending Approval' : 'Active',
+                    'submitted_at' => $investment->created_at?->format('M d, Y H:i') ?? now()->format('M d, Y: i'),
+                ],
                 'investment' => [
                     'id' => $investment->id,
                     'package_key' => $investment->package_key,
