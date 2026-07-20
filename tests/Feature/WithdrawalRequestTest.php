@@ -48,6 +48,8 @@ class WithdrawalRequestTest extends TestCase
 
         $response->assertRedirect(route('withdraw'));
         $response->assertSessionHas('status', 'Withdrawal request submitted successfully.');
+        $response->assertSessionHas('receipt.reference');
+        $response->assertSessionHas('receipt.amount');
         $this->assertDatabaseHas('withdrawals', [
             'user_id' => $user->id,
             'amount' => 50.00,

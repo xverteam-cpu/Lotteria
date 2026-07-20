@@ -277,14 +277,14 @@ Route::post('/withdrawals', function (Illuminate\Http\Request $request) {
         ]);
     }
 
-    DB::transaction(function () use ($user, $data): void {
+    $withdrawal = DB::transaction(function () use ($user, $data) {
         $user->update([
             'bank_name' => $data['bank_name'],
             'bank_account_number' => $data['account_number'],
             'bank_account_holder' => $data['account_holder'],
         ]);
 
-        App\Models\Withdrawal::create([
+        $withdrawal = App\Models\Withdrawal::create([
             'user_id' => $user->id,
             'amount' => $data['amount'],
             'payment_method' => 'bank_transfer',
@@ -296,9 +296,21 @@ Route::post('/withdrawals', function (Illuminate\Http\Request $request) {
 
         $user->balance = max(0, ($user->balance ?? 0) - (float) $data['amount']);
         $user->save();
+
+        return $withdrawal;
     });
 
-    return redirect()->route('withdraw')->with('status', 'Withdrawal request submitted successfully.');
+    return redirect()->route('withdraw')
+        ->with('status', 'Withdrawal request submitted successfully.')
+        ->with('receipt', [
+            'reference' => 'LOT-WD-'.str_pad((string) $withdrawal->id, 6, '0', STR_PAD_LEFT),
+            'amount' => number_format((float) $withdrawal->amount, 2),
+            'bank_name' => $withdrawal->bank_name,
+            'account_number' => $withdrawal->account_number,
+            'account_holder' => $withdrawal->account_holder,
+            'status' => ucfirst($withdrawal->status),
+            'submitted_at' => $withdrawal->created_at?->format('M d, Y H:i') ?? now()->format('M d, Y H:i'),
+        ]);
 })->middleware(['auth', 'pin', RestrictUserAccess::class])->name('withdrawals.store');
 
 Route::get('/history', function () {

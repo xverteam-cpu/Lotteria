@@ -79,6 +79,42 @@
       <div style="margin-bottom:12px; padding:12px; border-radius:12px; background:#e8f8ee; color:#137547; font-weight:700;">{{ session('status') }}</div>
     @endif
 
+    @if (session('receipt'))
+      @php $receipt = session('receipt'); @endphp
+      <div style="margin-bottom:16px; border:1px solid #f1d0d4; border-radius:20px; background:linear-gradient(135deg,#fff8f8 0%,#ffffff 100%); padding:18px; box-shadow:0 10px 25px rgba(237,28,36,0.08);">
+        <div style="display:flex; align-items:center; justify-content:space-between; gap:12px; margin-bottom:10px;">
+          <div>
+            <div style="font-size:11px; font-weight:900; letter-spacing:0.16em; text-transform:uppercase; color:#ed1c24;">Lotteria Withdrawal Receipt</div>
+            <div style="font-size:18px; font-weight:900; color:#071a44; margin-top:4px;">{{ $receipt['reference'] }}</div>
+          </div>
+          <div style="padding:8px 10px; border-radius:999px; background:#ed1c24; color:#fff; font-size:12px; font-weight:900;">{{ $receipt['status'] }}</div>
+        </div>
+
+        <div style="display:grid; gap:8px; font-size:13px; color:#46556b;">
+          <div style="display:flex; justify-content:space-between; gap:10px;">
+            <span style="font-weight:700; color:#64748b;">Amount</span>
+            <span style="font-weight:900; color:#071a44;">${{ $receipt['amount'] }}</span>
+          </div>
+          <div style="display:flex; justify-content:space-between; gap:10px;">
+            <span style="font-weight:700; color:#64748b;">Bank</span>
+            <span style="font-weight:900; color:#071a44;">{{ $receipt['bank_name'] }}</span>
+          </div>
+          <div style="display:flex; justify-content:space-between; gap:10px;">
+            <span style="font-weight:700; color:#64748b;">Account</span>
+            <span style="font-weight:900; color:#071a44;">{{ $receipt['account_number'] }}</span>
+          </div>
+          <div style="display:flex; justify-content:space-between; gap:10px;">
+            <span style="font-weight:700; color:#64748b;">Recipient</span>
+            <span style="font-weight:900; color:#071a44;">{{ $receipt['account_holder'] }}</span>
+          </div>
+          <div style="display:flex; justify-content:space-between; gap:10px;">
+            <span style="font-weight:700; color:#64748b;">Submitted</span>
+            <span style="font-weight:900; color:#071a44;">{{ $receipt['submitted_at'] }}</span>
+          </div>
+        </div>
+      </div>
+    @endif
+
     @if ($errors->any())
       <div style="margin-bottom:12px; padding:12px; border-radius:12px; background:#fff1f2; color:#b42318; font-weight:700;">
         <ul style="margin:0; padding-left:18px;">
