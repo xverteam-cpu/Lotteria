@@ -351,8 +351,8 @@
         @php
           $approvedInvestments = $user->investments()->where('status', 'approved')->get();
           $investmentIncomeRecords = $approvedInvestments;
-          $totalEstimatedInterest = $approvedInvestments->sum(fn($investment) => $investment->earnedInterest());
-          $displayBalance = (float) ($user->balance ?? 0) + $totalEstimatedInterest;
+          $totalCreditedInterest = $approvedInvestments->sum(fn($investment) => $investment->creditedInterest());
+          $displayBalance = (float) ($user->balance ?? 0);
         @endphp
 
         <div class="modal-field">
@@ -361,7 +361,7 @@
         </div>
         <div class="modal-field">
           <span class="modal-label">Balance Breakdown</span>
-          <div class="modal-value">${{ number_format((float) ($user->balance ?? 0), 2) }} + ${{ number_format($totalEstimatedInterest, 2) }}</div>
+          <div class="modal-value">Base: ${{ number_format($displayBalance - $totalCreditedInterest, 2) }} | Credited Interest: ${{ number_format($totalCreditedInterest, 2) }}</div>
         </div>
         <div class="modal-field">
           <span class="modal-label">Region</span>

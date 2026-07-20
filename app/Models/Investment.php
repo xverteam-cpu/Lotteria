@@ -74,6 +74,11 @@ class Investment extends Model
         return $this->dailyInterestAmount() * $this->elapsedInterestDays();
     }
 
+    public function creditedInterest(): float
+    {
+        return $this->dailyInterestAmount() * (int) ($this->interest_days_credited ?? 0);
+    }
+
     public function accrueDailyInterest(): float
     {
         if ($this->status !== 'approved' || ! $this->starts_at) {
