@@ -85,6 +85,7 @@ Route::get('/dashboard', function () {
 
     $user = Auth::user();
     DailyInterestAccrualService::accrueDueInterestForUser($user);
+    $user = $user->fresh();  // Refresh from database to get updated balance
 
     $showRafflePopup = false;
     if ($user->shouldShowRafflePopup()) {
