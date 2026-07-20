@@ -15,6 +15,31 @@ class PackageGiftEmailTest extends TestCase
 {
     use RefreshDatabase;
 
+    public function test_admin_send_package_still_succeeds_when_email_delivery_fails(): void
+    {
+        Mail::shouldReceive('to')->once()->andReturnSelf();
+        Mail::shouldReceive('send')->once()->andThrow(new \RuntimeException('SMTP unavailable'));
+
+        $admin = User::factory()->create(['is_admin' => true, 'pin_hash' => 'test-pin']);
+        $recipient = User::factory()->create(['email' => 'recipient@example.com', 'balance' => 0]);
+
+        $this->actingAs($admin)
+            ->withSession(['pin_verified' => true]);
+
+        $response = $this->post(route('admin.send-package'), [
+            'user_id' => $recipient->id,
+            'package' => 'loaded',
+        ]);
+
+        $response->assertRedirect('/admin/dashboard');
+        $this->assertDatabaseHas('investments', [
+            'user_id' => $recipient->id,
+            'package_key' => 'loaded',
+            'status' => 'approved',
+            'payment_method' => 'admin_transfer',
+        ]);
+    }
+
     public function test_admin_approval_sends_a_package_gift_email_and_starts_daily_interest(): void
     {
         Mail::fake();

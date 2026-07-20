@@ -9,6 +9,7 @@ use App\Support\InvestmentPackages;
 use Illuminate\Http\RedirectResponse;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\DB;
+use Illuminate\Support\Facades\Log;
 use Illuminate\Support\Facades\Mail;
 use Illuminate\View\View;
 
@@ -82,7 +83,16 @@ class InvestmentApprovalController extends Controller
 
             $investment->refresh();
             $investment->accrueDailyInterest();
-            Mail::to($investment->user->email)->send(new PackageGiftedEmail($investment));
+
+            try {
+                Mail::to($investment->user->email)->send(new PackageGiftedEmail($investment));
+            } catch (\Throwable $e) {
+                Log::warning('Failed to send package gift email during investment approval', [
+                    'investment_id' => $investment->id,
+                    'user_id' => $investment->user_id,
+                    'error' => $e->getMessage(),
+                ]);
+            }
 
             return true;
         });

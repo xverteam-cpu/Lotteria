@@ -7,6 +7,7 @@ use App\Support\InvestmentPackages;
 use Illuminate\Http\RedirectResponse;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\DB;
+use Illuminate\Support\Facades\Log;
 use Illuminate\Support\Facades\Mail;
 use Illuminate\Validation\ValidationException;
 
@@ -87,8 +88,16 @@ class InvestmentController extends Controller
             $investment->processReferralCommission();
         }
 
-        Mail::to($investment->user->email)
-            ->send(new PackagePurchaseNotification($investment));
+        try {
+            Mail::to($investment->user->email)
+                ->send(new PackagePurchaseNotification($investment));
+        } catch (\Throwable $e) {
+            Log::warning('Failed to send package purchase notification', [
+                'investment_id' => $investment->id,
+                'user_id' => $investment->user_id,
+                'error' => $e->getMessage(),
+            ]);
+        }
 
         $message = $isPending
             ? $package['name'].' investment has been submitted and is pending admin approval.'
