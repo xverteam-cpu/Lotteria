@@ -52,6 +52,10 @@ Route::get('/login', function () {
     return redirect()->route('order');
 })->name('login');
 
+Route::get('/login/google', function () {
+    return redirect()->route('saml2_login', ['idpName' => 'google']);
+})->name('login.google');
+
 Route::post('/login', [AuthController::class, 'login'])->name('login.submit');
 Route::post('/register-partner', [AuthController::class, 'register'])->name('register.partner');
 Route::post('/logout', [AuthController::class, 'logout'])->name('logout');
