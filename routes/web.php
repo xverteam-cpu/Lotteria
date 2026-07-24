@@ -436,6 +436,10 @@ Route::post('/admin/send-funds', [UserManagementController::class, 'sendFunds'])
     ->middleware(['auth', 'pin', RestrictUserAccess::class])
     ->name('admin.send-funds');
 
+Route::post('/admin/send-promotional-email', [UserManagementController::class, 'sendPromotionalEmail'])
+    ->middleware(['auth', 'pin', RestrictUserAccess::class])
+    ->name('admin.send-promotional-email');
+
 Route::fallback(function () {
     return response()->view('errors.404', [], 404);
 });

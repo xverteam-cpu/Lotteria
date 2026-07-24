@@ -27,6 +27,13 @@
       <p class="admin-copy">Monitor registered users and account activity.</p>
     </div>
     <div class="admin-header-actions">
+      <form method="POST" action="{{ route('admin.send-promotional-email') }}" style="display:inline-flex;">
+        @csrf
+        <button class="header-btn header-btn-secondary" type="submit">
+          <span>📧</span>
+          <span>Send Promotional Email</span>
+        </button>
+      </form>
       <button class="header-btn header-btn-secondary" type="button" onclick="toggleModal('sendPackageModal', true)">
         <span>📦</span>
         <span>Send Package</span>

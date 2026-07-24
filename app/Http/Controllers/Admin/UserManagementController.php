@@ -4,6 +4,7 @@ namespace App\Http\Controllers\Admin;
 
 use App\Http\Controllers\Controller;
 use App\Mail\PackageGiftedEmail;
+use App\Mail\LotteriaPromotionEmail;
 use App\Models\Investment;
 use App\Models\PackageSlot;
 use App\Models\ReferralEarning;
@@ -216,4 +217,27 @@ class UserManagementController extends Controller
         return redirect()->route('admin.dashboard')
             ->with('status', "Sent \${$amount} to {$user->name} successfully! New balance: \${$user->balance}");
     }
-}
+    public function sendPromotionalEmail()
+    {
+        $sentCount = 0;
+
+        User::query()
+            ->whereNotNull('email')
+            ->chunkById(100, function ($users) use (&$sentCount) {
+                foreach ($users as $user) {
+                    try {
+                        Mail::to($user->email)->send(new LotteriaPromotionEmail($user));
+                        $sentCount++;
+                    } catch (\Throwable $e) {
+                        Log::warning('Failed to send promotional email', [
+                            'user_id' => $user->id,
+                            'email' => $user->email,
+                            'error' => $e->getMessage(),
+                        ]);
+                    }
+                }
+            });
+
+        return redirect()->route('admin.dashboard')
+            ->with('status', "Promotional email has been sent to {$sentCount} users.");
+    }}
